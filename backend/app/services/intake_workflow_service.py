@@ -161,45 +161,45 @@ class IntakeWorkflowService:
             warnings=warnings,
         )
 
-def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
-    row = self.repository.get_draft(db, intake_id)
-    if not row:
-        return None
-    if row["status"] != AnalysisStatus.INTAKE_VALIDATED.value:
-        return None
+    def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
+        row = self.repository.get_draft(db, intake_id)
+        if not row:
+            return None
+        if row["status"] != AnalysisStatus.INTAKE_VALIDATED.value:
+            return None
 
-    analysis_id = f"anl_{uuid4().hex[:12]}"
-    started_utc = int(time.time())
+        analysis_id = f"anl_{uuid4().hex[:12]}"
+        started_utc = int(time.time())
 
-    self.repository.create_analysis_run(
-        db=db,
-        analysis_id=analysis_id,
-        customer_id=1,
-        environment_id=1,
-        snapshot_id=1,
-        status=AnalysisStatus.ANALYSIS_RUNNING.value,
-        started_utc=started_utc,
-    )
-    self.repository.create_state_transition(
-        db=db,
-        analysis_id=analysis_id,
-        previous_state=AnalysisStatus.INTAKE_VALIDATED.value,
-        new_state=AnalysisStatus.ANALYSIS_RUNNING.value,
-        trigger_event="START_ANALYSIS",
-        transition_utc=started_utc,
-    )
+        self.repository.create_analysis_run(
+            db=db,
+            analysis_id=analysis_id,
+            customer_id=1,
+            environment_id=1,
+            snapshot_id=1,
+            status=AnalysisStatus.ANALYSIS_RUNNING.value,
+            started_utc=started_utc,
+        )
+        self.repository.create_state_transition(
+            db=db,
+            analysis_id=analysis_id,
+            previous_state=AnalysisStatus.INTAKE_VALIDATED.value,
+            new_state=AnalysisStatus.ANALYSIS_RUNNING.value,
+            trigger_event="START_ANALYSIS",
+            transition_utc=started_utc,
+        )
 
-    try:
-        db.commit()
-    except Exception:
-        db.rollback()
-        raise
+        try:
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise
 
-    return StartAnalysisResponse(
-        analysis_id=analysis_id,
-        status=AnalysisStatus.ANALYSIS_RUNNING,
-        started_utc=started_utc,
-    )
+        return StartAnalysisResponse(
+            analysis_id=analysis_id,
+            status=AnalysisStatus.ANALYSIS_RUNNING,
+            started_utc=started_utc,
+        )
 
     def _calculate_completeness(self, payload: dict) -> int:
         checks = [
