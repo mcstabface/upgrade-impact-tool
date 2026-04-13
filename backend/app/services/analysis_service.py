@@ -84,7 +84,7 @@ class AnalysisService:
                     change_taxonomy=row["change_taxonomy"],
                     headline=row["headline"],
                     recommended_action=row["recommended_action"],
-                    kb_reference=f"KB {row['kb_article_number']}",
+                    kb_reference=row["kb_article_number"],
                 )
                 for row in findings
             ],
