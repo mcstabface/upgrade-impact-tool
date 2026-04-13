@@ -7,6 +7,7 @@ from app.api.v1.findings import router as findings_router
 from app.api.v1.health import router as health_router
 from app.api.v1.intake import router as intake_router
 from app.api.v1.meta import router as meta_router
+from app.api.v1.intakes import router as intakes_router
 
 app = FastAPI(
     title="Upgrade Impact Analysis Tool",
@@ -27,3 +28,4 @@ app.include_router(intake_router, prefix="/api/v1")
 app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(analyses_router, prefix="/api/v1")
 app.include_router(findings_router, prefix="/api/v1")
+app.include_router(intakes_router, prefix="/api/v1")
