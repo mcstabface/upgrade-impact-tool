@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from sqlalchemy.orm import Session
 
+from app.services.analysis_transition_service import AnalysisTransitionService
 from app.core.enums import AnalysisStatus
 from app.repositories.intake_repository import IntakeRepository
 from app.schemas.intake_api import (
@@ -19,6 +20,7 @@ from app.schemas.intake_api import (
 class IntakeWorkflowService:
     def __init__(self) -> None:
         self.repository = IntakeRepository()
+        self.transition_service = AnalysisTransitionService()
 
     def create_intake(self, db: Session, payload: IntakeCreateRequest) -> IntakeCreateResponse:
         created_utc = int(time.time())
@@ -177,16 +179,16 @@ class IntakeWorkflowService:
             customer_id=1,
             environment_id=1,
             snapshot_id=1,
-            status=AnalysisStatus.ANALYSIS_RUNNING.value,
+            status=AnalysisStatus.INTAKE_VALIDATED.value,
             started_utc=started_utc,
         )
-        self.repository.create_state_transition(
+
+        self.transition_service.transition_analysis(
             db=db,
             analysis_id=analysis_id,
-            previous_state=AnalysisStatus.INTAKE_VALIDATED.value,
-            new_state=AnalysisStatus.ANALYSIS_RUNNING.value,
+            new_state=AnalysisStatus.ANALYSIS_RUNNING,
             trigger_event="START_ANALYSIS",
-            transition_utc=started_utc,
+            user_id="system",
         )
 
         try:
