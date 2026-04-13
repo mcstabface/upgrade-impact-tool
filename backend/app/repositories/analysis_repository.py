@@ -1,0 +1,83 @@
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+
+
+class AnalysisRepository:
+    def get_status(self, db: Session, analysis_id: str) -> dict | None:
+        query = text("""
+            SELECT analysis_id, analysis_status
+            FROM analysis_runs
+            WHERE analysis_id = :analysis_id
+        """)
+        row = db.execute(query, {"analysis_id": analysis_id}).first()
+        return dict(row._mapping) if row else None
+
+    def get_overview_header(self, db: Session, analysis_id: str) -> dict | None:
+        query = text("""
+            SELECT
+                ar.analysis_id,
+                c.customer_name,
+                e.environment_name,
+                ar.completed_utc AS analysis_date,
+                ar.overall_status,
+                ar.applies_count,
+                ar.review_required_count,
+                ar.unknown_count,
+                ar.blocked_count
+            FROM analysis_runs ar
+            JOIN customers c ON c.customer_id = ar.customer_id
+            JOIN environments e ON e.environment_id = ar.environment_id
+            WHERE ar.analysis_id = :analysis_id
+        """)
+        row = db.execute(query, {"analysis_id": analysis_id}).first()
+        return dict(row._mapping) if row else None
+
+    def get_overview_applications(self, db: Session, analysis_id: str) -> list[dict]:
+        query = text("""
+            SELECT
+                analysis_application_id,
+                application_name,
+                current_version,
+                target_version,
+                application_status AS status,
+                findings_count
+            FROM analysis_applications
+            WHERE analysis_id = :analysis_id
+            ORDER BY analysis_application_id
+        """)
+        return [dict(row._mapping) for row in db.execute(query, {"analysis_id": analysis_id}).all()]
+
+    def get_application_detail(self, db: Session, analysis_id: str, analysis_application_id: int) -> dict | None:
+        query = text("""
+            SELECT
+                analysis_application_id,
+                application_name,
+                current_version,
+                target_version,
+                application_status
+            FROM analysis_applications
+            WHERE analysis_id = :analysis_id
+              AND analysis_application_id = :analysis_application_id
+        """)
+        row = db.execute(
+            query,
+            {"analysis_id": analysis_id, "analysis_application_id": analysis_application_id},
+        ).first()
+        return dict(row._mapping) if row else None
+
+    def get_application_findings(self, db: Session, analysis_application_id: int) -> list[dict]:
+        query = text("""
+            SELECT
+                af.finding_id,
+                af.finding_status AS status,
+                af.severity,
+                af.change_taxonomy,
+                af.headline,
+                af.recommended_action,
+                fe.kb_article_number
+            FROM analysis_findings af
+            JOIN finding_evidence fe ON fe.finding_id = af.finding_id
+            WHERE af.analysis_application_id = :analysis_application_id
+            ORDER BY af.finding_id
+        """)
+        return [dict(row._mapping) for row in db.execute(query, {"analysis_application_id": analysis_application_id}).all()]

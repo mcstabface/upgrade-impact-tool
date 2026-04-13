@@ -1,5 +1,7 @@
+from collections.abc import Generator
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import settings
 
@@ -15,3 +17,11 @@ SessionLocal = sessionmaker(
     autocommit=False,
     future=True,
 )
+
+
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

@@ -1,0 +1,56 @@
+from pydantic import BaseModel
+
+
+class AnalysisStatusResponse(BaseModel):
+    analysis_id: str
+    status: str
+    progress_pct: int
+    current_stage: str
+
+
+class AnalysisApplicationSummary(BaseModel):
+    analysis_application_id: int
+    application_name: str
+    current_version: str
+    target_version: str
+    status: str
+    findings_count: int
+
+
+class AnalysisSummaryCounts(BaseModel):
+    applies_count: int
+    review_required_count: int
+    unknown_count: int
+    blocked_count: int
+
+
+class AnalysisOverviewResponse(BaseModel):
+    analysis_id: str
+    customer_name: str
+    environment_name: str
+    analysis_date: int | None
+    overall_status: str
+    summary: AnalysisSummaryCounts
+    assumptions: list[str]
+    missing_inputs: list[str]
+    derived_risks: list[str]
+    applications: list[AnalysisApplicationSummary]
+
+
+class AnalysisApplicationFindingItem(BaseModel):
+    finding_id: int
+    status: str
+    severity: str
+    change_taxonomy: str
+    headline: str
+    recommended_action: str | None
+    kb_reference: str
+
+
+class AnalysisApplicationDetailResponse(BaseModel):
+    analysis_application_id: int
+    application_name: str
+    current_version: str
+    target_version: str
+    application_status: str
+    findings: list[AnalysisApplicationFindingItem]
