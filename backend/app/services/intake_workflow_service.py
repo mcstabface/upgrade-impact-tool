@@ -234,6 +234,8 @@ def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse |
         db.rollback()
         raise
 
+    print(f"snapshot created/selected: snapshot_id={snapshot_id}, content_hash={_content_hash}")
+
     return StartAnalysisResponse(
         analysis_id=analysis_id,
         status=AnalysisStatus.ANALYSIS_RUNNING,
