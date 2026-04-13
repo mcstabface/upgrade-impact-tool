@@ -2,7 +2,9 @@ import time
 from uuid import uuid4
 
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 
+from app.services.snapshot_service import SnapshotService
 from app.services.intake_validation_service import IntakeValidationService
 from app.services.analysis_transition_service import AnalysisTransitionService
 from app.core.enums import AnalysisStatus
@@ -23,6 +25,7 @@ class IntakeWorkflowService:
         self.repository = IntakeRepository()
         self.transition_service = AnalysisTransitionService()
         self.validation_service = IntakeValidationService()
+        self.snapshot_service = SnapshotService()
 
     def create_intake(self, db: Session, payload: IntakeCreateRequest) -> IntakeCreateResponse:
         created_utc = int(time.time())
@@ -183,45 +186,59 @@ class IntakeWorkflowService:
             warnings=[] if validation_result.status == AnalysisStatus.BLOCKED.value else validation_result.warnings,
         )
 
-    def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
-        row = self.repository.get_draft(db, intake_id)
-        if not row:
-            return None
-        if row["status"] != AnalysisStatus.INTAKE_VALIDATED.value:
-            return None
+def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
+    row = self.repository.get_draft(db, intake_id)
+    if not row:
+        return None
+    if row["status"] != AnalysisStatus.INTAKE_VALIDATED.value:
+        return None
 
-        analysis_id = f"anl_{uuid4().hex[:12]}"
-        started_utc = int(time.time())
+    snapshot_id, _content_hash = self.snapshot_service.persist_snapshot_for_intake(
+        db=db,
+        intake_row=row,
+    )
 
-        self.repository.create_analysis_run(
-            db=db,
-            analysis_id=analysis_id,
-            customer_id=1,
-            environment_id=1,
-            snapshot_id=1,
-            status=AnalysisStatus.INTAKE_VALIDATED.value,
-            started_utc=started_utc,
-        )
+    snapshot_row = db.execute(
+        text("""
+            SELECT customer_id, environment_id
+            FROM customer_state_snapshots
+            WHERE snapshot_id = :snapshot_id
+        """),
+        {"snapshot_id": snapshot_id},
+    ).first()
 
-        self.transition_service.transition_analysis(
-            db=db,
-            analysis_id=analysis_id,
-            new_state=AnalysisStatus.ANALYSIS_RUNNING,
-            trigger_event="START_ANALYSIS",
-            user_id="system",
-        )
+    analysis_id = f"anl_{uuid4().hex[:12]}"
+    started_utc = int(time.time())
 
-        try:
-            db.commit()
-        except Exception:
-            db.rollback()
-            raise
+    self.repository.create_analysis_run(
+        db=db,
+        analysis_id=analysis_id,
+        customer_id=snapshot_row.customer_id,
+        environment_id=snapshot_row.environment_id,
+        snapshot_id=snapshot_id,
+        status=AnalysisStatus.INTAKE_VALIDATED.value,
+        started_utc=started_utc,
+    )
 
-        return StartAnalysisResponse(
-            analysis_id=analysis_id,
-            status=AnalysisStatus.ANALYSIS_RUNNING,
-            started_utc=started_utc,
-        )
+    self.transition_service.transition_analysis(
+        db=db,
+        analysis_id=analysis_id,
+        new_state=AnalysisStatus.ANALYSIS_RUNNING,
+        trigger_event="START_ANALYSIS",
+        user_id="system",
+    )
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
+    return StartAnalysisResponse(
+        analysis_id=analysis_id,
+        status=AnalysisStatus.ANALYSIS_RUNNING,
+        started_utc=started_utc,
+    )
 
     def _calculate_completeness(self, payload: dict) -> int:
         checks = [
