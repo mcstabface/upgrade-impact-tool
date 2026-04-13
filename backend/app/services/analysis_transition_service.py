@@ -16,7 +16,7 @@ class AnalysisTransitionService:
         self,
         db: Session,
         analysis_id: str,
-        new_state: AnalysisStatus,
+        new_state: AnalysisStatus | str,
         trigger_event: str,
         user_id: str = "system",
     ) -> None:
@@ -33,10 +33,11 @@ class AnalysisTransitionService:
             raise InvalidAnalysisTransitionError("Analysis not found")
 
         previous_state = AnalysisStatus(row.analysis_status)
+        new_state_enum = AnalysisStatus(new_state)
 
-        if not can_transition(previous_state, new_state):
+        if not can_transition(previous_state, new_state_enum):
             raise InvalidAnalysisTransitionError(
-                f"Invalid transition: {previous_state.value} -> {new_state.value}"
+                f"Invalid transition: {previous_state.value} -> {new_state_enum.value}"
             )
 
         transition_utc = int(time.time())
@@ -51,7 +52,7 @@ class AnalysisTransitionService:
             """),
             {
                 "analysis_id": analysis_id,
-                "new_state": new_state.value,
+                "new_state": new_state_enum.value,
             },
         )
 
@@ -76,7 +77,7 @@ class AnalysisTransitionService:
             {
                 "analysis_id": analysis_id,
                 "previous_state": previous_state.value,
-                "new_state": new_state.value,
+                "new_state": new_state_enum.value,
                 "trigger_event": trigger_event,
                 "user_id": user_id,
                 "transition_utc": transition_utc,

@@ -26,8 +26,6 @@ class AnalysisTransitionRequest(BaseModel):
     new_state: AnalysisStatus
     trigger_event: str
 
-    model_config = {"use_enum_values": True}
-
 
 @router.post("/analyses/{analysis_id}/transition", response_model=AnalysisStatusResponse)
 def transition_analysis(
