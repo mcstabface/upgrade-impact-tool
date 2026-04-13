@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.health import router as health_router
+from app.api.v1.intake import router as intake_router
 from app.api.v1.meta import router as meta_router
 
 app = FastAPI(
@@ -19,3 +20,4 @@ app.add_middleware(
 
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(meta_router, prefix="/api/v1")
+app.include_router(intake_router, prefix="/api/v1")

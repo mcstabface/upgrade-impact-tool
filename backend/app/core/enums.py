@@ -69,3 +69,59 @@ class EnvironmentType(StrEnum):
     DEV = "DEV"
     TEST = "TEST"
     PROD = "PROD"
+
+
+class CustomerEnvironmentType(StrEnum):
+    PRODUCTION = "PRODUCTION"
+    TEST = "TEST"
+    DEVELOPMENT = "DEVELOPMENT"
+
+
+class ChangeClassification(StrEnum):
+    CONFIGURATION = "CONFIGURATION"
+    BEHAVIORAL = "BEHAVIORAL"
+    SCHEMA = "SCHEMA"
+    INTEGRATION = "INTEGRATION"
+    SECURITY = "SECURITY"
+    PERFORMANCE = "PERFORMANCE"
+    DEPRECATION = "DEPRECATION"
+    REPORTING = "REPORTING"
+    WORKFLOW = "WORKFLOW"
+    UI = "UI"
+    DOCUMENTATION = "DOCUMENTATION"
+
+
+class ReportStatus(StrEnum):
+    APPLIES = "APPLIES"
+    DOES_NOT_APPLY = "DOES_NOT_APPLY"
+    POSSIBLE_MATCH = "POSSIBLE_MATCH"
+    UNKNOWN = "UNKNOWN"
+    BLOCKED = "BLOCKED"
+    REQUIRES_REVIEW = "REQUIRES_REVIEW"
+
+
+class CustomizationObjectType(StrEnum):
+    WORKFLOW = "WORKFLOW"
+    REPORT = "REPORT"
+    SCRIPT = "SCRIPT"
+    EXTENSION = "EXTENSION"
+    DATABASE_OBJECT = "DATABASE_OBJECT"
+
+
+class IntegrationInterfaceType(StrEnum):
+    API = "API"
+    BATCH = "BATCH"
+    FILE = "FILE"
+    MESSAGE_QUEUE = "MESSAGE_QUEUE"
+
+
+class CriticalityLevel(StrEnum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
+
+class JobType(StrEnum):
+    BATCH = "BATCH"
+    REPORT = "REPORT"
+    SCHEDULED_TASK = "SCHEDULED_TASK"
