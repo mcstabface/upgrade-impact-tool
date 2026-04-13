@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from sqlalchemy.orm import Session
 
+from app.services.intake_validation_service import IntakeValidationService
 from app.services.analysis_transition_service import AnalysisTransitionService
 from app.core.enums import AnalysisStatus
 from app.repositories.intake_repository import IntakeRepository
@@ -21,6 +22,7 @@ class IntakeWorkflowService:
     def __init__(self) -> None:
         self.repository = IntakeRepository()
         self.transition_service = AnalysisTransitionService()
+        self.validation_service = IntakeValidationService()
 
     def create_intake(self, db: Session, payload: IntakeCreateRequest) -> IntakeCreateResponse:
         created_utc = int(time.time())
@@ -161,6 +163,24 @@ class IntakeWorkflowService:
             completeness_score=completeness_score,
             missing_required_fields=[],
             warnings=warnings,
+        )
+        validation_result = self.validation_service.validate(payload)
+
+        self.repository.update_draft(
+            db=db,
+            intake_id=intake_id,
+            status=validation_result.status,
+            payload_json=payload,
+            completeness_score=validation_result.completeness_score,
+            updated_utc=int(time.time()),
+        )
+
+        return IntakeValidateResponse(
+            intake_id=intake_id,
+            status=validation_result.status,
+            completeness_score=validation_result.completeness_score,
+            missing_required_fields=validation_result.missing_required_fields,
+            warnings=[] if validation_result.status == AnalysisStatus.BLOCKED.value else validation_result.warnings,
         )
 
     def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
