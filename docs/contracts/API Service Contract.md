@@ -670,5 +670,3 @@ Refresh Status
 Run Refresh
 Delta Summary
 Admin endpoints
-
-That gets the user-facing product alive before the admin cathedral gets too tall.

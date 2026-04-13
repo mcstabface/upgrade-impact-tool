@@ -745,5 +745,3 @@ exports
 Tier 3
 notifications
 refresh_triggers
-
-That gets the core product working before we add all the nice pain.

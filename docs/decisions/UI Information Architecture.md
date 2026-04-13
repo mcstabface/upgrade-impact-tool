@@ -586,5 +586,3 @@ Phase 3
 Admin screens
 deeper trace viewer
 normalization review tools
-
-This sequencing preserves acceptance-first delivery.
