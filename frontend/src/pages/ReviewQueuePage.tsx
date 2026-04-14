@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import StatusHelp from "../components/StatusHelp";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
+import StatusHelp from "../components/StatusHelp";
+import StatusBanner from "../components/StatusBanner";
 import { getReviewQueue, type ReviewQueueResponse } from "../services/reviewQueue";
 
 export default function ReviewQueuePage() {
@@ -20,7 +21,7 @@ export default function ReviewQueuePage() {
   if (data.items.length === 0) return <EmptyState message="No review items found." />;
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
       <h1>Review Queue</h1>
       <p>
         <Link to="/dashboard">Back to Dashboard</Link>
@@ -28,19 +29,20 @@ export default function ReviewQueuePage() {
 
       <ul>
         {data.items.map((item) => (
-          <li key={item.finding_id}>
-            <Link to={`/findings/${item.finding_id}`}>{item.headline}</Link>
-            {" — "}
-            {item.finding_status}
-            {" — "}
-            {item.application_name}
-            {" — "}
-            {item.analysis_id}
-            {item.reason_for_status ? ` — ${item.reason_for_status}` : ""}
-
+          <li key={item.finding_id} style={{ marginBottom: "1.5rem" }}>
             <div>
-              <StatusHelp status={item.finding_status} />
+              <Link to={`/findings/${item.finding_id}`}>{item.headline}</Link>
+              {" — "}
+              {item.finding_status}
+              {" — "}
+              {item.application_name}
+              {" — "}
+              {item.analysis_id}
+              {item.reason_for_status ? ` — ${item.reason_for_status}` : ""}
             </div>
+
+            <StatusHelp status={item.finding_status} />
+            <StatusBanner status={item.finding_status} />
           </li>
         ))}
       </ul>

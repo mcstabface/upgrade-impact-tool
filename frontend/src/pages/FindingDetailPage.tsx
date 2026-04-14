@@ -4,6 +4,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import StatusHelp from "../components/StatusHelp";
+import StatusBanner from "../components/StatusBanner";
 import {
   getFindingDetail,
   resolveFinding,
@@ -96,6 +97,7 @@ export default function FindingDetailPage() {
       <h1>{data.headline}</h1>
       <p>Status: {data.status}</p>
       <StatusHelp status={data.status} />
+      <StatusBanner status={data.status} />
       <p>Severity: {data.severity}</p>
       <p>Taxonomy: {data.change_taxonomy}</p>
       <p>Application: {data.application_name}</p>

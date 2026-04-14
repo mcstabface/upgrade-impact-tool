@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import StatusHelp from "../components/StatusHelp";
+import StatusBanner from "../components/StatusBanner";
 import {
   getAnalysisApplicationDetail,
   type AnalysisApplicationDetailResponse,
@@ -105,6 +106,7 @@ export default function ApplicationDetailPage() {
       <h1>{data.application_name}</h1>
       <p>Status: {data.application_status}</p>
       <StatusHelp status={data.application_status} />
+      <StatusBanner status={data.application_status} />
       <p>
         Current Version: {data.current_version} | Target Version: {data.target_version}
       </p>
@@ -173,6 +175,7 @@ export default function ApplicationDetailPage() {
               </h3>
 
               <p>Status: {finding.status}</p>
+              <StatusBanner status={finding.status} />
               <p>Severity: {finding.severity}</p>
               <p>Change Type: {finding.change_taxonomy}</p>
               <p>Source KB: {finding.kb_reference}</p>
