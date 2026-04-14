@@ -84,7 +84,73 @@ class AnalysisRepository:
             ORDER BY af.finding_id
         """)
         return [dict(row._mapping) for row in db.execute(query, {"analysis_application_id": analysis_application_id}).all()]
-    
+
+    def get_top_risks(self, db: Session, analysis_id: str) -> list[str]:
+        rows = db.execute(
+            text("""
+                SELECT headline
+                FROM analysis_findings
+                WHERE analysis_id = :analysis_id
+                  AND finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN')
+                ORDER BY
+                  CASE finding_status
+                    WHEN 'BLOCKED' THEN 1
+                    WHEN 'REQUIRES_REVIEW' THEN 2
+                    WHEN 'UNKNOWN' THEN 3
+                    ELSE 99
+                  END,
+                  CASE severity
+                    WHEN 'CRITICAL' THEN 1
+                    WHEN 'HIGH' THEN 2
+                    WHEN 'MEDIUM' THEN 3
+                    WHEN 'LOW' THEN 4
+                    ELSE 99
+                  END,
+                  headline
+                LIMIT 5
+            """),
+            {"analysis_id": analysis_id},
+        ).all()
+
+        return [row.headline for row in rows]
+
+    def get_top_actions(self, db: Session, analysis_id: str) -> list[str]:
+        rows = db.execute(
+            text("""
+                SELECT recommended_action
+                FROM analysis_findings
+                WHERE analysis_id = :analysis_id
+                  AND recommended_action IS NOT NULL
+                  AND recommended_action <> ''
+                ORDER BY
+                  CASE finding_status
+                    WHEN 'BLOCKED' THEN 1
+                    WHEN 'REQUIRES_REVIEW' THEN 2
+                    WHEN 'UNKNOWN' THEN 3
+                    WHEN 'APPLIES' THEN 4
+                    ELSE 99
+                  END,
+                  CASE severity
+                    WHEN 'CRITICAL' THEN 1
+                    WHEN 'HIGH' THEN 2
+                    WHEN 'MEDIUM' THEN 3
+                    WHEN 'LOW' THEN 4
+                    ELSE 99
+                  END,
+                  recommended_action
+                LIMIT 5
+            """),
+            {"analysis_id": analysis_id},
+        ).all()
+
+        seen = set()
+        actions: list[str] = []
+        for row in rows:
+            if row.recommended_action not in seen:
+                seen.add(row.recommended_action)
+                actions.append(row.recommended_action)
+        return actions
+
     def get_overview_supporting_lists(self, db: Session, analysis_id: str) -> dict:
         assumptions = db.execute(
             text("""

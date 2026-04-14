@@ -68,7 +68,7 @@ export default function FindingDetailPage() {
     data.status === "BLOCKED";
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "56rem" }}>
       <p>
         {analysisId && applicationId ? (
           <Link to={`/analyses/${analysisId}/applications/${applicationId}`}>
@@ -83,18 +83,68 @@ export default function FindingDetailPage() {
       <p>Status: {data.status}</p>
       <StatusHelp status={data.status} />
       <p>Severity: {data.severity}</p>
+      <p>Taxonomy: {data.change_taxonomy}</p>
       <p>Application: {data.application_name}</p>
       <p>Module: {data.module_name ?? "N/A"}</p>
+      <p>
+        Version Range: {data.version_range.from_version ?? "N/A"} →{" "}
+        {data.version_range.to_version ?? "N/A"}
+      </p>
+
+      <h2>What Changed</h2>
+      <p>{data.plain_language_summary}</p>
+
+      {data.business_impact_summary && (
+        <>
+          <h2>Why It Matters</h2>
+          <p>{data.business_impact_summary}</p>
+        </>
+      )}
+
+      {data.technical_impact_summary && (
+        <>
+          <h2>Technical Impact</h2>
+          <p>{data.technical_impact_summary}</p>
+        </>
+      )}
+
+      {data.recommended_action && (
+        <>
+          <h2>Recommended Action</h2>
+          <p>{data.recommended_action}</p>
+        </>
+      )}
+
+      <h2>Transparency</h2>
 
       {data.reason_for_status && (
         <>
-          <h2>Reason for Status</h2>
+          <h3>Reason for Status</h3>
           <p>{data.reason_for_status}</p>
         </>
       )}
 
-      <h2>Summary</h2>
-      <p>{data.plain_language_summary}</p>
+      {data.assumptions.length > 0 && (
+        <>
+          <h3>Assumptions</h3>
+          <ul>
+            {data.assumptions.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {data.missing_inputs.length > 0 && (
+        <>
+          <h3>Missing Inputs</h3>
+          <ul>
+            {data.missing_inputs.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </>
+      )}
 
       {canResolve && (
         <>
@@ -119,12 +169,14 @@ export default function FindingDetailPage() {
 
       {resolveMessage && <p>{resolveMessage}</p>}
 
-      <h2>Evidence</h2>
-      <p>{data.evidence.kb_article_number}</p>
-      <p>{data.evidence.kb_title}</p>
-      <p>{data.evidence.evidence_excerpt}</p>
+      <h2>Source Evidence</h2>
+      <p>KB Article: {data.evidence.kb_article_number}</p>
+      <p>Title: {data.evidence.kb_title}</p>
+      <p>Published: {data.evidence.publication_date}</p>
+      <p>Excerpt: {data.evidence.evidence_excerpt}</p>
+      {data.evidence.reference_section && <p>Reference Section: {data.evidence.reference_section}</p>}
       <a href={data.evidence.kb_url} target="_blank" rel="noreferrer">
-        Source Link
+        Open Source Link
       </a>
     </main>
   );

@@ -69,4 +69,22 @@ class AnalysisOverviewResponse(BaseModel):
     assumptions: list[str]
     missing_inputs: list[str]
     derived_risks: list[str]
+    top_risks: list[str] = []
+    top_actions: list[str] = []
+    applications: list[AnalysisApplicationSummary]
+
+
+class AnalysisOverviewResponse(BaseModel):
+    analysis_id: str
+    customer_name: str
+    environment_name: str
+    analysis_date: int | None
+    overall_status: str
+    started_utc: int | None = None
+    completed_utc: int | None = None
+    duration_ms: int | None = None
+    summary: AnalysisSummaryCounts
+    assumptions: list[str]
+    missing_inputs: list[str]
+    derived_risks: list[str]
     applications: list[AnalysisApplicationSummary]

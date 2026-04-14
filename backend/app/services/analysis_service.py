@@ -36,6 +36,10 @@ class AnalysisService:
         if not header:
             return None
 
+        supporting = self.repository.get_overview_supporting_lists(db, analysis_id)
+        top_risks = self.repository.get_top_risks(db, analysis_id)
+        top_actions = self.repository.get_top_actions(db, analysis_id)
+
         applications = self.repository.get_overview_applications(db, analysis_id)
 
         supporting = self.repository.get_overview_supporting_lists(db, analysis_id)
@@ -58,6 +62,8 @@ class AnalysisService:
             started_utc=header["started_utc"],
             completed_utc=header["completed_utc"],
             duration_ms=header["duration_ms"],
+            top_risks=top_risks,
+            top_actions=top_actions,
             applications=[AnalysisApplicationSummary(**row) for row in applications],
         )
 
