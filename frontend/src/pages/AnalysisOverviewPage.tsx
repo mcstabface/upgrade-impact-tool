@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { formatUnixSeconds } from "../utils/time";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import { getAnalysisOverview, type AnalysisOverviewResponse } from "../services/analyses";
@@ -39,16 +40,16 @@ export default function AnalysisOverviewPage() {
       </p>
       <p>Status: {data.overall_status}</p>
            <p>Status: {data.overall_status}</p>
-      <p>Started UTC: {data.started_utc ?? "N/A"}</p>
-      <p>Completed UTC: {data.completed_utc ?? "N/A"}</p>
+      <p>Started: {formatUnixSeconds(data.started_utc)}</p>
+      <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
       <p>Duration (ms): {data.duration_ms ?? "N/A"}</p> <p>
         Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
         {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
       </p>
 
       <p>Status: {data.overall_status}</p>
-      <p>Started UTC: {data.started_utc ?? "N/A"}</p>
-      <p>Completed UTC: {data.completed_utc ?? "N/A"}</p>
+      <p>Started: {formatUnixSeconds(data.started_utc)}</p>
+      <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
       <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
 
       {reviewNote && <p>{reviewNote}</p>}
