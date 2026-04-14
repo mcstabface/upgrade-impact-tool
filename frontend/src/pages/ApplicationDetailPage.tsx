@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import EmptyState from "../components/EmptyState";
-import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
+import EmptyState from "../components/EmptyState";
 import StatusHelp from "../components/StatusHelp";
 import StatusBanner from "../components/StatusBanner";
+import { formatStatusLabel } from "../utils/status";
 import {
   getAnalysisApplicationDetail,
   type AnalysisApplicationDetailResponse,
@@ -42,6 +42,27 @@ function severityPriority(severity: string): number {
     default:
       return 99;
   }
+}
+
+function FilterChip({
+  label,
+  onClear,
+}: {
+  label: string;
+  onClear: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      style={{
+        marginRight: "0.5rem",
+        marginBottom: "0.5rem",
+      }}
+    >
+      {label} ×
+    </button>
+  );
 }
 
 export default function ApplicationDetailPage() {
@@ -96,8 +117,18 @@ export default function ApplicationDetailPage() {
     setSearchText("");
   }
 
-  if (error) return <ErrorState message={error} />;
-  if (!data) return <LoadingState />;
+  if (error) {
+    return (
+      <ErrorState
+        title="Could not load application detail"
+        message={error}
+      />
+    );
+  }
+
+  if (!data) {
+    return <LoadingState message="Loading application findings..." />;
+  }
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
@@ -152,6 +183,35 @@ export default function ApplicationDetailPage() {
           Clear Filters
         </button>
       </section>
+
+      {(statusFilter !== "ALL" || severityFilter !== "ALL" || searchText.trim().length > 0) && (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Active Filters</h2>
+
+          <div>
+            {statusFilter !== "ALL" && (
+              <FilterChip
+                label={`Status: ${formatStatusLabel(statusFilter)}`}
+                onClear={() => setStatusFilter("ALL")}
+              />
+            )}
+
+            {severityFilter !== "ALL" && (
+              <FilterChip
+                label={`Severity: ${severityFilter}`}
+                onClear={() => setSeverityFilter("ALL")}
+              />
+            )}
+
+            {searchText.trim().length > 0 && (
+              <FilterChip
+                label={`Search: ${searchText}`}
+                onClear={() => setSearchText("")}
+              />
+            )}
+          </div>
+        </section>
+      )}
 
       <section>
         <h2>Findings</h2>
