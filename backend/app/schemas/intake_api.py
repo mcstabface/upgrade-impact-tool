@@ -57,7 +57,5 @@ class StartAnalysisRequest(BaseModel):
 
 class StartAnalysisResponse(BaseModel):
     analysis_id: str
-    status: AnalysisStatus
+    status: str
     started_utc: int
-
-    model_config = {"use_enum_values": True}

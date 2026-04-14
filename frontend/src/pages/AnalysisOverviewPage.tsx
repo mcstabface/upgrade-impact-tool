@@ -18,14 +18,61 @@ export default function AnalysisOverviewPage() {
   if (error) return <ErrorState message={error} />;
   if (!data) return <LoadingState />;
 
+  const reviewNote =
+    data.summary.unknown_count > 0
+      ? "Overall status requires review because unresolved unknown findings remain."
+      : data.summary.blocked_count > 0
+        ? "Overall status requires review because blocked findings remain."
+        : data.summary.review_required_count > 0
+          ? "Overall status requires review because review-required findings remain."
+          : null;
+
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>Analysis Overview</h1>
-      <p>{data.customer_name} — {data.environment_name}</p>
+      <p>
+        {data.customer_name} — {data.environment_name}
+      </p>
       <p>Status: {data.overall_status}</p>
       <p>
-        Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count}
+        Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
+        {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
       </p>
+
+      {reviewNote && <p>{reviewNote}</p>}
+
+      {data.assumptions.length > 0 && (
+        <>
+          <h2>Assumptions</h2>
+          <ul>
+            {data.assumptions.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {data.missing_inputs.length > 0 && (
+        <>
+          <h2>Missing Inputs</h2>
+          <ul>
+            {data.missing_inputs.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {data.derived_risks.length > 0 && (
+        <>
+          <h2>Derived Risks</h2>
+          <ul>
+            {data.derived_risks.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <h2>Applications</h2>
       <ul>

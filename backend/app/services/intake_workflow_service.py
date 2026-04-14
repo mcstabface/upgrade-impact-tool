@@ -171,7 +171,6 @@ class IntakeWorkflowService:
         )
 
         execution_result = self.execution_service.execute(db, analysis_id)
-        print(f"analysis execution result: {execution_result}")
 
         try:
             db.commit()
@@ -180,10 +179,26 @@ class IntakeWorkflowService:
             raise
 
         print(f"snapshot created/selected: snapshot_id={snapshot_id}, content_hash={content_hash}")
+        print(f"analysis execution result: {execution_result}")
+
+        status_row = db.execute(
+            text("""
+                SELECT analysis_status
+                FROM analysis_runs
+                WHERE analysis_id = :analysis_id
+            """),
+            {"analysis_id": analysis_id},
+        ).first()
+
+        final_status = (
+            status_row.analysis_status
+            if status_row and status_row.analysis_status
+            else AnalysisStatus.ANALYSIS_RUNNING.value
+        )
 
         return StartAnalysisResponse(
             analysis_id=analysis_id,
-            status=AnalysisStatus.ANALYSIS_RUNNING,
+            status=final_status,
             started_utc=started_utc,
         )
 
