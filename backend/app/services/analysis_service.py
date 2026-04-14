@@ -38,6 +38,8 @@ class AnalysisService:
 
         applications = self.repository.get_overview_applications(db, analysis_id)
 
+        supporting = self.repository.get_overview_supporting_lists(db, analysis_id)
+
         return AnalysisOverviewResponse(
             analysis_id=header["analysis_id"],
             customer_name=header["customer_name"],
@@ -50,15 +52,9 @@ class AnalysisService:
                 unknown_count=header["unknown_count"],
                 blocked_count=header["blocked_count"],
             ),
-            assumptions=["Standard application usage assumed"],
-            missing_inputs=[
-                "No integration inventory provided for Payroll",
-                "No customization inventory provided for Accounts Payable",
-            ],
-            derived_risks=[
-                "Technical interface impact may be understated",
-                "Workflow customization behavior may require review",
-            ],
+            assumptions=supporting["assumptions"],
+            missing_inputs=supporting["missing_inputs"],
+            derived_risks=supporting["derived_risks"],
             applications=[AnalysisApplicationSummary(**row) for row in applications],
         )
 

@@ -81,3 +81,38 @@ class AnalysisRepository:
             ORDER BY af.finding_id
         """)
         return [dict(row._mapping) for row in db.execute(query, {"analysis_application_id": analysis_application_id}).all()]
+    
+    def get_overview_supporting_lists(self, db: Session, analysis_id: str) -> dict:
+        assumptions = db.execute(
+            text("""
+                SELECT DISTINCT assumptions_text
+                FROM analysis_findings
+                WHERE analysis_id = :analysis_id
+                AND assumptions_text IS NOT NULL
+                AND assumptions_text <> ''
+                ORDER BY assumptions_text
+            """),
+            {"analysis_id": analysis_id},
+        ).all()
+
+        missing_inputs = db.execute(
+            text("""
+                SELECT DISTINCT missing_inputs_text
+                FROM analysis_findings
+                WHERE analysis_id = :analysis_id
+                AND missing_inputs_text IS NOT NULL
+                AND missing_inputs_text <> ''
+                ORDER BY missing_inputs_text
+            """),
+            {"analysis_id": analysis_id},
+        ).all()
+
+        derived_risks: list[str] = []
+        if any(row.missing_inputs_text for row in missing_inputs):
+            derived_risks.append("Analysis includes findings with incomplete customer context.")
+
+        return {
+            "assumptions": [row.assumptions_text for row in assumptions],
+            "missing_inputs": [row.missing_inputs_text for row in missing_inputs],
+            "derived_risks": derived_risks,
+        }
