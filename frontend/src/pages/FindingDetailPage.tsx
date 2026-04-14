@@ -21,6 +21,7 @@ export default function FindingDetailPage() {
   );
   const [resolving, setResolving] = useState(false);
   const [resolveMessage, setResolveMessage] = useState<string | null>(null);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
   const analysisId = searchParams.get("analysisId");
   const applicationId = searchParams.get("applicationId");
@@ -59,6 +60,19 @@ export default function FindingDetailPage() {
     }
   }
 
+  async function handleCopyKbReference() {
+    if (!data) return;
+
+    const kbReference = `${data.evidence.kb_article_number} — ${data.evidence.kb_title}`;
+
+    try {
+      await navigator.clipboard.writeText(kbReference);
+      setCopyMessage("KB reference copied.");
+    } catch {
+      setCopyMessage("Could not copy KB reference.");
+    }
+  }
+
   if (error) return <ErrorState message={error} />;
   if (!data) return <LoadingState />;
 
@@ -91,63 +105,67 @@ export default function FindingDetailPage() {
         {data.version_range.to_version ?? "N/A"}
       </p>
 
-      <h2>What Changed</h2>
-      <p>{data.plain_language_summary}</p>
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>What Changed</h2>
+        <p>{data.plain_language_summary}</p>
+      </section>
 
       {data.business_impact_summary && (
-        <>
+        <section style={{ marginBottom: "2rem" }}>
           <h2>Why It Matters</h2>
           <p>{data.business_impact_summary}</p>
-        </>
+        </section>
       )}
 
       {data.technical_impact_summary && (
-        <>
+        <section style={{ marginBottom: "2rem" }}>
           <h2>Technical Impact</h2>
           <p>{data.technical_impact_summary}</p>
-        </>
+        </section>
       )}
 
       {data.recommended_action && (
-        <>
+        <section style={{ marginBottom: "2rem" }}>
           <h2>Recommended Action</h2>
           <p>{data.recommended_action}</p>
-        </>
+        </section>
       )}
 
-      <h2>Transparency</h2>
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Transparency</h2>
 
-      {data.reason_for_status && (
-        <>
-          <h3>Reason for Status</h3>
-          <p>{data.reason_for_status}</p>
-        </>
-      )}
+        {data.reason_for_status && (
+          <>
+            <h3>Reason for Status</h3>
+            <p>{data.reason_for_status}</p>
+          </>
+        )}
 
-      {data.assumptions.length > 0 && (
-        <>
-          <h3>Assumptions</h3>
-          <ul>
-            {data.assumptions.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
+        {data.assumptions.length > 0 && (
+          <>
+            <h3>Assumptions</h3>
+            <ul>
+              {data.assumptions.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </>
+        )}
 
-      {data.missing_inputs.length > 0 && (
-        <>
-          <h3>Missing Inputs</h3>
-          <ul>
-            {data.missing_inputs.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
+        {data.missing_inputs.length > 0 && (
+          <>
+            <h3>Missing Inputs</h3>
+            <ul>
+              {data.missing_inputs.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </>
+        )}
+      </section>
 
       {canResolve && (
-        <>
+        <section style={{ marginBottom: "2rem" }}>
           <h2>Resolve Finding</h2>
           <form onSubmit={handleResolve}>
             <div>
@@ -164,20 +182,50 @@ export default function FindingDetailPage() {
               </button>
             </div>
           </form>
-        </>
+          {resolveMessage && <p>{resolveMessage}</p>}
+        </section>
       )}
 
-      {resolveMessage && <p>{resolveMessage}</p>}
+      <section
+        style={{
+          border: "1px solid #ccc",
+          padding: "1rem",
+          marginBottom: "2rem",
+        }}
+      >
+        <h2 style={{ marginTop: 0 }}>Source Evidence</h2>
+        <p>
+          <strong>KB Article:</strong> {data.evidence.kb_article_number}
+        </p>
+        <p>
+          <strong>Title:</strong> {data.evidence.kb_title}
+        </p>
+        <p>
+          <strong>Published:</strong> {data.evidence.publication_date}
+        </p>
+        <p>
+          <strong>Excerpt:</strong> {data.evidence.evidence_excerpt}
+        </p>
+        {data.evidence.reference_section && (
+          <p>
+            <strong>Reference Section:</strong> {data.evidence.reference_section}
+          </p>
+        )}
 
-      <h2>Source Evidence</h2>
-      <p>KB Article: {data.evidence.kb_article_number}</p>
-      <p>Title: {data.evidence.kb_title}</p>
-      <p>Published: {data.evidence.publication_date}</p>
-      <p>Excerpt: {data.evidence.evidence_excerpt}</p>
-      {data.evidence.reference_section && <p>Reference Section: {data.evidence.reference_section}</p>}
-      <a href={data.evidence.kb_url} target="_blank" rel="noreferrer">
-        Open Source Link
-      </a>
+        <div style={{ marginTop: "1rem" }}>
+          <button type="button" onClick={handleCopyKbReference}>
+            Copy KB Reference
+          </button>
+        </div>
+
+        {copyMessage && <p>{copyMessage}</p>}
+
+        <p style={{ marginTop: "1rem" }}>
+          <a href={data.evidence.kb_url} target="_blank" rel="noreferrer">
+            Open Source Link
+          </a>
+        </p>
+      </section>
     </main>
   );
 }
