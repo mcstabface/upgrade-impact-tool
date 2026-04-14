@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import ReviewQueuePage from "../pages/ReviewQueuePage";
 import DashboardPage from "../pages/DashboardPage";
 import IntakeNewPage from "../pages/IntakeNewPage";
 import IntakeDetailPage from "../pages/IntakeDetailPage";
@@ -18,4 +19,5 @@ export const router = createBrowserRouter([
     element: <ApplicationDetailPage />,
   },
   { path: "/findings/:id", element: <FindingDetailPage /> },
+  { path: "/review-queue", element: <ReviewQueuePage /> },
 ]);

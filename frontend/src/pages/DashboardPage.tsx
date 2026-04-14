@@ -36,6 +36,9 @@ export default function DashboardPage() {
             Applies: {analysis.applies_count} | Review Required:{" "}
             {analysis.review_required_count} | Unknown: {analysis.unknown_count}
           </p>
+          <p>
+            <Link to="/review-queue">Open Review Queue</Link>
+          </p>
         </article>
       ))}
     </main>
