@@ -1,3 +1,5 @@
+import { formatStatusLabel } from "../utils/status";
+
 type Props = {
   status: string;
 };
@@ -24,7 +26,7 @@ export default function StatusBanner({ status }: Props) {
         margin: "1rem 0",
       }}
     >
-      <strong>{status}</strong>
+      <strong>{formatStatusLabel(status)}</strong>
       <p style={{ marginBottom: 0 }}>{text}</p>
     </div>
   );

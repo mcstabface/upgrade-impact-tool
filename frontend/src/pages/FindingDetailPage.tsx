@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
+import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import StatusHelp from "../components/StatusHelp";
@@ -95,7 +96,7 @@ export default function FindingDetailPage() {
       </p>
 
       <h1>{data.headline}</h1>
-      <p>Status: {data.status}</p>
+      <p>Status: {formatStatusLabel(data.status)}</p>
       <StatusHelp status={data.status} />
       <StatusBanner status={data.status} />
       <p>Severity: {data.severity}</p>

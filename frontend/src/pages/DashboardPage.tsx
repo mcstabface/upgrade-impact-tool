@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
@@ -17,7 +18,7 @@ function AnalysisCard({ analysis }: { analysis: DashboardAnalysisItem }) {
         </Link>
       </h3>
       <p>Analysis ID: {analysis.analysis_id}</p>
-      <p>Status: {analysis.overall_status}</p>
+      <p>Status: {formatStatusLabel(analysis.overall_status)}</p>
       <StatusHelp status={analysis.overall_status} />
       <p>
         Applies: {analysis.applies_count} | Review Required: {analysis.review_required_count} | Unknown:{" "}

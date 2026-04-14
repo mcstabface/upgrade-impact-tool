@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import StatusHelp from "../components/StatusHelp";
@@ -104,7 +105,7 @@ export default function ApplicationDetailPage() {
       </p>
 
       <h1>{data.application_name}</h1>
-      <p>Status: {data.application_status}</p>
+      <p>Status: {formatStatusLabel(data.application_status)}</p>
       <StatusHelp status={data.application_status} />
       <StatusBanner status={data.application_status} />
       <p>
@@ -174,7 +175,7 @@ export default function ApplicationDetailPage() {
                 </Link>
               </h3>
 
-              <p>Status: {finding.status}</p>
+              <p>Status: {formatStatusLabel(finding.status)}</p>
               <StatusBanner status={finding.status} />
               <p>Severity: {finding.severity}</p>
               <p>Change Type: {finding.change_taxonomy}</p>

@@ -9,6 +9,8 @@ const STATUS_HELP: Record<string, string> = {
   BLOCKED: "This change cannot be evaluated safely because required source data is missing.",
   READY: "No unresolved blocking or review conditions remain.",
   REVIEW_REQUIRED: "At least one finding still needs review or clarification.",
+  ANALYSIS_RUNNING: "This analysis is still running.",
+  ANALYSIS_COMPLETE: "Analysis execution finished successfully.",
 };
 
 export default function StatusHelp({ status }: Props) {

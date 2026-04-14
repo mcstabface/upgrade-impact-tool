@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
@@ -33,7 +34,7 @@ export default function ReviewQueuePage() {
             <div>
               <Link to={`/findings/${item.finding_id}`}>{item.headline}</Link>
               {" — "}
-              {item.finding_status}
+              {formatStatusLabel(item.finding_status)}
               {" — "}
               {item.application_name}
               {" — "}
@@ -41,8 +42,8 @@ export default function ReviewQueuePage() {
               {item.reason_for_status ? ` — ${item.reason_for_status}` : ""}
             </div>
 
-            <StatusHelp status={item.finding_status} />
-            <StatusBanner status={item.finding_status} />
+            <StatusHelp status={formatStatusLabel(item.finding_status)} />
+            <StatusBanner status={formatStatusLabel(item.finding_status)} />
           </li>
         ))}
       </ul>

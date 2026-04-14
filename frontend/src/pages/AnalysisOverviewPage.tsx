@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { formatStatusLabel } from "../utils/status";
 import StatusHelp from "../components/StatusHelp";
 import { formatUnixSeconds } from "../utils/time";
 import LoadingState from "../components/LoadingState";
@@ -87,7 +88,7 @@ export default function AnalysisOverviewPage() {
         <p>
           {data.customer_name} — {data.environment_name}
         </p>
-        <p>Status: {data.overall_status}</p>
+        <p>Status: {formatStatusLabel(data.overall_status)}</p>
         <StatusHelp status={data.overall_status} />
         <p>Started: {formatUnixSeconds(data.started_utc)}</p>
         <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
