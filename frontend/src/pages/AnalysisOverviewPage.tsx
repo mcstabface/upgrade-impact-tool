@@ -29,33 +29,33 @@ export default function AnalysisOverviewPage() {
           ? "Overall status requires review because review-required findings remain."
           : null;
 
+  const topRisks = data.top_risks ?? [];
+  const topActions = data.top_actions ?? [];
+
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>Analysis Overview</h1>
+
       <p>
         <Link to="/dashboard">Back to Dashboard</Link>
       </p>
+
       <p>Analysis ID: {data.analysis_id}</p>
       <p>
         {data.customer_name} — {data.environment_name}
       </p>
       <p>Status: {data.overall_status}</p>
-           <p>Status: {data.overall_status}</p>
       <StatusHelp status={data.overall_status} />
-      <p>Started: {formatUnixSeconds(data.started_utc)}</p>
-      <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
-      <p>Duration (ms): {data.duration_ms ?? "N/A"}</p> <p>
-        Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
-        {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
-      </p>
-
-      <p>Status: {data.overall_status}</p>
       <p>Started: {formatUnixSeconds(data.started_utc)}</p>
       <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
       <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
 
-      const topRisks = data.top_risks ?? [];
-      const topActions = data.top_actions ?? [];
+      <p>
+        Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
+        {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
+      </p>
+
+      {reviewNote && <p>{reviewNote}</p>}
 
       {topRisks.length > 0 && (
         <>
@@ -78,7 +78,6 @@ export default function AnalysisOverviewPage() {
           </ul>
         </>
       )}
-      {reviewNote && <p>{reviewNote}</p>}
 
       {data.assumptions.length > 0 && (
         <>
