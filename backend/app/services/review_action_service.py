@@ -1,8 +1,13 @@
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.services.analysis_recompute_service import AnalysisRecomputeService
+
 
 class ReviewActionService:
+    def __init__(self) -> None:
+        self.recompute_service = AnalysisRecomputeService()
+
     def resolve_finding(
         self,
         db: Session,
@@ -37,8 +42,14 @@ class ReviewActionService:
             },
         )
 
+        recompute_result = self.recompute_service.recompute_for_analysis(
+            db=db,
+            analysis_id=row.analysis_id,
+        )
+
         return {
             "finding_id": finding_id,
             "finding_status": "RESOLVED",
             "resolution_note": resolution_note,
+            "analysis_status": recompute_result["overall_status"],
         }

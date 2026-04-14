@@ -9,3 +9,4 @@ class ResolveFindingResponse(BaseModel):
     finding_id: int
     finding_status: str
     resolution_note: str
+    analysis_status: str
