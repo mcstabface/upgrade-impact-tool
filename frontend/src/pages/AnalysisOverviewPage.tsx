@@ -38,12 +38,14 @@ export default function AnalysisOverviewPage() {
         {data.customer_name} — {data.environment_name}
       </p>
       <p>Status: {data.overall_status}</p>
-      <p>
+           <p>Status: {data.overall_status}</p>
+      <p>Started UTC: {data.started_utc ?? "N/A"}</p>
+      <p>Completed UTC: {data.completed_utc ?? "N/A"}</p>
+      <p>Duration (ms): {data.duration_ms ?? "N/A"}</p> <p>
         Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
         {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
       </p>
 
-      <p>Analysis ID: {data.analysis_id}</p>
       <p>Status: {data.overall_status}</p>
       <p>Started UTC: {data.started_utc ?? "N/A"}</p>
       <p>Completed UTC: {data.completed_utc ?? "N/A"}</p>

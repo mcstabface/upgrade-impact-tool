@@ -36,7 +36,9 @@ export default function ApplicationDetailPage() {
       <ul>
         {data.findings.map((finding) => (
           <li key={finding.finding_id}>
-            <Link to={`/findings/${finding.finding_id}?analysisId=${id}&applicationId=${applicationId}`}>
+            <Link
+              to={`/findings/${finding.finding_id}?analysisId=${id}&applicationId=${applicationId}`}
+            >
               {finding.headline}
             </Link>
             {" — "}
