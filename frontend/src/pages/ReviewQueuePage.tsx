@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import StatusHelp from "../components/StatusHelp";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
@@ -36,6 +37,10 @@ export default function ReviewQueuePage() {
             {" — "}
             {item.analysis_id}
             {item.reason_for_status ? ` — ${item.reason_for_status}` : ""}
+
+            <div>
+              <StatusHelp status={item.finding_status} />
+            </div>
           </li>
         ))}
       </ul>

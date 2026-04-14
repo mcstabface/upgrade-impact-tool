@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
+import StatusHelp from "../components/StatusHelp";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import { getFindingDetail, type FindingDetailResponse } from "../services/findings";
@@ -36,6 +37,7 @@ export default function FindingDetailPage() {
 
       <h1>{data.headline}</h1>
       <p>Status: {data.status}</p>
+      <StatusHelp status={data.status} />
       <p>Severity: {data.severity}</p>
       <p>Application: {data.application_name}</p>
       <p>Module: {data.module_name ?? "N/A"}</p>
