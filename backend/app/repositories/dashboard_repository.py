@@ -21,34 +21,65 @@ class DashboardRepository:
             JOIN environments e ON e.environment_id = ar.environment_id
             LEFT JOIN analysis_applications aa ON aa.analysis_id = ar.analysis_id
             GROUP BY
-                ar.analysis_id, c.customer_name, e.environment_name, ar.completed_utc,
-                ar.overall_status, ar.applies_count, ar.review_required_count,
-                ar.unknown_count, ar.blocked_count
+                ar.analysis_id,
+                c.customer_name,
+                e.environment_name,
+                ar.completed_utc,
+                ar.overall_status,
+                ar.applies_count,
+                ar.review_required_count,
+                ar.unknown_count,
+                ar.blocked_count
             ORDER BY ar.completed_utc DESC NULLS LAST, ar.analysis_id
         """)
         return [dict(row._mapping) for row in db.execute(query).all()]
 
     def get_top_risks(self, db: Session) -> list[str]:
         query = text("""
-            SELECT af.headline
-            FROM analysis_findings af
-            JOIN analysis_runs ar ON ar.analysis_id = af.analysis_id
-            WHERE af.finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN')
+            WITH ranked_risks AS (
+                SELECT
+                    af.headline,
+                    af.finding_status,
+                    af.severity,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY af.headline
+                        ORDER BY
+                            CASE af.finding_status
+                                WHEN 'BLOCKED' THEN 1
+                                WHEN 'REQUIRES_REVIEW' THEN 2
+                                WHEN 'UNKNOWN' THEN 3
+                                ELSE 99
+                            END,
+                            CASE af.severity
+                                WHEN 'CRITICAL' THEN 1
+                                WHEN 'HIGH' THEN 2
+                                WHEN 'MEDIUM' THEN 3
+                                WHEN 'LOW' THEN 4
+                                ELSE 99
+                            END,
+                            af.finding_id DESC
+                    ) AS rn
+                FROM analysis_findings af
+                WHERE af.finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN')
+            )
+            SELECT headline
+            FROM ranked_risks
+            WHERE rn = 1
             ORDER BY
-            CASE af.finding_status
-                WHEN 'BLOCKED' THEN 1
-                WHEN 'REQUIRES_REVIEW' THEN 2
-                WHEN 'UNKNOWN' THEN 3
-                ELSE 99
-            END,
-            CASE af.severity
-                WHEN 'CRITICAL' THEN 1
-                WHEN 'HIGH' THEN 2
-                WHEN 'MEDIUM' THEN 3
-                WHEN 'LOW' THEN 4
-                ELSE 99
-            END,
-            af.headline
+                CASE finding_status
+                    WHEN 'BLOCKED' THEN 1
+                    WHEN 'REQUIRES_REVIEW' THEN 2
+                    WHEN 'UNKNOWN' THEN 3
+                    ELSE 99
+                END,
+                CASE severity
+                    WHEN 'CRITICAL' THEN 1
+                    WHEN 'HIGH' THEN 2
+                    WHEN 'MEDIUM' THEN 3
+                    WHEN 'LOW' THEN 4
+                    ELSE 99
+                END,
+                headline
             LIMIT 5
         """)
         rows = db.execute(query).all()
@@ -56,35 +87,55 @@ class DashboardRepository:
 
     def get_top_actions(self, db: Session) -> list[str]:
         query = text("""
-            SELECT af.recommended_action
-            FROM analysis_findings af
-            WHERE af.finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN', 'APPLIES')
-            AND af.recommended_action IS NOT NULL
-            AND af.recommended_action <> ''
+            WITH ranked_actions AS (
+                SELECT
+                    af.recommended_action,
+                    af.finding_status,
+                    af.severity,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY af.recommended_action
+                        ORDER BY
+                            CASE af.finding_status
+                                WHEN 'BLOCKED' THEN 1
+                                WHEN 'REQUIRES_REVIEW' THEN 2
+                                WHEN 'UNKNOWN' THEN 3
+                                WHEN 'APPLIES' THEN 4
+                                ELSE 99
+                            END,
+                            CASE af.severity
+                                WHEN 'CRITICAL' THEN 1
+                                WHEN 'HIGH' THEN 2
+                                WHEN 'MEDIUM' THEN 3
+                                WHEN 'LOW' THEN 4
+                                ELSE 99
+                            END,
+                            af.finding_id DESC
+                    ) AS rn
+                FROM analysis_findings af
+                WHERE af.finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN', 'APPLIES')
+                  AND af.recommended_action IS NOT NULL
+                  AND af.recommended_action <> ''
+            )
+            SELECT recommended_action
+            FROM ranked_actions
+            WHERE rn = 1
             ORDER BY
-            CASE af.finding_status
-                WHEN 'BLOCKED' THEN 1
-                WHEN 'REQUIRES_REVIEW' THEN 2
-                WHEN 'UNKNOWN' THEN 3
-                WHEN 'APPLIES' THEN 4
-                ELSE 99
-            END,
-            CASE af.severity
-                WHEN 'CRITICAL' THEN 1
-                WHEN 'HIGH' THEN 2
-                WHEN 'MEDIUM' THEN 3
-                WHEN 'LOW' THEN 4
-                ELSE 99
-            END,
-            af.recommended_action
+                CASE finding_status
+                    WHEN 'BLOCKED' THEN 1
+                    WHEN 'REQUIRES_REVIEW' THEN 2
+                    WHEN 'UNKNOWN' THEN 3
+                    WHEN 'APPLIES' THEN 4
+                    ELSE 99
+                END,
+                CASE severity
+                    WHEN 'CRITICAL' THEN 1
+                    WHEN 'HIGH' THEN 2
+                    WHEN 'MEDIUM' THEN 3
+                    WHEN 'LOW' THEN 4
+                    ELSE 99
+                END,
+                recommended_action
             LIMIT 5
         """)
         rows = db.execute(query).all()
-
-        seen = set()
-        actions = []
-        for row in rows:
-            if row.recommended_action not in seen:
-                seen.add(row.recommended_action)
-                actions.append(row.recommended_action)
-        return actions
+        return [row.recommended_action for row in rows]
