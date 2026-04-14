@@ -42,8 +42,6 @@ class AnalysisService:
 
         applications = self.repository.get_overview_applications(db, analysis_id)
 
-        supporting = self.repository.get_overview_supporting_lists(db, analysis_id)
-
         return AnalysisOverviewResponse(
             analysis_id=header["analysis_id"],
             customer_name=header["customer_name"],
