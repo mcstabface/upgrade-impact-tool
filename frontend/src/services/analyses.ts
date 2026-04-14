@@ -22,6 +22,9 @@ export type AnalysisOverviewResponse = {
   assumptions: string[];
   missing_inputs: string[];
   derived_risks: string[];
+  started_utc: number | null;
+  completed_utc: number | null;
+  duration_ms: number | null;
   applications: {
     analysis_application_id: number;
     application_name: string;

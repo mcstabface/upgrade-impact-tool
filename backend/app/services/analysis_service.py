@@ -55,6 +55,9 @@ class AnalysisService:
             assumptions=supporting["assumptions"],
             missing_inputs=supporting["missing_inputs"],
             derived_risks=supporting["derived_risks"],
+            started_utc=header["started_utc"],
+            completed_utc=header["completed_utc"],
+            duration_ms=header["duration_ms"],
             applications=[AnalysisApplicationSummary(**row) for row in applications],
         )
 

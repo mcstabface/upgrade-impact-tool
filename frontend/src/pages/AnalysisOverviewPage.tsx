@@ -31,6 +31,10 @@ export default function AnalysisOverviewPage() {
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>Analysis Overview</h1>
       <p>
+        <Link to="/dashboard">Back to Dashboard</Link>
+      </p>
+      <p>Analysis ID: {data.analysis_id}</p>
+      <p>
         {data.customer_name} — {data.environment_name}
       </p>
       <p>Status: {data.overall_status}</p>
@@ -38,6 +42,12 @@ export default function AnalysisOverviewPage() {
         Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
         {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
       </p>
+
+      <p>Analysis ID: {data.analysis_id}</p>
+      <p>Status: {data.overall_status}</p>
+      <p>Started UTC: {data.started_utc ?? "N/A"}</p>
+      <p>Completed UTC: {data.completed_utc ?? "N/A"}</p>
+      <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
 
       {reviewNote && <p>{reviewNote}</p>}
 

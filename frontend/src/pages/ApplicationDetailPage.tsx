@@ -25,6 +25,10 @@ export default function ApplicationDetailPage() {
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+      <p>
+        <Link to={`/analyses/${id}`}>Back to Analysis Overview</Link>
+      </p>
+
       <h1>{data.application_name}</h1>
       <p>Status: {data.application_status}</p>
 
@@ -32,7 +36,9 @@ export default function ApplicationDetailPage() {
       <ul>
         {data.findings.map((finding) => (
           <li key={finding.finding_id}>
-            <Link to={`/findings/${finding.finding_id}`}>{finding.headline}</Link>
+            <Link to={`/findings/${finding.finding_id}?analysisId=${id}&applicationId=${applicationId}`}>
+              {finding.headline}
+            </Link>
             {" — "}
             {finding.status}
           </li>

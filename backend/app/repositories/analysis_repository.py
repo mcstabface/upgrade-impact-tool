@@ -23,7 +23,10 @@ class AnalysisRepository:
                 ar.applies_count,
                 ar.review_required_count,
                 ar.unknown_count,
-                ar.blocked_count
+                ar.started_utc,
+                ar.completed_utc,
+                ar.duration_ms,
+                ar.blocked_count                
             FROM analysis_runs ar
             JOIN customers c ON c.customer_id = ar.customer_id
             JOIN environments e ON e.environment_id = ar.environment_id
