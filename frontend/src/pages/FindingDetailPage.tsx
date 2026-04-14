@@ -1,16 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
-import StatusHelp from "../components/StatusHelp";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
-import { getFindingDetail, type FindingDetailResponse } from "../services/findings";
+import StatusHelp from "../components/StatusHelp";
+import {
+  getFindingDetail,
+  resolveFinding,
+  type FindingDetailResponse,
+} from "../services/findings";
 
 export default function FindingDetailPage() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+
   const [data, setData] = useState<FindingDetailResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [resolutionNote, setResolutionNote] = useState(
+    "Reviewed manually; no further action required for current scope.",
+  );
+  const [resolving, setResolving] = useState(false);
+  const [resolveMessage, setResolveMessage] = useState<string | null>(null);
 
   const analysisId = searchParams.get("analysisId");
   const applicationId = searchParams.get("applicationId");
@@ -20,8 +30,42 @@ export default function FindingDetailPage() {
     getFindingDetail(id).then(setData).catch((err: Error) => setError(err.message));
   }, [id]);
 
+  async function handleResolve(event: React.FormEvent) {
+    event.preventDefault();
+    if (!id) return;
+
+    setResolving(true);
+    setError(null);
+    setResolveMessage(null);
+
+    try {
+      const result = await resolveFinding(id, resolutionNote);
+
+      setData((current) =>
+        current
+          ? {
+              ...current,
+              status: result.finding_status,
+              reason_for_status: result.resolution_note,
+            }
+          : current,
+      );
+
+      setResolveMessage("Finding resolved.");
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setResolving(false);
+    }
+  }
+
   if (error) return <ErrorState message={error} />;
   if (!data) return <LoadingState />;
+
+  const canResolve =
+    data.status === "UNKNOWN" ||
+    data.status === "REQUIRES_REVIEW" ||
+    data.status === "BLOCKED";
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
@@ -42,12 +86,38 @@ export default function FindingDetailPage() {
       <p>Application: {data.application_name}</p>
       <p>Module: {data.module_name ?? "N/A"}</p>
 
-      {data.status === "UNKNOWN" && (
-        <p>This finding requires follow-up because customer context is incomplete.</p>
+      {data.reason_for_status && (
+        <>
+          <h2>Reason for Status</h2>
+          <p>{data.reason_for_status}</p>
+        </>
       )}
 
       <h2>Summary</h2>
       <p>{data.plain_language_summary}</p>
+
+      {canResolve && (
+        <>
+          <h2>Resolve Finding</h2>
+          <form onSubmit={handleResolve}>
+            <div>
+              <label>Resolution Note </label>
+              <input
+                value={resolutionNote}
+                onChange={(e) => setResolutionNote(e.target.value)}
+                style={{ width: "32rem", maxWidth: "100%" }}
+              />
+            </div>
+            <div style={{ marginTop: "1rem" }}>
+              <button type="submit" disabled={resolving}>
+                {resolving ? "Resolving..." : "Resolve Finding"}
+              </button>
+            </div>
+          </form>
+        </>
+      )}
+
+      {resolveMessage && <p>{resolveMessage}</p>}
 
       <h2>Evidence</h2>
       <p>{data.evidence.kb_article_number}</p>
