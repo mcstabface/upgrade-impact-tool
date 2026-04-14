@@ -48,6 +48,27 @@ function FilterChip({
   );
 }
 
+function SummaryCard({
+  label,
+  value,
+}: {
+  label: string;
+  value: number;
+}) {
+  return (
+    <div
+      style={{
+        border: "1px solid #ccc",
+        padding: "0.75rem 1rem",
+        minWidth: "10rem",
+      }}
+    >
+      <div style={{ fontSize: "0.9rem" }}>{label}</div>
+      <div style={{ fontSize: "1.5rem", fontWeight: 700 }}>{value}</div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -74,17 +95,35 @@ export default function DashboardPage() {
     });
   }, [data, statusFilter, showUnresolvedOnly]);
 
-  const latestCompletedAnalysis = useMemo(() => {
-    return (
-      filteredAnalyses.find((analysis) => analysis.analysis_date !== null) ?? null
+  const dashboardMetrics = useMemo(() => {
+    return filteredAnalyses.reduce(
+      (acc, analysis) => {
+        acc.totalAnalyses += 1;
+        if (analysis.overall_status === "READY") acc.readyAnalyses += 1;
+        if (analysis.overall_status === "REVIEW_REQUIRED") acc.reviewRequiredAnalyses += 1;
+        if (analysis.overall_status === "ANALYSIS_RUNNING") acc.runningAnalyses += 1;
+        acc.unknownFindings += analysis.unknown_count;
+        acc.blockedFindings += analysis.blocked_count;
+        return acc;
+      },
+      {
+        totalAnalyses: 0,
+        readyAnalyses: 0,
+        reviewRequiredAnalyses: 0,
+        runningAnalyses: 0,
+        unknownFindings: 0,
+        blockedFindings: 0,
+      },
     );
+  }, [filteredAnalyses]);
+
+  const latestCompletedAnalysis = useMemo(() => {
+    return filteredAnalyses.find((analysis) => analysis.analysis_date !== null) ?? null;
   }, [filteredAnalyses]);
 
   const activeAnalyses = useMemo(() => {
     return filteredAnalyses.filter(
-      (analysis) =>
-        analysis.analysis_date === null &&
-        analysis.overall_status !== "READY",
+      (analysis) => analysis.analysis_date === null && analysis.overall_status !== "READY",
     );
   }, [filteredAnalyses]);
 
@@ -105,12 +144,7 @@ export default function DashboardPage() {
   }
 
   if (error) {
-    return (
-      <ErrorState
-        title="Could not load dashboard"
-        message={error}
-      />
-    );
+    return <ErrorState title="Could not load dashboard" message={error} />;
   }
 
   if (!data) {
@@ -189,6 +223,24 @@ export default function DashboardPage() {
           </div>
         </section>
       )}
+
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Summary</h2>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <SummaryCard label="Analyses in View" value={dashboardMetrics.totalAnalyses} />
+          <SummaryCard label="Ready" value={dashboardMetrics.readyAnalyses} />
+          <SummaryCard label="Review Required" value={dashboardMetrics.reviewRequiredAnalyses} />
+          <SummaryCard label="Running" value={dashboardMetrics.runningAnalyses} />
+          <SummaryCard label="Unknown Findings" value={dashboardMetrics.unknownFindings} />
+          <SummaryCard label="Blocked Findings" value={dashboardMetrics.blockedFindings} />
+        </div>
+      </section>
 
       {latestCompletedAnalysis && (
         <>
