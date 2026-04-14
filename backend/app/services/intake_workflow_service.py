@@ -1,12 +1,9 @@
 import time
 from uuid import uuid4
 
-from sqlalchemy.orm import Session
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-from app.services.snapshot_service import SnapshotService
-from app.services.intake_validation_service import IntakeValidationService
-from app.services.analysis_transition_service import AnalysisTransitionService
 from app.core.enums import AnalysisStatus
 from app.repositories.intake_repository import IntakeRepository
 from app.schemas.intake_api import (
@@ -18,6 +15,9 @@ from app.schemas.intake_api import (
     IntakeValidateResponse,
     StartAnalysisResponse,
 )
+from app.services.analysis_transition_service import AnalysisTransitionService
+from app.services.intake_validation_service import IntakeValidationService
+from app.services.snapshot_service import SnapshotService
 
 
 class IntakeWorkflowService:
@@ -36,6 +36,7 @@ class IntakeWorkflowService:
             "environment_type": payload.environment_type.value,
             "applications": [],
         }
+
         self.repository.create_draft(
             db=db,
             intake_id=intake_id,
@@ -46,6 +47,7 @@ class IntakeWorkflowService:
             payload_json=payload_json,
             created_utc=created_utc,
         )
+
         return IntakeCreateResponse(
             intake_id=intake_id,
             status=AnalysisStatus.DRAFT.value,
@@ -105,68 +107,6 @@ class IntakeWorkflowService:
             return None
 
         payload = row["payload_json"] or {}
-        missing_required_fields = []
-
-        applications = payload.get("applications") or []
-        if not applications:
-            missing_required_fields.append("applications")
-
-        if not payload.get("vendor_kb_documents"):
-            missing_required_fields.append("vendor_kb_documents")
-
-        for app in applications:
-            if not app.get("current_version"):
-                missing_required_fields.append("current_version")
-            if not app.get("target_version"):
-                missing_required_fields.append("target_version")
-            if not app.get("modules_enabled"):
-                missing_required_fields.append("modules_enabled")
-
-        missing_required_fields = sorted(set(missing_required_fields))
-        warnings = []
-
-        if not payload.get("integrations"):
-            warnings.append("No integration inventory provided")
-        if not payload.get("customizations"):
-            warnings.append("No customization inventory provided")
-        if not payload.get("jobs"):
-            warnings.append("Job inventory is incomplete or not provided")
-
-        completeness_score = self._calculate_completeness(payload)
-
-        if missing_required_fields:
-            new_status = AnalysisStatus.BLOCKED.value
-            self.repository.update_draft(
-                db=db,
-                intake_id=intake_id,
-                status=new_status,
-                payload_json=payload,
-                completeness_score=completeness_score,
-                updated_utc=int(time.time()),
-            )
-            return IntakeValidateResponse(
-                intake_id=intake_id,
-                status=new_status,
-                missing_required_fields=missing_required_fields,
-                warnings=[],
-            )
-
-        new_status = AnalysisStatus.INTAKE_VALIDATED.value
-        self.repository.update_draft(
-            db=db,
-            intake_id=intake_id,
-            status=new_status,
-            payload_json=payload,
-            completeness_score=completeness_score,
-            updated_utc=int(time.time()),
-        )
-        return IntakeValidateResponse(
-            intake_id=intake_id,
-            status=new_status,
-            completeness_score=completeness_score,
-            missing_required_fields=[],
-            warnings=warnings,
-        )
         validation_result = self.validation_service.validate(payload)
 
         self.repository.update_draft(
@@ -186,61 +126,61 @@ class IntakeWorkflowService:
             warnings=[] if validation_result.status == AnalysisStatus.BLOCKED.value else validation_result.warnings,
         )
 
-def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
-    row = self.repository.get_draft(db, intake_id)
-    if not row:
-        return None
-    if row["status"] != AnalysisStatus.INTAKE_VALIDATED.value:
-        return None
+    def start_analysis(self, db: Session, intake_id: str) -> StartAnalysisResponse | None:
+        row = self.repository.get_draft(db, intake_id)
+        if not row:
+            return None
+        if row["status"] != AnalysisStatus.INTAKE_VALIDATED.value:
+            return None
 
-    snapshot_id, _content_hash = self.snapshot_service.persist_snapshot_for_intake(
-        db=db,
-        intake_row=row,
-    )
+        snapshot_id, content_hash = self.snapshot_service.persist_snapshot_for_intake(
+            db=db,
+            intake_row=row,
+        )
 
-    snapshot_row = db.execute(
-        text("""
-            SELECT customer_id, environment_id
-            FROM customer_state_snapshots
-            WHERE snapshot_id = :snapshot_id
-        """),
-        {"snapshot_id": snapshot_id},
-    ).first()
+        snapshot_row = db.execute(
+            text("""
+                SELECT customer_id, environment_id
+                FROM customer_state_snapshots
+                WHERE snapshot_id = :snapshot_id
+            """),
+            {"snapshot_id": snapshot_id},
+        ).first()
 
-    analysis_id = f"anl_{uuid4().hex[:12]}"
-    started_utc = int(time.time())
+        analysis_id = f"anl_{uuid4().hex[:12]}"
+        started_utc = int(time.time())
 
-    self.repository.create_analysis_run(
-        db=db,
-        analysis_id=analysis_id,
-        customer_id=snapshot_row.customer_id,
-        environment_id=snapshot_row.environment_id,
-        snapshot_id=snapshot_id,
-        status=AnalysisStatus.INTAKE_VALIDATED.value,
-        started_utc=started_utc,
-    )
+        self.repository.create_analysis_run(
+            db=db,
+            analysis_id=analysis_id,
+            customer_id=snapshot_row.customer_id,
+            environment_id=snapshot_row.environment_id,
+            snapshot_id=snapshot_id,
+            status=AnalysisStatus.INTAKE_VALIDATED.value,
+            started_utc=started_utc,
+        )
 
-    self.transition_service.transition_analysis(
-        db=db,
-        analysis_id=analysis_id,
-        new_state=AnalysisStatus.ANALYSIS_RUNNING,
-        trigger_event="START_ANALYSIS",
-        user_id="system",
-    )
+        self.transition_service.transition_analysis(
+            db=db,
+            analysis_id=analysis_id,
+            new_state=AnalysisStatus.ANALYSIS_RUNNING,
+            trigger_event="START_ANALYSIS",
+            user_id="system",
+        )
 
-    try:
-        db.commit()
-    except Exception:
-        db.rollback()
-        raise
+        try:
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise
 
-    print(f"snapshot created/selected: snapshot_id={snapshot_id}, content_hash={_content_hash}")
+        print(f"snapshot created/selected: snapshot_id={snapshot_id}, content_hash={content_hash}")
 
-    return StartAnalysisResponse(
-        analysis_id=analysis_id,
-        status=AnalysisStatus.ANALYSIS_RUNNING,
-        started_utc=started_utc,
-    )
+        return StartAnalysisResponse(
+            analysis_id=analysis_id,
+            status=AnalysisStatus.ANALYSIS_RUNNING,
+            started_utc=started_utc,
+        )
 
     def _calculate_completeness(self, payload: dict) -> int:
         checks = [
