@@ -4,6 +4,7 @@ from uuid import uuid4
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.services.analysis_execution_service import AnalysisExecutionService
 from app.core.enums import AnalysisStatus
 from app.repositories.intake_repository import IntakeRepository
 from app.schemas.intake_api import (
@@ -26,6 +27,7 @@ class IntakeWorkflowService:
         self.transition_service = AnalysisTransitionService()
         self.validation_service = IntakeValidationService()
         self.snapshot_service = SnapshotService()
+        self.execution_service = AnalysisExecutionService()
 
     def create_intake(self, db: Session, payload: IntakeCreateRequest) -> IntakeCreateResponse:
         created_utc = int(time.time())
@@ -167,6 +169,9 @@ class IntakeWorkflowService:
             trigger_event="START_ANALYSIS",
             user_id="system",
         )
+
+        execution_result = self.execution_service.execute(db, analysis_id)
+        print(f"analysis execution result: {execution_result}")
 
         try:
             db.commit()
