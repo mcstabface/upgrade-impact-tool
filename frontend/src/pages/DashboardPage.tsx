@@ -24,6 +24,19 @@ export default function DashboardPage() {
       <p>
         <Link to="/intakes/new">Create Intake</Link>
       </p>
+      <h2>Top Risks</h2>
+      <ul>
+        {data.top_risks.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+
+      <h2>Top Actions</h2>
+      <ul>
+        {data.top_actions.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
       {data.analyses.map((analysis) => (
         <article key={analysis.analysis_id} style={{ marginBottom: "1rem" }}>
           <h2>
