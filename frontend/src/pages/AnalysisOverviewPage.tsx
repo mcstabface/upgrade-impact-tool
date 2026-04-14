@@ -54,28 +54,30 @@ export default function AnalysisOverviewPage() {
       <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
       <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
 
-      {data.top_risks.length > 0 && (
+      const topRisks = data.top_risks ?? [];
+      const topActions = data.top_actions ?? [];
+
+      {topRisks.length > 0 && (
         <>
           <h2>Top Risks</h2>
           <ul>
-            {data.top_risks.map((item) => (
+            {topRisks.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </>
       )}
 
-      {data.top_actions.length > 0 && (
+      {topActions.length > 0 && (
         <>
           <h2>Top Actions</h2>
           <ul>
-            {data.top_actions.map((item) => (
+            {topActions.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </>
       )}
-
       {reviewNote && <p>{reviewNote}</p>}
 
       {data.assumptions.length > 0 && (
