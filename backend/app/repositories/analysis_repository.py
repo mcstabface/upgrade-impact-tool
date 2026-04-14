@@ -120,6 +120,7 @@ class AnalysisRepository:
                 SELECT recommended_action
                 FROM analysis_findings
                 WHERE analysis_id = :analysis_id
+                  AND finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN', 'APPLIES')
                   AND recommended_action IS NOT NULL
                   AND recommended_action <> ''
                 ORDER BY
@@ -150,15 +151,16 @@ class AnalysisRepository:
                 seen.add(row.recommended_action)
                 actions.append(row.recommended_action)
         return actions
-
+        
     def get_overview_supporting_lists(self, db: Session, analysis_id: str) -> dict:
         assumptions = db.execute(
             text("""
                 SELECT DISTINCT assumptions_text
                 FROM analysis_findings
                 WHERE analysis_id = :analysis_id
-                AND assumptions_text IS NOT NULL
-                AND assumptions_text <> ''
+                  AND finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN', 'APPLIES')
+                  AND assumptions_text IS NOT NULL
+                  AND assumptions_text <> ''
                 ORDER BY assumptions_text
             """),
             {"analysis_id": analysis_id},
@@ -169,8 +171,9 @@ class AnalysisRepository:
                 SELECT DISTINCT missing_inputs_text
                 FROM analysis_findings
                 WHERE analysis_id = :analysis_id
-                AND missing_inputs_text IS NOT NULL
-                AND missing_inputs_text <> ''
+                  AND finding_status IN ('BLOCKED', 'REQUIRES_REVIEW', 'UNKNOWN')
+                  AND missing_inputs_text IS NOT NULL
+                  AND missing_inputs_text <> ''
                 ORDER BY missing_inputs_text
             """),
             {"analysis_id": analysis_id},
