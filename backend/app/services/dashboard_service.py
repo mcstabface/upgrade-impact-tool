@@ -10,6 +10,11 @@ class DashboardService:
 
     def get_dashboard(self, db: Session) -> DashboardResponse:
         rows = self.repository.get_dashboard(db)
+        top_risks = self.repository.get_top_risks(db)
+        top_actions = self.repository.get_top_actions(db)
+
         return DashboardResponse(
-            analyses=[DashboardAnalysisItem(**row) for row in rows]
+            analyses=[DashboardAnalysisItem(**row) for row in rows],
+            top_risks=top_risks,
+            top_actions=top_actions,
         )

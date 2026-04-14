@@ -16,3 +16,5 @@ class DashboardAnalysisItem(BaseModel):
 
 class DashboardResponse(BaseModel):
     analyses: list[DashboardAnalysisItem]
+    top_risks: list[str] = []
+    top_actions: list[str] = []

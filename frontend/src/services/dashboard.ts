@@ -15,6 +15,8 @@ export type DashboardAnalysisItem = {
 
 export type DashboardResponse = {
   analyses: DashboardAnalysisItem[];
+  top_risks: string[];
+  top_actions: string[];
 };
 
 export function getDashboard() {
