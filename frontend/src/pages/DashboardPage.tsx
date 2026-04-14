@@ -64,9 +64,27 @@ export default function DashboardPage() {
   const topRisks = data?.top_risks ?? [];
   const topActions = data?.top_actions ?? [];
 
-  if (error) return <ErrorState message={error} />;
-  if (!data) return <LoadingState />;
-  if (data.analyses.length === 0) return <EmptyState message="No analyses found." />;
+  if (error) {
+    return (
+      <ErrorState
+        title="Could not load dashboard"
+        message={error}
+      />
+    );
+  }
+
+  if (!data) {
+    return <LoadingState message="Loading dashboard..." />;
+  }
+
+  if (data.analyses.length === 0) {
+    return (
+      <EmptyState
+        title="No analyses found"
+        message="Create an intake to begin a new upgrade impact analysis."
+      />
+    );
+  }
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>

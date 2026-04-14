@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import EmptyState from "../components/EmptyState";
 import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
@@ -156,7 +157,10 @@ export default function ApplicationDetailPage() {
         <h2>Findings</h2>
 
         {filteredFindings.length === 0 ? (
-          <p>No findings match the current filters.</p>
+          <EmptyState
+            title="No matching findings"
+            message="No findings match the current filters. Clear or adjust the filters to see more results."
+          />
         ) : (
           filteredFindings.map((finding) => (
             <article

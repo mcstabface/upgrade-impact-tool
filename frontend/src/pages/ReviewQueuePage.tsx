@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import StatusHelp from "../components/StatusHelp";
 import StatusBanner from "../components/StatusBanner";
+import { formatStatusLabel } from "../utils/status";
 import { getReviewQueue, type ReviewQueueResponse } from "../services/reviewQueue";
 
 export default function ReviewQueuePage() {
@@ -17,9 +17,27 @@ export default function ReviewQueuePage() {
     getReviewQueue().then(setData).catch((err: Error) => setError(err.message));
   }, []);
 
-  if (error) return <ErrorState message={error} />;
-  if (!data) return <LoadingState />;
-  if (data.items.length === 0) return <EmptyState message="No review items found." />;
+  if (error) {
+    return (
+      <ErrorState
+        title="Could not load review queue"
+        message={error}
+      />
+    );
+  }
+
+  if (!data) {
+    return <LoadingState message="Loading unresolved review items..." />;
+  }
+
+  if (data.items.length === 0) {
+    return (
+      <EmptyState
+        title="Review queue is clear"
+        message="There are no unresolved unknown, blocked, or review-required findings right now."
+      />
+    );
+  }
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
@@ -42,8 +60,8 @@ export default function ReviewQueuePage() {
               {item.reason_for_status ? ` — ${item.reason_for_status}` : ""}
             </div>
 
-            <StatusHelp status={formatStatusLabel(item.finding_status)} />
-            <StatusBanner status={formatStatusLabel(item.finding_status)} />
+            <StatusHelp status={item.finding_status} />
+            <StatusBanner status={item.finding_status} />
           </li>
         ))}
       </ul>
