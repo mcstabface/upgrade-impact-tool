@@ -1,3 +1,5 @@
+import time
+
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -28,6 +30,19 @@ class AnalysisResultsService:
         unknown_count = counts.unknown_count or 0
         blocked_count = counts.blocked_count or 0
 
+        timing = db.execute(
+            text("""
+                SELECT started_utc
+                FROM analysis_runs
+                WHERE analysis_id = :analysis_id
+            """),
+            {"analysis_id": analysis_id},
+        ).first()
+
+        completed_utc = int(time.time())
+        started_utc = timing.started_utc if timing and timing.started_utc else completed_utc
+        duration_ms = max(0, (completed_utc - started_utc) * 1000)
+
         db.execute(
             text("""
                 UPDATE analysis_runs
@@ -35,7 +50,9 @@ class AnalysisResultsService:
                     applies_count = :applies_count,
                     review_required_count = :review_required_count,
                     unknown_count = :unknown_count,
-                    blocked_count = :blocked_count
+                    blocked_count = :blocked_count,
+                    completed_utc = :completed_utc,
+                    duration_ms = :duration_ms
                 WHERE analysis_id = :analysis_id
             """),
             {
@@ -44,6 +61,8 @@ class AnalysisResultsService:
                 "review_required_count": review_required_count,
                 "unknown_count": unknown_count,
                 "blocked_count": blocked_count,
+                "completed_utc": completed_utc,
+                "duration_ms": duration_ms,
             },
         )
 
@@ -75,5 +94,7 @@ class AnalysisResultsService:
             "review_required_count": review_required_count,
             "unknown_count": unknown_count,
             "blocked_count": blocked_count,
+            "completed_utc": completed_utc,
+            "duration_ms": duration_ms,
             "final_status": final_state.value,
         }
