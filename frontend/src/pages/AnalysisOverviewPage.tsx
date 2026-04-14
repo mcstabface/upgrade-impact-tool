@@ -7,6 +7,48 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import { getAnalysisOverview, type AnalysisOverviewResponse } from "../services/analyses";
 
+function SectionList({
+  title,
+  items,
+}: {
+  title: string;
+  items: string[];
+}) {
+  if (items.length === 0) return null;
+
+  return (
+    <section style={{ marginBottom: "2rem" }}>
+      <h2>{title}</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function SummaryCard({
+  label,
+  value,
+}: {
+  label: string;
+  value: number;
+}) {
+  return (
+    <div
+      style={{
+        border: "1px solid #ccc",
+        padding: "0.75rem 1rem",
+        minWidth: "10rem",
+      }}
+    >
+      <div style={{ fontSize: "0.9rem" }}>{label}</div>
+      <div style={{ fontSize: "1.5rem", fontWeight: 700 }}>{value}</div>
+    </div>
+  );
+}
+
 export default function AnalysisOverviewPage() {
   const { id } = useParams();
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);
@@ -33,96 +75,67 @@ export default function AnalysisOverviewPage() {
   const topActions = data.top_actions ?? [];
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
       <h1>Analysis Overview</h1>
 
       <p>
         <Link to="/dashboard">Back to Dashboard</Link>
       </p>
 
-      <p>Analysis ID: {data.analysis_id}</p>
-      <p>
-        {data.customer_name} — {data.environment_name}
-      </p>
-      <p>Status: {data.overall_status}</p>
-      <StatusHelp status={data.overall_status} />
-      <p>Started: {formatUnixSeconds(data.started_utc)}</p>
-      <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
-      <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
+      <section style={{ marginBottom: "2rem" }}>
+        <p>Analysis ID: {data.analysis_id}</p>
+        <p>
+          {data.customer_name} — {data.environment_name}
+        </p>
+        <p>Status: {data.overall_status}</p>
+        <StatusHelp status={data.overall_status} />
+        <p>Started: {formatUnixSeconds(data.started_utc)}</p>
+        <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
+        <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
+        {reviewNote && <p>{reviewNote}</p>}
+      </section>
 
-      <p>
-        Applies: {data.summary.applies_count} | Review Required: {data.summary.review_required_count} | Unknown:{" "}
-        {data.summary.unknown_count} | Blocked: {data.summary.blocked_count}
-      </p>
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Summary</h2>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <SummaryCard label="Applies" value={data.summary.applies_count} />
+          <SummaryCard label="Requires Review" value={data.summary.review_required_count} />
+          <SummaryCard label="Unknown" value={data.summary.unknown_count} />
+          <SummaryCard label="Blocked" value={data.summary.blocked_count} />
+        </div>
+      </section>
 
-      {reviewNote && <p>{reviewNote}</p>}
+      <SectionList title="Top Risks" items={topRisks} />
+      <SectionList title="Top Actions" items={topActions} />
+      <SectionList title="Assumptions" items={data.assumptions} />
+      <SectionList title="Missing Inputs" items={data.missing_inputs} />
+      <SectionList title="Derived Risks" items={data.derived_risks} />
 
-      {topRisks.length > 0 && (
-        <>
-          <h2>Top Risks</h2>
-          <ul>
-            {topRisks.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {topActions.length > 0 && (
-        <>
-          <h2>Top Actions</h2>
-          <ul>
-            {topActions.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {data.assumptions.length > 0 && (
-        <>
-          <h2>Assumptions</h2>
-          <ul>
-            {data.assumptions.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {data.missing_inputs.length > 0 && (
-        <>
-          <h2>Missing Inputs</h2>
-          <ul>
-            {data.missing_inputs.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {data.derived_risks.length > 0 && (
-        <>
-          <h2>Derived Risks</h2>
-          <ul>
-            {data.derived_risks.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      <h2>Applications</h2>
-      <ul>
-        {data.applications.map((app) => (
-          <li key={app.analysis_application_id}>
-            <Link to={`/analyses/${data.analysis_id}/applications/${app.analysis_application_id}`}>
-              {app.application_name}
-            </Link>{" "}
-            — {app.status}
-          </li>
-        ))}
-      </ul>
+      <section>
+        <h2>Applications</h2>
+        <ul>
+          {data.applications.map((app) => (
+            <li key={app.analysis_application_id} style={{ marginBottom: "1rem" }}>
+              <div>
+                <Link to={`/analyses/${data.analysis_id}/applications/${app.analysis_application_id}`}>
+                  {app.application_name}
+                </Link>{" "}
+                — {app.status}
+              </div>
+              <div>
+                Current: {app.current_version} | Target: {app.target_version} | Findings:{" "}
+                {app.findings_count}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }
