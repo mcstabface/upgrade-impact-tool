@@ -22,6 +22,12 @@ def create_review_item(
         result = service.create_review_item(db, payload)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Review item creation failed: {exc}",
+        ) from exc
 
     if not result:
         raise HTTPException(status_code=404, detail="Finding not found")

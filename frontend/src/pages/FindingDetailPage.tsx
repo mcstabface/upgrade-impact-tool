@@ -74,16 +74,36 @@ export default function FindingDetailPage() {
     event.preventDefault();
     if (!id || !data) return;
 
-    setCreatingReviewItem(true);
+    const trimmedReason = reviewReason.trim();
+    const trimmedOwner = assignedOwnerUserId.trim();
+    const trimmedDueDate = dueDate.trim();
+
     setReviewItemMessage(null);
     setError(null);
+
+    if (!trimmedReason) {
+      setError("Review reason is required.");
+      return;
+    }
+
+    if (!trimmedOwner) {
+      setError("Assigned owner is required.");
+      return;
+    }
+
+    if (!trimmedDueDate) {
+      setError("Due date is required.");
+      return;
+    }
+
+    setCreatingReviewItem(true);
 
     try {
       const result = await createReviewItem({
         finding_id: data.finding_id,
-        review_reason: reviewReason,
-        assigned_owner_user_id: assignedOwnerUserId,
-        due_date: dueDate,
+        review_reason: trimmedReason,
+        assigned_owner_user_id: trimmedOwner,
+        due_date: trimmedDueDate,
       });
 
       setReviewItemMessage(

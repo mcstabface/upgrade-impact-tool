@@ -5,7 +5,15 @@ export async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`);
 
   if (!response.ok) {
-    throw new Error(`GET ${path} failed with status ${response.status}`);
+    let detail = "";
+    try {
+      detail = await response.text();
+    } catch {
+      detail = "";
+    }
+    throw new Error(
+      `GET ${path} failed with status ${response.status}${detail ? `: ${detail}` : ""}`,
+    );
   }
 
   return response.json() as Promise<T>;
@@ -15,16 +23,32 @@ export async function apiPost<TResponse, TRequest>(
   path: string,
   payload: TRequest,
 ): Promise<TResponse> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    throw new Error(
+      `POST ${path} could not reach the backend. Check that the API is running and reachable at ${API_BASE_URL}.`,
+    );
+  }
 
   if (!response.ok) {
-    throw new Error(`POST ${path} failed with status ${response.status}`);
+    let detail = "";
+    try {
+      detail = await response.text();
+    } catch {
+      detail = "";
+    }
+    throw new Error(
+      `POST ${path} failed with status ${response.status}${detail ? `: ${detail}` : ""}`,
+    );
   }
 
   return response.json() as Promise<TResponse>;
