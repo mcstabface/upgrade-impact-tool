@@ -5,6 +5,7 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import StatusHelp from "../components/StatusHelp";
+import { getCurrentRole, isAdminRole, setCurrentRole, type UserRole } from "../auth/role";
 import { formatStatusLabel } from "../utils/status";
 import { formatUnixSeconds } from "../utils/time";
 import { getDashboard, type DashboardAnalysisItem, type DashboardResponse } from "../services/dashboard";
@@ -72,13 +73,14 @@ function SummaryCard({
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [currentRole, setRoleState] = useState<UserRole>(getCurrentRole());
 
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [showUnresolvedOnly, setShowUnresolvedOnly] = useState(false);
 
   useEffect(() => {
     getDashboard().then(setData).catch((err: Error) => setError(err.message));
-  }, []);
+  }, [currentRole]);
 
   const filteredAnalyses = useMemo(() => {
     if (!data) return [];
@@ -153,6 +155,11 @@ export default function DashboardPage() {
     setShowUnresolvedOnly(false);
   }
 
+  function handleRoleChange(nextRole: UserRole) {
+    setCurrentRole(nextRole);
+    setRoleState(nextRole);
+  }
+
   if (error) {
     return <ErrorState title="Could not load dashboard" message={error} />;
   }
@@ -174,15 +181,33 @@ export default function DashboardPage() {
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
       <h1>Dashboard</h1>
 
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Role</h2>
+        <div style={{ marginBottom: "1rem" }}>
+          <label>Current Role </label>
+          <select
+            value={currentRole}
+            onChange={(e) => handleRoleChange(e.target.value as UserRole)}
+          >
+            <option value="VIEWER">VIEWER</option>
+            <option value="ANALYST">ANALYST</option>
+            <option value="REVIEWER">REVIEWER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
+      </section>
+
       <p>
         <Link to="/intakes/new">Create Intake</Link>
       </p>
       <p>
         <Link to="/review-queue">Open Review Queue</Link>
       </p>
-      <p>
-        <Link to="/admin/inspection">Open Admin Inspection</Link>
-      </p>
+      {isAdminRole(currentRole) && (
+        <p>
+          <Link to="/admin/inspection">Open Admin Inspection</Link>
+        </p>
+      )}
 
       <section style={{ marginBottom: "2rem" }}>
         <h2>Filters</h2>

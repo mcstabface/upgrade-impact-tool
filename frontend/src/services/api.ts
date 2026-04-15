@@ -1,8 +1,19 @@
+import { getCurrentRole } from "../auth/role";
+
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1";
 
+function buildHeaders(extraHeaders?: HeadersInit): HeadersInit {
+  return {
+    "X-User-Role": getCurrentRole(),
+    ...extraHeaders,
+  };
+}
+
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`);
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: buildHeaders(),
+  });
 
   if (!response.ok) {
     let detail = "";
@@ -28,12 +39,12 @@ export async function apiPost<TResponse, TRequest>(
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
       method: "POST",
-      headers: {
+      headers: buildHeaders({
         "Content-Type": "application/json",
-      },
+      }),
       body: JSON.stringify(payload),
     });
-  } catch (error) {
+  } catch {
     throw new Error(
       `POST ${path} could not reach the backend. Check that the API is running and reachable at ${API_BASE_URL}.`,
     );
@@ -63,9 +74,9 @@ export async function apiPatch<TResponse, TRequest>(
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
       method: "PATCH",
-      headers: {
+      headers: buildHeaders({
         "Content-Type": "application/json",
-      },
+      }),
       body: JSON.stringify(payload),
     });
   } catch {

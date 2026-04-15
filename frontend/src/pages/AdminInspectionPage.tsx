@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ErrorState from "../components/ErrorState";
 import LoadingState from "../components/LoadingState";
 import EmptyState from "../components/EmptyState";
+import { getCurrentRole, isAdminRole } from "../auth/role";
 import { getDashboard, type DashboardAnalysisItem } from "../services/dashboard";
 import { getAnalysisAudit, type AnalysisAuditResponse } from "../services/analyses";
 import { formatStatusLabel } from "../utils/status";
@@ -77,6 +78,7 @@ function AnalysisInspectionCard({
 }
 
 export default function AdminInspectionPage() {
+  const currentRole = getCurrentRole();
   const [analyses, setAnalyses] = useState<DashboardAnalysisItem[] | null>(null);
   const [audit, setAudit] = useState<AnalysisAuditResponse | null>(null);
   const [selectedAnalysisId, setSelectedAnalysisId] = useState<string | null>(null);
@@ -85,10 +87,14 @@ export default function AdminInspectionPage() {
   const [loadingAudit, setLoadingAudit] = useState(false);
 
   useEffect(() => {
+    if (!isAdminRole(currentRole)) {
+      return;
+    }
+
     getDashboard()
       .then((result) => setAnalyses(result.analyses))
       .catch((err: Error) => setError(err.message));
-  }, []);
+  }, [currentRole]);
 
   const staleAnalyses = useMemo(() => {
     if (!analyses) return [];
@@ -121,6 +127,15 @@ export default function AdminInspectionPage() {
     } finally {
       setLoadingAudit(false);
     }
+  }
+
+  if (!isAdminRole(currentRole)) {
+    return (
+      <ErrorState
+        title="Permission denied"
+        message="Admin role is required to access the admin inspection view."
+      />
+    );
   }
 
   if (error) {

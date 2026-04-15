@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
+from app.core.auth import UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.analysis import (
     AnalysisApplicationDetailResponse,
@@ -48,6 +49,7 @@ def transition_analysis(
     analysis_id: str,
     payload: AnalysisTransitionRequest,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisStatusResponse:
     try:
         transition_service.transition_analysis(
@@ -72,6 +74,7 @@ def transition_analysis(
 def evaluate_analysis_staleness(
     analysis_id: str,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisStalenessResponse:
     try:
         result = staleness_service.evaluate_analysis(db, analysis_id)
@@ -97,6 +100,7 @@ def evaluate_analysis_staleness(
 def refresh_analysis(
     analysis_id: str,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisRefreshResponse:
     try:
         result = refresh_service.refresh_analysis(db, analysis_id)
@@ -133,6 +137,7 @@ def get_analysis_delta_summary(
 def get_analysis_audit(
     analysis_id: str,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisAuditResponse:
     result = audit_service.get_audit(db, analysis_id)
     if not result:

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { getCurrentRole, isAdminRole } from "../auth/role";
 import { formatStatusLabel } from "../utils/status";
 import StatusHelp from "../components/StatusHelp";
 import { formatUnixSeconds } from "../utils/time";
@@ -63,6 +64,9 @@ function SummaryCard({
 export default function AnalysisOverviewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const currentRole = getCurrentRole();
+  const canAdminAnalysis = isAdminRole(currentRole);
+
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);
   const [deltaData, setDeltaData] = useState<AnalysisDeltaSummaryResponse | null>(null);
   const [auditData, setAuditData] = useState<AnalysisAuditResponse | null>(null);
@@ -86,18 +90,22 @@ export default function AnalysisOverviewPage() {
           setDeltaData(null);
         }
 
-        const audit = await getAnalysisAudit(id);
-        setAuditData(audit);
+        if (canAdminAnalysis) {
+          const audit = await getAnalysisAudit(id);
+          setAuditData(audit);
+        } else {
+          setAuditData(null);
+        }
       } catch (err) {
         setError((err as Error).message);
       }
     }
 
     loadPage();
-  }, [id]);
+  }, [id, canAdminAnalysis]);
 
   async function handleEvaluateStaleness() {
-    if (!id || !data) return;
+    if (!id || !data || !canAdminAnalysis) return;
 
     setEvaluatingStaleness(true);
     setError(null);
@@ -125,7 +133,7 @@ export default function AnalysisOverviewPage() {
   }
 
   async function handleRefreshAnalysis() {
-    if (!id) return;
+    if (!id || !canAdminAnalysis) return;
 
     setRefreshingAnalysis(true);
     setError(null);
@@ -194,25 +202,27 @@ export default function AnalysisOverviewPage() {
         {data.previous_analysis_id && <p>Previous Analysis: {data.previous_analysis_id}</p>}
         {reviewNote && <p>{reviewNote}</p>}
 
-        <div style={{ marginTop: "1rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-          <button
-            type="button"
-            onClick={handleEvaluateStaleness}
-            disabled={evaluatingStaleness || refreshingAnalysis}
-          >
-            {evaluatingStaleness ? "Evaluating..." : "Evaluate Staleness"}
-          </button>
-
-          {data.overall_status === "STALE" && (
+        {canAdminAnalysis && (
+          <div style={{ marginTop: "1rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             <button
               type="button"
-              onClick={handleRefreshAnalysis}
-              disabled={refreshingAnalysis || evaluatingStaleness}
+              onClick={handleEvaluateStaleness}
+              disabled={evaluatingStaleness || refreshingAnalysis}
             >
-              {refreshingAnalysis ? "Refreshing..." : "Refresh Analysis"}
+              {evaluatingStaleness ? "Evaluating..." : "Evaluate Staleness"}
             </button>
-          )}
-        </div>
+
+            {data.overall_status === "STALE" && (
+              <button
+                type="button"
+                onClick={handleRefreshAnalysis}
+                disabled={refreshingAnalysis || evaluatingStaleness}
+              >
+                {refreshingAnalysis ? "Refreshing..." : "Refresh Analysis"}
+              </button>
+            )}
+          </div>
+        )}
       </section>
 
       {deltaData && (
@@ -242,7 +252,7 @@ export default function AnalysisOverviewPage() {
         </section>
       )}
 
-      {auditData && (
+      {canAdminAnalysis && auditData && (
         <section style={{ marginBottom: "2rem" }}>
           <h2>Audit and Lineage</h2>
 
