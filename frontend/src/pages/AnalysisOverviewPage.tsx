@@ -8,9 +8,11 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import {
   evaluateAnalysisStaleness,
+  getAnalysisAudit,
   getAnalysisDeltaSummary,
   getAnalysisOverview,
   refreshAnalysis,
+  type AnalysisAuditResponse,
   type AnalysisDeltaSummaryResponse,
   type AnalysisOverviewResponse,
 } from "../services/analyses";
@@ -62,6 +64,7 @@ export default function AnalysisOverviewPage() {
   const navigate = useNavigate();
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);
   const [deltaData, setDeltaData] = useState<AnalysisDeltaSummaryResponse | null>(null);
+  const [auditData, setAuditData] = useState<AnalysisAuditResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [evaluatingStaleness, setEvaluatingStaleness] = useState(false);
@@ -81,6 +84,9 @@ export default function AnalysisOverviewPage() {
         } else {
           setDeltaData(null);
         }
+
+        const audit = await getAnalysisAudit(id);
+        setAuditData(audit);
       } catch (err) {
         setError((err as Error).message);
       }
@@ -221,6 +227,30 @@ export default function AnalysisOverviewPage() {
 
           <SectionList title="Applications Impacted" items={deltaData.applications_impacted} />
           <SectionList title="Delta Notes" items={deltaData.summary_lines} />
+        </section>
+      )}
+
+      {auditData && (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Audit and Lineage</h2>
+
+          <SectionList
+            title="Lineage Chain"
+            items={auditData.lineage.map((node) => {
+              const started = formatUnixSeconds(node.started_utc);
+              const completed = formatUnixSeconds(node.completed_utc);
+              return `${node.analysis_id} | Status: ${formatStatusLabel(node.overall_status)} | Started: ${started} | Completed: ${completed}`;
+            })}
+          />
+
+          <SectionList
+            title="State Transitions"
+            items={auditData.transitions.map((transition) => {
+              const previousState = transition.previous_state ?? "NONE";
+              const transitionTime = formatUnixSeconds(transition.transition_utc);
+              return `${transition.analysis_id} | ${previousState} -> ${transition.new_state} | Trigger: ${transition.trigger_event} | User: ${transition.user_id ?? "system"} | At: ${transitionTime}`;
+            })}
+          />
         </section>
       )}
 

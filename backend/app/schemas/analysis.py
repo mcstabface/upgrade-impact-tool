@@ -62,6 +62,30 @@ class AnalysisDeltaSummaryResponse(BaseModel):
     summary_lines: list[str]
 
 
+class AnalysisLineageNode(BaseModel):
+    analysis_id: str
+    previous_analysis_id: str | None
+    overall_status: str
+    started_utc: int | None
+    completed_utc: int | None
+
+
+class AnalysisStateTransitionItem(BaseModel):
+    state_transition_id: int
+    analysis_id: str
+    previous_state: str | None
+    new_state: str
+    trigger_event: str
+    user_id: str | None
+    transition_utc: int
+
+
+class AnalysisAuditResponse(BaseModel):
+    analysis_id: str
+    lineage: list[AnalysisLineageNode]
+    transitions: list[AnalysisStateTransitionItem]
+
+
 class AnalysisOverviewResponse(BaseModel):
     analysis_id: str
     customer_name: str

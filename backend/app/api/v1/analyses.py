@@ -5,12 +5,14 @@ from pydantic import BaseModel
 from app.db.session import get_db
 from app.schemas.analysis import (
     AnalysisApplicationDetailResponse,
+    AnalysisAuditResponse,
     AnalysisDeltaSummaryResponse,
     AnalysisOverviewResponse,
     AnalysisRefreshResponse,
     AnalysisStalenessResponse,
     AnalysisStatusResponse,
 )
+from app.services.analysis_audit_service import AnalysisAuditService
 from app.services.analysis_delta_service import AnalysisDeltaService
 from app.services.analysis_refresh_service import AnalysisRefreshService
 from app.services.analysis_service import AnalysisService
@@ -27,6 +29,7 @@ service = AnalysisService()
 staleness_service = AnalysisStalenessService()
 refresh_service = AnalysisRefreshService()
 delta_service = AnalysisDeltaService()
+audit_service = AnalysisAuditService()
 
 transition_service = AnalysisTransitionService()
 
@@ -119,6 +122,17 @@ def get_analysis_delta_summary(
     result = delta_service.get_delta_summary(db, analysis_id)
     if not result:
         raise HTTPException(status_code=404, detail="Delta summary not available for analysis")
+    return result
+
+
+@router.get("/analyses/{analysis_id}/audit", response_model=AnalysisAuditResponse)
+def get_analysis_audit(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+) -> AnalysisAuditResponse:
+    result = audit_service.get_audit(db, analysis_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Analysis not found")
     return result
 
 

@@ -45,6 +45,26 @@ export type AnalysisDeltaSummaryResponse = {
   summary_lines: string[];
 };
 
+export type AnalysisAuditResponse = {
+  analysis_id: string;
+  lineage: {
+    analysis_id: string;
+    previous_analysis_id: string | null;
+    overall_status: string;
+    started_utc: number | null;
+    completed_utc: number | null;
+  }[];
+  transitions: {
+    state_transition_id: number;
+    analysis_id: string;
+    previous_state: string | null;
+    new_state: string;
+    trigger_event: string;
+    user_id: string | null;
+    transition_utc: number;
+  }[];
+};
+
 export type AnalysisOverviewResponse = {
   analysis_id: string;
   customer_name: string;
@@ -119,6 +139,10 @@ export function refreshAnalysis(id: string) {
 
 export function getAnalysisDeltaSummary(id: string) {
   return apiGet<AnalysisDeltaSummaryResponse>(`/analyses/${id}/delta-summary`);
+}
+
+export function getAnalysisAudit(id: string) {
+  return apiGet<AnalysisAuditResponse>(`/analyses/${id}/audit`);
 }
 
 export function getAnalysisApplicationDetail(id: string, applicationId: string) {

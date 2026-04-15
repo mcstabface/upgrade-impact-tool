@@ -456,3 +456,59 @@ class AnalysisRepository:
             ORDER BY aa.application_name, af.change_id, af.finding_id
         """)
         return [dict(row._mapping) for row in db.execute(query, {"analysis_id": analysis_id}).all()]
+
+    def get_lineage_chain(self, db: Session, analysis_id: str) -> list[dict]:
+        query = text("""
+            WITH RECURSIVE lineage AS (
+                SELECT
+                    ar.analysis_id,
+                    ar.previous_analysis_id,
+                    ar.overall_status,
+                    ar.started_utc,
+                    ar.completed_utc,
+                    0 AS depth
+                FROM analysis_runs ar
+                WHERE ar.analysis_id = :analysis_id
+
+                UNION ALL
+
+                SELECT
+                    parent.analysis_id,
+                    parent.previous_analysis_id,
+                    parent.overall_status,
+                    parent.started_utc,
+                    parent.completed_utc,
+                    lineage.depth + 1 AS depth
+                FROM analysis_runs parent
+                JOIN lineage
+                  ON lineage.previous_analysis_id = parent.analysis_id
+            )
+            SELECT
+                analysis_id,
+                previous_analysis_id,
+                overall_status,
+                started_utc,
+                completed_utc
+            FROM lineage
+            ORDER BY depth ASC
+        """)
+        return [dict(row._mapping) for row in db.execute(query, {"analysis_id": analysis_id}).all()]
+
+    def get_state_transitions_for_lineage(self, db: Session, analysis_ids: list[str]) -> list[dict]:
+        if not analysis_ids:
+            return []
+
+        query = text("""
+            SELECT
+                state_transition_id,
+                analysis_id,
+                previous_state,
+                new_state,
+                trigger_event,
+                user_id,
+                transition_utc
+            FROM state_transitions
+            WHERE analysis_id = ANY(:analysis_ids)
+            ORDER BY transition_utc DESC, state_transition_id DESC
+        """)
+        return [dict(row._mapping) for row in db.execute(query, {"analysis_ids": analysis_ids}).all()]
