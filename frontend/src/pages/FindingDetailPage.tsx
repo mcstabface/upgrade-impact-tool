@@ -18,7 +18,7 @@ export default function FindingDetailPage() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const currentRole = getCurrentRole();
-  const canCreateReviewItems = canManageReviews(currentRole);
+  const canManageReviewWork = canManageReviews(currentRole);
 
   const [data, setData] = useState<FindingDetailResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +46,7 @@ export default function FindingDetailPage() {
 
   async function handleResolve(event: React.FormEvent) {
     event.preventDefault();
-    if (!id) return;
+    if (!id || !canManageReviewWork) return;
 
     setResolving(true);
     setError(null);
@@ -75,7 +75,7 @@ export default function FindingDetailPage() {
 
   async function handleCreateReviewItem(event: React.FormEvent) {
     event.preventDefault();
-    if (!id || !data || !canCreateReviewItems) return;
+    if (!id || !data || !canManageReviewWork) return;
 
     const trimmedReason = reviewReason.trim();
     const trimmedOwner = assignedOwnerUserId.trim();
@@ -136,9 +136,12 @@ export default function FindingDetailPage() {
   if (!data) return <LoadingState />;
 
   const canResolve =
-    data.status === "UNKNOWN" ||
-    data.status === "REQUIRES_REVIEW" ||
-    data.status === "BLOCKED";
+    canManageReviewWork &&
+    (
+      data.status === "UNKNOWN" ||
+      data.status === "REQUIRES_REVIEW" ||
+      data.status === "BLOCKED"
+    );
 
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "56rem" }}>
@@ -224,7 +227,7 @@ export default function FindingDetailPage() {
         )}
       </section>
 
-      {canResolve && (
+      {canResolve ? (
         <section style={{ marginBottom: "2rem" }}>
           <h2>Resolve Finding</h2>
           <form onSubmit={handleResolve}>
@@ -244,9 +247,14 @@ export default function FindingDetailPage() {
           </form>
           {resolveMessage && <p>{resolveMessage}</p>}
         </section>
+      ) : (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Resolve Finding</h2>
+          <p>Reviewer or admin role is required to resolve findings.</p>
+        </section>
       )}
 
-      {canCreateReviewItems ? (
+      {canManageReviewWork ? (
         <section style={{ marginBottom: "2rem" }}>
           <h2>Create Review Item</h2>
           <form onSubmit={handleCreateReviewItem}>

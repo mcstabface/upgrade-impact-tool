@@ -1,4 +1,4 @@
-import { apiGet } from "./api";
+import { apiGet, apiPost } from "./api";
 
 export type FindingDetailResponse = {
   finding_id: number;
@@ -29,22 +29,19 @@ export type FindingDetailResponse = {
   };
 };
 
+export type ResolveFindingResponse = {
+  finding_id: number;
+  finding_status: string;
+  resolution_note: string;
+};
+
 export function getFindingDetail(id: string) {
   return apiGet<FindingDetailResponse>(`/findings/${id}`);
 }
 
-export async function resolveFinding(findingId: string, resolutionNote: string) {
-  const response = await fetch(`http://localhost:8000/api/v1/findings/${findingId}/resolve`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ resolution_note: resolutionNote }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`POST /findings/${findingId}/resolve failed with status ${response.status}`);
-  }
-
-  return response.json();
+export function resolveFinding(findingId: string, resolutionNote: string) {
+  return apiPost<ResolveFindingResponse, { resolution_note: string }>(
+    `/findings/${findingId}/resolve`,
+    { resolution_note: resolutionNote },
+  );
 }
