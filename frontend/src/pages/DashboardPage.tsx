@@ -141,6 +141,7 @@ export default function DashboardPage() {
     open_count: 0,
     in_progress_count: 0,
     deferred_count: 0,
+    overdue_count: 0,
   };
 
   function clearFilters() {
