@@ -73,8 +73,24 @@ class ReviewItemService:
         if not current:
             return None
 
+        now = int(time.time())
+
         current_status = current["review_status"]
-        next_status = payload.review_status.strip()
+        next_status = payload.review_status.strip() if payload.review_status else current_status
+
+        current_owner = current["assigned_owner_user_id"]
+        next_owner = payload.assigned_owner_user_id.strip() if payload.assigned_owner_user_id else current_owner
+
+        current_due_date = current["due_date"]
+        next_due_date = payload.due_date.strip() if payload.due_date else current_due_date
+
+        if not next_owner:
+            raise ValueError("assigned_owner_user_id is required")
+
+        try:
+            date.fromisoformat(next_due_date)
+        except ValueError as exc:
+            raise ValueError("due_date must be ISO format YYYY-MM-DD") from exc
 
         allowed_transitions = {
             ReviewItemStatus.OPEN.value: {ReviewItemStatus.IN_PROGRESS.value},
@@ -94,10 +110,11 @@ class ReviewItemService:
         }:
             raise ValueError("review_status is invalid")
 
-        if next_status not in allowed_transitions.get(current_status, set()):
-            raise ValueError(
-                f"invalid review item transition: {current_status} -> {next_status}",
-            )
+        if next_status != current_status:
+            if next_status not in allowed_transitions.get(current_status, set()):
+                raise ValueError(
+                    f"invalid review item transition: {current_status} -> {next_status}",
+                )
 
         resolution_note = payload.resolution_note.strip() if payload.resolution_note else None
         defer_reason = payload.defer_reason.strip() if payload.defer_reason else None
@@ -114,11 +131,18 @@ class ReviewItemService:
         if next_status != ReviewItemStatus.DEFERRED.value:
             defer_reason = None
 
-        updated = self.repository.update_review_item_status(
+        assignment_updated_utc = None
+        if next_owner != current_owner or next_due_date != current_due_date:
+            assignment_updated_utc = now
+
+        updated = self.repository.update_review_item(
             db=db,
             review_item_id=review_item_id,
             review_status=next_status,
-            updated_utc=int(time.time()),
+            assigned_owner_user_id=next_owner,
+            due_date=next_due_date,
+            updated_utc=now,
+            assignment_updated_utc=assignment_updated_utc,
             resolution_note=resolution_note,
             defer_reason=defer_reason,
         )

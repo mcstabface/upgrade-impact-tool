@@ -6,6 +6,7 @@ import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import { formatStatusLabel } from "../utils/status";
 import { getReviewQueue, type ReviewQueueResponse } from "../services/reviewQueue";
+import { updateReviewItem } from "../services/reviewItems";
 
 function statusPriority(status: string): number {
   switch (status) {
@@ -45,6 +46,15 @@ export default function ReviewQueuePage() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [ownerFilter, setOwnerFilter] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  const [workingItemId, setWorkingItemId] = useState<number | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const [resolutionNotes, setResolutionNotes] = useState<Record<number, string>>({});
+  const [deferReasons, setDeferReasons] = useState<Record<number, string>>({});
+
+  const [ownerEdits, setOwnerEdits] = useState<Record<number, string>>({});
+  const [dueDateEdits, setDueDateEdits] = useState<Record<number, string>>({});
 
   useEffect(() => {
     getReviewQueue().then(setData).catch((err: Error) => setError(err.message));
@@ -92,21 +102,182 @@ export default function ReviewQueuePage() {
     setSearchText("");
   }
 
+  async function handleSaveAssignment(reviewItemId: number) {
+    const item = data?.items.find((entry) => entry.review_item_id === reviewItemId);
+    if (!item) return;
+
+    const assignedOwner = (ownerEdits[reviewItemId] ?? item.assigned_owner_user_id).trim();
+    const dueDate = (dueDateEdits[reviewItemId] ?? item.due_date).trim();
+
+    if (!assignedOwner) {
+      setError("Assigned owner is required.");
+      return;
+    }
+
+    if (!dueDate) {
+      setError("Due date is required.");
+      return;
+    }
+
+    setWorkingItemId(reviewItemId);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const result = await updateReviewItem(reviewItemId, {
+        assigned_owner_user_id: assignedOwner,
+        due_date: dueDate,
+      });
+
+      setData((current) =>
+        current
+          ? {
+              ...current,
+              items: current.items.map((entry) =>
+                entry.review_item_id === reviewItemId
+                  ? {
+                      ...entry,
+                      assigned_owner_user_id: result.assigned_owner_user_id,
+                      due_date: result.due_date,
+                      updated_utc: result.updated_utc,
+                      resolution_note: result.resolution_note,
+                      defer_reason: result.defer_reason,
+                    }
+                  : entry,
+              ),
+            }
+          : current,
+      );
+
+      setMessage(`Review item ${reviewItemId} assignment updated.`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setWorkingItemId(null);
+    }
+  }
+
+  async function handleStart(reviewItemId: number) {
+    setWorkingItemId(reviewItemId);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const result = await updateReviewItem(reviewItemId, {
+        review_status: "IN_PROGRESS",
+      });
+
+      setData((current) =>
+        current
+          ? {
+              ...current,
+              items: current.items.map((item) =>
+                item.review_item_id === reviewItemId
+                  ? {
+                      ...item,
+                      review_status: result.review_status,
+                      updated_utc: result.updated_utc,
+                      resolution_note: result.resolution_note,
+                      defer_reason: result.defer_reason,
+                    }
+                  : item,
+              ),
+            }
+          : current,
+      );
+
+      setMessage(`Review item ${reviewItemId} moved to IN_PROGRESS.`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setWorkingItemId(null);
+    }
+  }
+
+  async function handleDefer(reviewItemId: number) {
+    const deferReason = (deferReasons[reviewItemId] ?? "").trim();
+    if (!deferReason) {
+      setError("Defer reason is required.");
+      return;
+    }
+
+    setWorkingItemId(reviewItemId);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const result = await updateReviewItem(reviewItemId, {
+        review_status: "DEFERRED",
+        defer_reason: deferReason,
+      });
+
+      setData((current) =>
+        current
+          ? {
+              ...current,
+              items: current.items.map((item) =>
+                item.review_item_id === reviewItemId
+                  ? {
+                      ...item,
+                      review_status: result.review_status,
+                      updated_utc: result.updated_utc,
+                      resolution_note: result.resolution_note,
+                      defer_reason: result.defer_reason,
+                    }
+                  : item,
+              ),
+            }
+          : current,
+      );
+
+      setMessage(`Review item ${reviewItemId} deferred.`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setWorkingItemId(null);
+    }
+  }
+
+  async function handleResolve(reviewItemId: number) {
+    const resolutionNote = (resolutionNotes[reviewItemId] ?? "").trim();
+    if (!resolutionNote) {
+      setError("Resolution note is required.");
+      return;
+    }
+
+    setWorkingItemId(reviewItemId);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const result = await updateReviewItem(reviewItemId, {
+        review_status: "RESOLVED",
+        resolution_note: resolutionNote,
+      });
+
+      setData((current) =>
+        current
+          ? {
+              ...current,
+              items: current.items.filter((item) => item.review_item_id !== reviewItemId),
+            }
+          : current,
+      );
+
+      setMessage(`Review item ${reviewItemId} resolved.`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setWorkingItemId(null);
+    }
+  }
+
   if (error) {
     return <ErrorState title="Could not load review queue" message={error} />;
   }
 
   if (!data) {
     return <LoadingState message="Loading review items..." />;
-  }
-
-  if (data.items.length === 0) {
-    return (
-      <EmptyState
-        title="Review queue is clear"
-        message="There are no open, in-progress, or deferred review items right now."
-      />
-    );
   }
 
   return (
@@ -116,6 +287,8 @@ export default function ReviewQueuePage() {
       <p>
         <Link to="/dashboard">Back to Dashboard</Link>
       </p>
+
+      {message && <p>{message}</p>}
 
       <section style={{ marginBottom: "2rem" }}>
         <h2>Filters</h2>
@@ -184,13 +357,13 @@ export default function ReviewQueuePage() {
 
       {filteredItems.length === 0 ? (
         <EmptyState
-          title="No matching review items"
-          message="No review items match the current filters. Clear or adjust the filters to see more results."
+          title="Review queue is clear"
+          message="There are no open, in-progress, or deferred review items right now."
         />
       ) : (
         <ul>
           {filteredItems.map((item) => (
-            <li key={item.review_item_id} style={{ marginBottom: "1.5rem" }}>
+            <li key={item.review_item_id} style={{ marginBottom: "2rem" }}>
               <div>
                 <strong>Review Item {item.review_item_id}</strong>
                 {" — "}
@@ -205,6 +378,114 @@ export default function ReviewQueuePage() {
               <div>Reason: {item.review_reason}</div>
               {item.defer_reason && <div>Deferred Because: {item.defer_reason}</div>}
               {item.resolution_note && <div>Resolution Note: {item.resolution_note}</div>}
+
+              <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <div style={{ marginBottom: "0.75rem" }}>
+                  <label>Owner </label>
+                  <input
+                    value={ownerEdits[item.review_item_id] ?? item.assigned_owner_user_id}
+                    onChange={(e) =>
+                      setOwnerEdits((current) => ({
+                        ...current,
+                        [item.review_item_id]: e.target.value,
+                      }))
+                    }
+                    style={{ width: "20rem", maxWidth: "100%" }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: "0.75rem" }}>
+                  <label>Due Date </label>
+                  <input
+                    type="date"
+                    value={dueDateEdits[item.review_item_id] ?? item.due_date}
+                    onChange={(e) =>
+                      setDueDateEdits((current) => ({
+                        ...current,
+                        [item.review_item_id]: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+
+        <button
+          type="button"
+          onClick={() => handleSaveAssignment(item.review_item_id)}
+          disabled={workingItemId === item.review_item_id}
+        >
+          Save Assignment
+        </button>
+      </div>
+
+      <div style={{ marginTop: "1rem" }}>
+        {item.review_status === "OPEN" && (
+          <button
+            type="button"
+            onClick={() => handleStart(item.review_item_id)}
+            disabled={workingItemId === item.review_item_id}
+          >
+            Start Work
+          </button>
+        )}
+
+        {item.review_status === "DEFERRED" && (
+          <button
+            type="button"
+            onClick={() => handleStart(item.review_item_id)}
+            disabled={workingItemId === item.review_item_id}
+          >
+            Resume Work
+          </button>
+        )}
+      </div>
+
+              {item.review_status === "IN_PROGRESS" && (
+                <div style={{ marginTop: "1rem" }}>
+                  <div style={{ marginBottom: "0.75rem" }}>
+                    <label>Resolution Note </label>
+                    <input
+                      value={resolutionNotes[item.review_item_id] ?? ""}
+                      onChange={(e) =>
+                        setResolutionNotes((current) => ({
+                          ...current,
+                          [item.review_item_id]: e.target.value,
+                        }))
+                      }
+                      style={{ width: "32rem", maxWidth: "100%" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleResolve(item.review_item_id)}
+                      disabled={workingItemId === item.review_item_id}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Resolve
+                    </button>
+                  </div>
+
+                  <div>
+                    <label>Defer Reason </label>
+                    <input
+                      value={deferReasons[item.review_item_id] ?? ""}
+                      onChange={(e) =>
+                        setDeferReasons((current) => ({
+                          ...current,
+                          [item.review_item_id]: e.target.value,
+                        }))
+                      }
+                      style={{ width: "32rem", maxWidth: "100%" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDefer(item.review_item_id)}
+                      disabled={workingItemId === item.review_item_id}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Defer
+                    </button>
+                  </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>

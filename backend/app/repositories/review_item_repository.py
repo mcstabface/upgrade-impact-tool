@@ -104,6 +104,7 @@ class ReviewItemRepository:
                 updated_utc,
                 created_by_user_id,
                 resolution_note,
+                assignment_updated_utc,
                 defer_reason
             FROM review_items
             WHERE review_item_id = :review_item_id
@@ -116,21 +117,27 @@ class ReviewItemRepository:
             SELECT
                 review_item_id,
                 review_status,
+                assigned_owner_user_id,
+                due_date::text AS due_date,
                 resolution_note,
-                defer_reason
+                defer_reason,
+                assignment_updated_utc
             FROM review_items
             WHERE review_item_id = :review_item_id
         """)
         row = db.execute(query, {"review_item_id": review_item_id}).first()
         return dict(row._mapping) if row else None
 
-    def update_review_item_status(
+    def update_review_item(
         self,
         db: Session,
         *,
         review_item_id: int,
         review_status: str,
+        assigned_owner_user_id: str,
+        due_date: str,
         updated_utc: int,
+        assignment_updated_utc: int | None,
         resolution_note: str | None,
         defer_reason: str | None,
     ) -> dict:
@@ -138,14 +145,20 @@ class ReviewItemRepository:
             UPDATE review_items
             SET
                 review_status = :review_status,
+                assigned_owner_user_id = :assigned_owner_user_id,
+                due_date = CAST(:due_date AS date),
                 updated_utc = :updated_utc,
+                assignment_updated_utc = :assignment_updated_utc,
                 resolution_note = :resolution_note,
                 defer_reason = :defer_reason
             WHERE review_item_id = :review_item_id
             RETURNING
                 review_item_id,
                 review_status,
+                assigned_owner_user_id,
+                due_date::text AS due_date,
                 updated_utc,
+                assignment_updated_utc,
                 resolution_note,
                 defer_reason
         """)
@@ -154,7 +167,10 @@ class ReviewItemRepository:
             {
                 "review_item_id": review_item_id,
                 "review_status": review_status,
+                "assigned_owner_user_id": assigned_owner_user_id,
+                "due_date": due_date,
                 "updated_utc": updated_utc,
+                "assignment_updated_utc": assignment_updated_utc,
                 "resolution_note": resolution_note,
                 "defer_reason": defer_reason,
             },
