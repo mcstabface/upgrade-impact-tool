@@ -5,7 +5,11 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import { formatStatusLabel } from "../utils/status";
-import { getReviewQueue, type ReviewQueueResponse } from "../services/reviewQueue";
+import {
+  getReviewQueue,
+  getReviewQueueCsvExportUrl,
+  type ReviewQueueResponse,
+} from "../services/reviewQueue";
 
 function statusPriority(status: string): number {
   switch (status) {
@@ -115,6 +119,10 @@ export default function ReviewQueuePage() {
 
       <p>
         <Link to="/dashboard">Back to Dashboard</Link>
+      </p>
+
+      <p>
+        <a href={getReviewQueueCsvExportUrl()}>Export Review Queue CSV</a>
       </p>
 
       <section style={{ marginBottom: "2rem" }}>
