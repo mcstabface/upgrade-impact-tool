@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.v1.review_items import router as review_items_router
 from app.api.v1.review_actions import router as review_actions_router
 from app.api.v1.review_queue import router as review_queue_router
 from app.api.v1.analyses import router as analyses_router
@@ -31,3 +32,4 @@ app.include_router(findings_router, prefix="/api/v1")
 app.include_router(intakes_router, prefix="/api/v1")
 app.include_router(review_queue_router, prefix="/api/v1")
 app.include_router(review_actions_router, prefix="/api/v1")
+app.include_router(review_items_router, prefix="/api/v1")

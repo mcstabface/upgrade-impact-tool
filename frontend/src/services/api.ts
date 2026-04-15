@@ -10,3 +10,22 @@ export async function apiGet<T>(path: string): Promise<T> {
 
   return response.json() as Promise<T>;
 }
+
+export async function apiPost<TResponse, TRequest>(
+  path: string,
+  payload: TRequest,
+): Promise<TResponse> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`POST ${path} failed with status ${response.status}`);
+  }
+
+  return response.json() as Promise<TResponse>;
+}

@@ -11,6 +11,7 @@ import {
   resolveFinding,
   type FindingDetailResponse,
 } from "../services/findings";
+import { createReviewItem } from "../services/reviewItems";
 
 export default function FindingDetailPage() {
   const { id } = useParams();
@@ -24,6 +25,13 @@ export default function FindingDetailPage() {
   const [resolving, setResolving] = useState(false);
   const [resolveMessage, setResolveMessage] = useState<string | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
+  const [reviewReason, setReviewReason] = useState(
+    "Manual review required before implementation decision.",
+  );
+  const [assignedOwnerUserId, setAssignedOwnerUserId] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [creatingReviewItem, setCreatingReviewItem] = useState(false);
+  const [reviewItemMessage, setReviewItemMessage] = useState<string | null>(null);
 
   const analysisId = searchParams.get("analysisId");
   const applicationId = searchParams.get("applicationId");
@@ -59,6 +67,32 @@ export default function FindingDetailPage() {
       setError((err as Error).message);
     } finally {
       setResolving(false);
+    }
+  }
+
+  async function handleCreateReviewItem(event: React.FormEvent) {
+    event.preventDefault();
+    if (!id || !data) return;
+
+    setCreatingReviewItem(true);
+    setReviewItemMessage(null);
+    setError(null);
+
+    try {
+      const result = await createReviewItem({
+        finding_id: data.finding_id,
+        review_reason: reviewReason,
+        assigned_owner_user_id: assignedOwnerUserId,
+        due_date: dueDate,
+      });
+
+      setReviewItemMessage(
+        `Review item ${result.review_item_id} created with status ${result.review_status}.`,
+      );
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setCreatingReviewItem(false);
     }
   }
 
@@ -188,6 +222,45 @@ export default function FindingDetailPage() {
           {resolveMessage && <p>{resolveMessage}</p>}
         </section>
       )}
+
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Create Review Item</h2>
+        <form onSubmit={handleCreateReviewItem}>
+          <div style={{ marginBottom: "1rem" }}>
+            <label>Review Reason </label>
+            <input
+              value={reviewReason}
+              onChange={(e) => setReviewReason(e.target.value)}
+              style={{ width: "32rem", maxWidth: "100%" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "1rem" }}>
+            <label>Assigned Owner </label>
+            <input
+              value={assignedOwnerUserId}
+              onChange={(e) => setAssignedOwnerUserId(e.target.value)}
+              placeholder="owner_user_id"
+              style={{ width: "20rem", maxWidth: "100%" }}
+            />
+          </div>
+
+          <div style={{ marginBottom: "1rem" }}>
+            <label>Due Date </label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" disabled={creatingReviewItem}>
+            {creatingReviewItem ? "Creating..." : "Create Review Item"}
+          </button>
+        </form>
+
+        {reviewItemMessage && <p>{reviewItemMessage}</p>}
+      </section>
 
       <section
         style={{

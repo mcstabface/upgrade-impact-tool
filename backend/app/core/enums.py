@@ -71,6 +71,13 @@ class EnvironmentType(StrEnum):
     PROD = "PROD"
 
 
+class ReviewItemStatus(StrEnum):
+    OPEN = "OPEN"
+    IN_PROGRESS = "IN_PROGRESS"
+    RESOLVED = "RESOLVED"
+    DEFERRED = "DEFERRED"
+
+
 class CustomerEnvironmentType(StrEnum):
     PRODUCTION = "PRODUCTION"
     TEST = "TEST"
