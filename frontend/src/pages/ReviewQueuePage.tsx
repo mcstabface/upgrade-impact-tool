@@ -4,34 +4,17 @@ import { Link } from "react-router-dom";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
-import StatusHelp from "../components/StatusHelp";
-import StatusBanner from "../components/StatusBanner";
 import { formatStatusLabel } from "../utils/status";
 import { getReviewQueue, type ReviewQueueResponse } from "../services/reviewQueue";
 
 function statusPriority(status: string): number {
   switch (status) {
-    case "BLOCKED":
+    case "OPEN":
       return 1;
-    case "REQUIRES_REVIEW":
+    case "IN_PROGRESS":
       return 2;
-    case "UNKNOWN":
+    case "DEFERRED":
       return 3;
-    default:
-      return 99;
-  }
-}
-
-function severityPriority(severity: string): number {
-  switch (severity) {
-    case "CRITICAL":
-      return 1;
-    case "HIGH":
-      return 2;
-    case "MEDIUM":
-      return 3;
-    case "LOW":
-      return 4;
     default:
       return 99;
   }
@@ -60,7 +43,7 @@ export default function ReviewQueuePage() {
   const [error, setError] = useState<string | null>(null);
 
   const [statusFilter, setStatusFilter] = useState("ALL");
-  const [severityFilter, setSeverityFilter] = useState("ALL");
+  const [ownerFilter, setOwnerFilter] = useState("");
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -71,35 +54,41 @@ export default function ReviewQueuePage() {
     if (!data) return [];
 
     const filtered = data.items.filter((item) => {
-      const statusMatches = statusFilter === "ALL" ? true : item.finding_status === statusFilter;
-      const severityMatches = severityFilter === "ALL" ? true : item.severity === severityFilter;
+      const statusMatches = statusFilter === "ALL" ? true : item.review_status === statusFilter;
+
+      const ownerSearch = ownerFilter.trim().toLowerCase();
+      const ownerMatches =
+        ownerSearch.length === 0
+          ? true
+          : item.assigned_owner_user_id.toLowerCase().includes(ownerSearch);
 
       const search = searchText.trim().toLowerCase();
       const searchMatches =
         search.length === 0
           ? true
-          : item.headline.toLowerCase().includes(search) ||
+          : item.finding_headline.toLowerCase().includes(search) ||
             item.application_name.toLowerCase().includes(search) ||
             item.analysis_id.toLowerCase().includes(search) ||
-            (item.reason_for_status ?? "").toLowerCase().includes(search);
+            item.kb_reference.toLowerCase().includes(search) ||
+            item.review_reason.toLowerCase().includes(search);
 
-      return statusMatches && severityMatches && searchMatches;
+      return statusMatches && ownerMatches && searchMatches;
     });
 
     return [...filtered].sort((a, b) => {
-      const statusDiff = statusPriority(a.finding_status) - statusPriority(b.finding_status);
+      const statusDiff = statusPriority(a.review_status) - statusPriority(b.review_status);
       if (statusDiff !== 0) return statusDiff;
 
-      const severityDiff = severityPriority(a.severity) - severityPriority(b.severity);
-      if (severityDiff !== 0) return severityDiff;
+      const dueDateDiff = a.due_date.localeCompare(b.due_date);
+      if (dueDateDiff !== 0) return dueDateDiff;
 
-      return a.headline.localeCompare(b.headline);
+      return b.review_item_id - a.review_item_id;
     });
-  }, [data, statusFilter, severityFilter, searchText]);
+  }, [data, statusFilter, ownerFilter, searchText]);
 
   function clearFilters() {
     setStatusFilter("ALL");
-    setSeverityFilter("ALL");
+    setOwnerFilter("");
     setSearchText("");
   }
 
@@ -108,20 +97,20 @@ export default function ReviewQueuePage() {
   }
 
   if (!data) {
-    return <LoadingState message="Loading unresolved review items..." />;
+    return <LoadingState message="Loading review items..." />;
   }
 
   if (data.items.length === 0) {
     return (
       <EmptyState
         title="Review queue is clear"
-        message="There are no unresolved unknown, blocked, or review-required findings right now."
+        message="There are no open, in-progress, or deferred review items right now."
       />
     );
   }
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
+    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "72rem" }}>
       <h1>Review Queue</h1>
 
       <p>
@@ -135,21 +124,19 @@ export default function ReviewQueuePage() {
           <label>Status </label>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="ALL">ALL</option>
-            <option value="BLOCKED">BLOCKED</option>
-            <option value="REQUIRES_REVIEW">REQUIRES_REVIEW</option>
-            <option value="UNKNOWN">UNKNOWN</option>
+            <option value="OPEN">OPEN</option>
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="DEFERRED">DEFERRED</option>
           </select>
         </div>
 
         <div style={{ marginBottom: "1rem" }}>
-          <label>Severity </label>
-          <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)}>
-            <option value="ALL">ALL</option>
-            <option value="CRITICAL">CRITICAL</option>
-            <option value="HIGH">HIGH</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="LOW">LOW</option>
-          </select>
+          <label>Owner </label>
+          <input
+            value={ownerFilter}
+            onChange={(e) => setOwnerFilter(e.target.value)}
+            placeholder="Filter by owner"
+          />
         </div>
 
         <div style={{ marginBottom: "1rem" }}>
@@ -157,7 +144,7 @@ export default function ReviewQueuePage() {
           <input
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            placeholder="Search headline, app, analysis, or reason"
+            placeholder="Search headline, app, analysis, KB, or reason"
           />
         </div>
 
@@ -166,7 +153,7 @@ export default function ReviewQueuePage() {
         </button>
       </section>
 
-      {(statusFilter !== "ALL" || severityFilter !== "ALL" || searchText.trim().length > 0) && (
+      {(statusFilter !== "ALL" || ownerFilter.trim().length > 0 || searchText.trim().length > 0) && (
         <section style={{ marginBottom: "2rem" }}>
           <h2>Active Filters</h2>
 
@@ -178,10 +165,10 @@ export default function ReviewQueuePage() {
               />
             )}
 
-            {severityFilter !== "ALL" && (
+            {ownerFilter.trim().length > 0 && (
               <FilterChip
-                label={`Severity: ${severityFilter}`}
-                onClear={() => setSeverityFilter("ALL")}
+                label={`Owner: ${ownerFilter}`}
+                onClear={() => setOwnerFilter("")}
               />
             )}
 
@@ -203,20 +190,21 @@ export default function ReviewQueuePage() {
       ) : (
         <ul>
           {filteredItems.map((item) => (
-            <li key={item.finding_id} style={{ marginBottom: "1.5rem" }}>
+            <li key={item.review_item_id} style={{ marginBottom: "1.5rem" }}>
               <div>
-                <Link to={`/findings/${item.finding_id}`}>{item.headline}</Link>
+                <strong>Review Item {item.review_item_id}</strong>
                 {" — "}
-                {formatStatusLabel(item.finding_status)}
-                {" — "}
-                {item.application_name}
-                {" — "}
-                {item.analysis_id}
-                {item.reason_for_status ? ` — ${item.reason_for_status}` : ""}
+                <Link to={`/findings/${item.finding_id}`}>{item.finding_headline}</Link>
               </div>
-
-              <StatusHelp status={item.finding_status} />
-              <StatusBanner status={item.finding_status} />
+              <div>Status: {formatStatusLabel(item.review_status)}</div>
+              <div>Owner: {item.assigned_owner_user_id}</div>
+              <div>Due Date: {item.due_date}</div>
+              <div>Application: {item.application_name}</div>
+              <div>Analysis: {item.analysis_id}</div>
+              <div>KB: {item.kb_reference}</div>
+              <div>Reason: {item.review_reason}</div>
+              {item.defer_reason && <div>Deferred Because: {item.defer_reason}</div>}
+              {item.resolution_note && <div>Resolution Note: {item.resolution_note}</div>}
             </li>
           ))}
         </ul>
