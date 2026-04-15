@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 from app.core.auth import UserRole, require_roles
+from app.core.errors import AppError
 from app.db.session import get_db
 from app.schemas.analysis import (
     AnalysisApplicationDetailResponse,
@@ -90,9 +91,15 @@ def evaluate_analysis_staleness(
         raise
     except Exception as exc:
         db.rollback()
-        raise HTTPException(
+        raise AppError(
             status_code=500,
-            detail=f"Staleness evaluation failed: {exc}",
+            error_class="SOURCE_DATA_ERROR",
+            message="Staleness evaluation could not be completed.",
+            recovery_guidance=(
+                "Return to the analysis overview and retry. "
+                "If the issue continues, confirm the source snapshot and KB state before retrying."
+            ),
+            retryable=True,
         ) from exc
 
 
@@ -116,9 +123,15 @@ def refresh_analysis(
         raise
     except Exception as exc:
         db.rollback()
-        raise HTTPException(
+        raise AppError(
             status_code=500,
-            detail=f"Refresh analysis failed: {exc}",
+            error_class="REFRESH_ERROR",
+            message="Refresh analysis failed.",
+            recovery_guidance=(
+                "The prior analysis history is preserved. Return to the analysis overview, "
+                "confirm source state, and retry the refresh only when ready."
+            ),
+            retryable=True,
         ) from exc
 
 
@@ -150,17 +163,31 @@ def export_analysis_json(
     analysis_id: str,
     db: Session = Depends(get_db),
 ) -> Response:
-    result = export_service.get_export(db, analysis_id)
-    if not result:
-        raise HTTPException(status_code=404, detail="Analysis not found")
+    try:
+        result = export_service.get_export(db, analysis_id)
+        if not result:
+            raise HTTPException(status_code=404, detail="Analysis not found")
 
-    return Response(
-        content=result.model_dump_json(indent=2),
-        media_type="application/json",
-        headers={
-            "Content-Disposition": f'attachment; filename="{analysis_id}_export.json"',
-        },
-    )
+        return Response(
+            content=result.model_dump_json(indent=2),
+            media_type="application/json",
+            headers={
+                "Content-Disposition": f'attachment; filename="{analysis_id}_export.json"',
+            },
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise AppError(
+            status_code=500,
+            error_class="EXPORT_ERROR",
+            message="Analysis export failed.",
+            recovery_guidance=(
+                "Retry the export. If the problem continues, return to the analysis overview "
+                "and confirm the analysis is still accessible."
+            ),
+            retryable=True,
+        ) from exc
 
 
 @router.get("/analyses/{analysis_id}/applications/{analysis_application_id}/export.json")
@@ -169,19 +196,33 @@ def export_analysis_application_json(
     analysis_application_id: int,
     db: Session = Depends(get_db),
 ) -> Response:
-    result = application_export_service.get_export(db, analysis_id, analysis_application_id)
-    if not result:
-        raise HTTPException(status_code=404, detail="Analysis application not found")
+    try:
+        result = application_export_service.get_export(db, analysis_id, analysis_application_id)
+        if not result:
+            raise HTTPException(status_code=404, detail="Analysis application not found")
 
-    return Response(
-        content=result.model_dump_json(indent=2),
-        media_type="application/json",
-        headers={
-            "Content-Disposition": (
-                f'attachment; filename="{analysis_id}_application_{analysis_application_id}_export.json"'
+        return Response(
+            content=result.model_dump_json(indent=2),
+            media_type="application/json",
+            headers={
+                "Content-Disposition": (
+                    f'attachment; filename="{analysis_id}_application_{analysis_application_id}_export.json"'
+                ),
+            },
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise AppError(
+            status_code=500,
+            error_class="EXPORT_ERROR",
+            message="Application export failed.",
+            recovery_guidance=(
+                "Retry the export. If the problem continues, return to the application detail page "
+                "and confirm the application is still accessible."
             ),
-        },
-    )
+            retryable=True,
+        ) from exc
 
 
 @router.get("/analyses/{analysis_id}/status", response_model=AnalysisStatusResponse)

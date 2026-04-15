@@ -10,21 +10,50 @@ function buildHeaders(extraHeaders?: HeadersInit): HeadersInit {
   };
 }
 
+async function buildErrorMessage(response: Response, fallbackMessage: string): Promise<string> {
+  try {
+    const responseText = await response.text();
+
+    if (!responseText) {
+      return fallbackMessage;
+    }
+
+    const parsed = JSON.parse(responseText) as {
+      message?: string;
+      recovery_guidance?: string;
+      detail?: string;
+      error_class?: string;
+    };
+
+    const message = parsed.message ?? parsed.detail ?? fallbackMessage;
+    const recoveryGuidance = parsed.recovery_guidance;
+
+    if (recoveryGuidance) {
+      return `${message}\nRecovery: ${recoveryGuidance}`;
+    }
+
+    return message;
+  } catch {
+    return fallbackMessage;
+  }
+}
+
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: buildHeaders(),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      headers: buildHeaders(),
+    });
+  } catch {
+    throw new Error(
+      `Could not reach the backend.\nRecovery: Check that the API is running and reachable at ${API_BASE_URL}, then retry the action.`,
+    );
+  }
 
   if (!response.ok) {
-    let detail = "";
-    try {
-      detail = await response.text();
-    } catch {
-      detail = "";
-    }
-    throw new Error(
-      `GET ${path} failed with status ${response.status}${detail ? `: ${detail}` : ""}`,
-    );
+    const fallbackMessage = `Request failed with status ${response.status}.`;
+    throw new Error(await buildErrorMessage(response, fallbackMessage));
   }
 
   return response.json() as Promise<T>;
@@ -46,20 +75,13 @@ export async function apiPost<TResponse, TRequest>(
     });
   } catch {
     throw new Error(
-      `POST ${path} could not reach the backend. Check that the API is running and reachable at ${API_BASE_URL}.`,
+      `Could not reach the backend.\nRecovery: Check that the API is running and reachable at ${API_BASE_URL}, then retry the action.`,
     );
   }
 
   if (!response.ok) {
-    let detail = "";
-    try {
-      detail = await response.text();
-    } catch {
-      detail = "";
-    }
-    throw new Error(
-      `POST ${path} failed with status ${response.status}${detail ? `: ${detail}` : ""}`,
-    );
+    const fallbackMessage = `Request failed with status ${response.status}.`;
+    throw new Error(await buildErrorMessage(response, fallbackMessage));
   }
 
   return response.json() as Promise<TResponse>;
@@ -81,20 +103,13 @@ export async function apiPatch<TResponse, TRequest>(
     });
   } catch {
     throw new Error(
-      `PATCH ${path} could not reach the backend. Check that the API is running and reachable at ${API_BASE_URL}.`,
+      `Could not reach the backend.\nRecovery: Check that the API is running and reachable at ${API_BASE_URL}, then retry the action.`,
     );
   }
 
   if (!response.ok) {
-    let detail = "";
-    try {
-      detail = await response.text();
-    } catch {
-      detail = "";
-    }
-    throw new Error(
-      `PATCH ${path} failed with status ${response.status}${detail ? `: ${detail}` : ""}`,
-    );
+    const fallbackMessage = `Request failed with status ${response.status}.`;
+    throw new Error(await buildErrorMessage(response, fallbackMessage));
   }
 
   return response.json() as Promise<TResponse>;
