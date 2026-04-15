@@ -137,7 +137,11 @@ export default function DashboardPage() {
 
   const topRisks = data?.top_risks ?? [];
   const topActions = data?.top_actions ?? [];
-  const reviewItemSummary = data.review_item_summary;
+  const reviewItemSummary = data?.review_item_summary ?? {
+    open_count: 0,
+    in_progress_count: 0,
+    deferred_count: 0,
+  };
 
   function clearFilters() {
     setStatusFilter("ALL");
