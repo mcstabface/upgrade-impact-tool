@@ -2,7 +2,7 @@ from alembic import op
 import sqlalchemy as sa
 
 
-revision = "005_review_item_assignment_updates"
+revision = "005_review_item_assign"
 down_revision = "004_review_item_transitions"
 branch_labels = None
 depends_on = None
