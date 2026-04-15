@@ -32,6 +32,19 @@ export type AnalysisRefreshResponse = {
   analysis_input_hash: string;
 };
 
+export type AnalysisDeltaSummaryResponse = {
+  previous_analysis_id: string;
+  current_analysis_id: string;
+  new_findings_count: number;
+  resolved_findings_count: number;
+  updated_findings_count: number;
+  unchanged_findings_count: number;
+  new_kb_articles_count: number;
+  updated_kb_articles_count: number;
+  applications_impacted: string[];
+  summary_lines: string[];
+};
+
 export type AnalysisOverviewResponse = {
   analysis_id: string;
   customer_name: string;
@@ -102,6 +115,10 @@ export function refreshAnalysis(id: string) {
     `/analyses/${id}/refresh`,
     {},
   );
+}
+
+export function getAnalysisDeltaSummary(id: string) {
+  return apiGet<AnalysisDeltaSummaryResponse>(`/analyses/${id}/delta-summary`);
 }
 
 export function getAnalysisApplicationDetail(id: string, applicationId: string) {

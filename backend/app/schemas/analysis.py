@@ -49,6 +49,19 @@ class AnalysisRefreshResponse(BaseModel):
     analysis_input_hash: str
 
 
+class AnalysisDeltaSummaryResponse(BaseModel):
+    previous_analysis_id: str
+    current_analysis_id: str
+    new_findings_count: int
+    resolved_findings_count: int
+    updated_findings_count: int
+    unchanged_findings_count: int
+    new_kb_articles_count: int
+    updated_kb_articles_count: int
+    applications_impacted: list[str]
+    summary_lines: list[str]
+
+
 class AnalysisOverviewResponse(BaseModel):
     analysis_id: str
     customer_name: str

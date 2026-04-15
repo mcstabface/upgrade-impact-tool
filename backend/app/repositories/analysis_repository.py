@@ -415,3 +415,44 @@ class AnalysisRepository:
                 "started_utc": started_utc,
             },
         )
+
+    def get_delta_pair(self, db: Session, analysis_id: str) -> dict | None:
+        query = text("""
+            SELECT
+                analysis_id AS current_analysis_id,
+                previous_analysis_id
+            FROM analysis_runs
+            WHERE analysis_id = :analysis_id
+              AND previous_analysis_id IS NOT NULL
+        """)
+        row = db.execute(query, {"analysis_id": analysis_id}).first()
+        return dict(row._mapping) if row else None
+
+    def get_analysis_finding_projection(self, db: Session, analysis_id: str) -> list[dict]:
+        query = text("""
+            SELECT
+                af.finding_id,
+                af.change_id,
+                aa.application_name,
+                af.finding_status,
+                af.severity,
+                af.headline,
+                af.recommended_action,
+                MIN(fe.kb_article_number) AS kb_reference
+            FROM analysis_findings af
+            JOIN analysis_applications aa
+              ON aa.analysis_application_id = af.analysis_application_id
+            LEFT JOIN finding_evidence fe
+              ON fe.finding_id = af.finding_id
+            WHERE af.analysis_id = :analysis_id
+            GROUP BY
+                af.finding_id,
+                af.change_id,
+                aa.application_name,
+                af.finding_status,
+                af.severity,
+                af.headline,
+                af.recommended_action
+            ORDER BY aa.application_name, af.change_id, af.finding_id
+        """)
+        return [dict(row._mapping) for row in db.execute(query, {"analysis_id": analysis_id}).all()]

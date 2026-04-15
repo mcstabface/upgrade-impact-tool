@@ -8,8 +8,10 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import {
   evaluateAnalysisStaleness,
+  getAnalysisDeltaSummary,
   getAnalysisOverview,
   refreshAnalysis,
+  type AnalysisDeltaSummaryResponse,
   type AnalysisOverviewResponse,
 } from "../services/analyses";
 
@@ -59,6 +61,7 @@ export default function AnalysisOverviewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);
+  const [deltaData, setDeltaData] = useState<AnalysisDeltaSummaryResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [evaluatingStaleness, setEvaluatingStaleness] = useState(false);
@@ -66,7 +69,24 @@ export default function AnalysisOverviewPage() {
 
   useEffect(() => {
     if (!id) return;
-    getAnalysisOverview(id).then(setData).catch((err: Error) => setError(err.message));
+
+    async function loadPage() {
+      try {
+        const overview = await getAnalysisOverview(id);
+        setData(overview);
+
+        if (overview.previous_analysis_id) {
+          const delta = await getAnalysisDeltaSummary(id);
+          setDeltaData(delta);
+        } else {
+          setDeltaData(null);
+        }
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    }
+
+    loadPage();
   }, [id]);
 
   async function handleEvaluateStaleness() {
@@ -176,6 +196,33 @@ export default function AnalysisOverviewPage() {
           )}
         </div>
       </section>
+
+      {deltaData && (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Delta Summary</h2>
+          <p>Previous Analysis: {deltaData.previous_analysis_id}</p>
+          <p>Current Analysis: {deltaData.current_analysis_id}</p>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "1rem",
+              flexWrap: "wrap",
+              marginBottom: "1rem",
+            }}
+          >
+            <SummaryCard label="New Findings" value={deltaData.new_findings_count} />
+            <SummaryCard label="Resolved Findings" value={deltaData.resolved_findings_count} />
+            <SummaryCard label="Updated Findings" value={deltaData.updated_findings_count} />
+            <SummaryCard label="Unchanged Findings" value={deltaData.unchanged_findings_count} />
+            <SummaryCard label="New KB Articles" value={deltaData.new_kb_articles_count} />
+            <SummaryCard label="Updated KB Articles" value={deltaData.updated_kb_articles_count} />
+          </div>
+
+          <SectionList title="Applications Impacted" items={deltaData.applications_impacted} />
+          <SectionList title="Delta Notes" items={deltaData.summary_lines} />
+        </section>
+      )}
 
       <section style={{ marginBottom: "2rem" }}>
         <h2>Summary</h2>
