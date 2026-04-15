@@ -154,3 +154,7 @@ export function getAnalysisApplicationDetail(id: string, applicationId: string) 
 export function getAnalysisExportJsonUrl(id: string) {
   return `${API_BASE_URL}/analyses/${id}/export.json`;
 }
+
+export function getAnalysisApplicationExportJsonUrl(id: string, applicationId: string) {
+  return `${API_BASE_URL}/analyses/${id}/applications/${applicationId}/export.json`;
+}

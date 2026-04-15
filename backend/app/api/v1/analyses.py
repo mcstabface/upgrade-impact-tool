@@ -12,6 +12,7 @@ from app.schemas.analysis import (
     AnalysisStalenessResponse,
     AnalysisStatusResponse,
 )
+from app.services.analysis_application_export_service import AnalysisApplicationExportService
 from app.services.analysis_audit_service import AnalysisAuditService
 from app.services.analysis_delta_service import AnalysisDeltaService
 from app.services.analysis_export_service import AnalysisExportService
@@ -32,6 +33,7 @@ refresh_service = AnalysisRefreshService()
 delta_service = AnalysisDeltaService()
 audit_service = AnalysisAuditService()
 export_service = AnalysisExportService()
+application_export_service = AnalysisApplicationExportService()
 
 transition_service = AnalysisTransitionService()
 
@@ -152,6 +154,27 @@ def export_analysis_json(
         media_type="application/json",
         headers={
             "Content-Disposition": f'attachment; filename="{analysis_id}_export.json"',
+        },
+    )
+
+
+@router.get("/analyses/{analysis_id}/applications/{analysis_application_id}/export.json")
+def export_analysis_application_json(
+    analysis_id: str,
+    analysis_application_id: int,
+    db: Session = Depends(get_db),
+) -> Response:
+    result = application_export_service.get_export(db, analysis_id, analysis_application_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Analysis application not found")
+
+    return Response(
+        content=result.model_dump_json(indent=2),
+        media_type="application/json",
+        headers={
+            "Content-Disposition": (
+                f'attachment; filename="{analysis_id}_application_{analysis_application_id}_export.json"'
+            ),
         },
     )
 

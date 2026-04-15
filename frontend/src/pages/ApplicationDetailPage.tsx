@@ -9,6 +9,7 @@ import StatusBanner from "../components/StatusBanner";
 import { formatStatusLabel } from "../utils/status";
 import {
   getAnalysisApplicationDetail,
+  getAnalysisApplicationExportJsonUrl,
   type AnalysisApplicationDetailResponse,
 } from "../services/analyses";
 
@@ -135,6 +136,14 @@ export default function ApplicationDetailPage() {
       <p>
         <Link to={`/analyses/${id}`}>Back to Analysis Overview</Link>
       </p>
+
+      {id && applicationId && (
+        <p>
+          <a href={getAnalysisApplicationExportJsonUrl(id, applicationId)}>
+            Export Application JSON
+          </a>
+        </p>
+      )}
 
       <h1>{data.application_name}</h1>
       <p>Status: {formatStatusLabel(data.application_status)}</p>

@@ -131,3 +131,10 @@ class AnalysisExportResponse(BaseModel):
     analysis: AnalysisOverviewResponse
     delta_summary: AnalysisDeltaSummaryResponse | None
     audit: AnalysisAuditResponse
+
+
+class AnalysisApplicationExportResponse(BaseModel):
+    exported_at_utc: int
+    analysis_id: str
+    analysis_application_id: int
+    application: AnalysisApplicationDetailResponse
