@@ -26,7 +26,10 @@ class AnalysisRepository:
                 ar.started_utc,
                 ar.completed_utc,
                 ar.duration_ms,
-                ar.blocked_count                
+                ar.blocked_count,
+                ar.stale_reason,
+                ar.stale_detected_utc,
+                ar.previous_analysis_id
             FROM analysis_runs ar
             JOIN customers c ON c.customer_id = ar.customer_id
             JOIN environments e ON e.environment_id = ar.environment_id
@@ -151,7 +154,7 @@ class AnalysisRepository:
                 seen.add(row.recommended_action)
                 actions.append(row.recommended_action)
         return actions
-        
+
     def get_overview_supporting_lists(self, db: Session, analysis_id: str) -> dict:
         assumptions = db.execute(
             text("""
@@ -188,3 +191,118 @@ class AnalysisRepository:
             "missing_inputs": [row.missing_inputs_text for row in missing_inputs],
             "derived_risks": derived_risks,
         }
+
+    def get_staleness_context(self, db: Session, analysis_id: str) -> dict | None:
+        query = text("""
+            SELECT
+                analysis_id,
+                analysis_status,
+                overall_status,
+                snapshot_id,
+                kb_catalog_version AS recorded_kb_catalog_hash,
+                snapshot_hash AS recorded_snapshot_hash,
+                analysis_input_hash AS recorded_analysis_input_hash,
+                stale_reason,
+                stale_detected_utc
+            FROM analysis_runs
+            WHERE analysis_id = :analysis_id
+        """)
+        row = db.execute(query, {"analysis_id": analysis_id}).first()
+        return dict(row._mapping) if row else None
+
+    def get_snapshot_hash(self, db: Session, snapshot_id: int) -> str | None:
+        query = text("""
+            SELECT content_hash
+            FROM customer_state_snapshots
+            WHERE snapshot_id = :snapshot_id
+        """)
+        row = db.execute(query, {"snapshot_id": snapshot_id}).first()
+        return row.content_hash if row else None
+
+    def get_current_kb_catalog_hash(self, db: Session) -> str:
+        query = text("""
+            SELECT
+                COALESCE(
+                    md5(
+                        COALESCE(
+                            string_agg(
+                                ka.kb_article_number || ':' || kav.content_hash,
+                                '|' ORDER BY ka.kb_article_number, kav.kb_article_version_id
+                            ),
+                            ''
+                        )
+                    ),
+                    md5('')
+                ) AS kb_catalog_hash
+            FROM kb_article_versions kav
+            JOIN kb_articles ka ON ka.kb_article_id = kav.kb_article_id
+            WHERE kav.is_current = true
+        """)
+        row = db.execute(query).first()
+        return row.kb_catalog_hash
+
+    def mark_analysis_stale(
+        self,
+        db: Session,
+        *,
+        analysis_id: str,
+        stale_reason: str,
+        stale_detected_utc: int,
+    ) -> None:
+        query = text("""
+            UPDATE analysis_runs
+            SET
+                analysis_status = 'STALE',
+                overall_status = 'STALE',
+                stale_reason = :stale_reason,
+                stale_detected_utc = :stale_detected_utc
+            WHERE analysis_id = :analysis_id
+        """)
+        db.execute(
+            query,
+            {
+                "analysis_id": analysis_id,
+                "stale_reason": stale_reason,
+                "stale_detected_utc": stale_detected_utc,
+            },
+        )
+
+    def insert_state_transition(
+        self,
+        db: Session,
+        *,
+        analysis_id: str,
+        previous_state: str | None,
+        new_state: str,
+        trigger_event: str,
+        user_id: str | None,
+        transition_utc: int,
+    ) -> None:
+        query = text("""
+            INSERT INTO state_transitions (
+                analysis_id,
+                previous_state,
+                new_state,
+                trigger_event,
+                user_id,
+                transition_utc
+            ) VALUES (
+                :analysis_id,
+                :previous_state,
+                :new_state,
+                :trigger_event,
+                :user_id,
+                :transition_utc
+            )
+        """)
+        db.execute(
+            query,
+            {
+                "analysis_id": analysis_id,
+                "previous_state": previous_state,
+                "new_state": new_state,
+                "trigger_event": trigger_event,
+                "user_id": user_id,
+                "transition_utc": transition_utc,
+            },
+        )

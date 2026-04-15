@@ -21,7 +21,7 @@ class AnalysisService:
             return None
 
         status = row["analysis_status"]
-        progress_pct = 100 if status in {"ANALYSIS_COMPLETE", "REVIEW_REQUIRED", "READY"} else 10
+        progress_pct = 100 if status in {"ANALYSIS_COMPLETE", "REVIEW_REQUIRED", "READY", "STALE"} else 10
         current_stage = "COMPLETE" if progress_pct == 100 else "INITIALIZED"
 
         return AnalysisStatusResponse(
@@ -60,6 +60,9 @@ class AnalysisService:
             started_utc=header["started_utc"],
             completed_utc=header["completed_utc"],
             duration_ms=header["duration_ms"],
+            stale_reason=header["stale_reason"],
+            stale_detected_utc=header["stale_detected_utc"],
+            previous_analysis_id=header["previous_analysis_id"],
             top_risks=top_risks,
             top_actions=top_actions,
             applications=[AnalysisApplicationSummary(**row) for row in applications],

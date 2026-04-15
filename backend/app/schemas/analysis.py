@@ -24,6 +24,20 @@ class AnalysisSummaryCounts(BaseModel):
     blocked_count: int
 
 
+class AnalysisStalenessResponse(BaseModel):
+    analysis_id: str
+    status: str
+    is_stale: bool
+    triggers: list[str]
+    stale_detected_utc: int | None
+    recorded_snapshot_hash: str | None
+    current_snapshot_hash: str | None
+    recorded_kb_catalog_hash: str | None
+    current_kb_catalog_hash: str
+    recorded_analysis_input_hash: str | None
+    current_analysis_input_hash: str
+
+
 class AnalysisOverviewResponse(BaseModel):
     analysis_id: str
     customer_name: str
@@ -33,6 +47,9 @@ class AnalysisOverviewResponse(BaseModel):
     started_utc: int | None = None
     completed_utc: int | None = None
     duration_ms: int | None = None
+    stale_reason: str | None = None
+    stale_detected_utc: int | None = None
+    previous_analysis_id: str | None = None
     summary: AnalysisSummaryCounts
     assumptions: list[str]
     missing_inputs: list[str]
