@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { formatUnixSeconds } from "../utils/time";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
@@ -242,7 +243,12 @@ export default function ReviewItemDetailPage() {
         <h2>Overview</h2>
         <div>Status: {formatStatusLabel(data.review_status)}</div>
         <div>Owner: {data.assigned_owner_user_id}</div>
+        <div>Created: {formatUnixSeconds(data.created_utc)}</div>
         <div>Due Date: {data.due_date}</div>
+        <div>Last Updated: {formatUnixSeconds(data.updated_utc)}</div>
+        {data.assignment_updated_utc && (
+          <div>Assignment Updated: {formatUnixSeconds(data.assignment_updated_utc)}</div>
+        )}
         <div>Application: {data.application_name}</div>
         <div>Analysis: {data.analysis_id}</div>
         <div>Finding: <Link to={`/findings/${data.finding_id}`}>{data.finding_headline}</Link></div>
