@@ -124,3 +124,10 @@ class AnalysisApplicationDetailResponse(BaseModel):
     target_version: str
     application_status: str
     findings: list[AnalysisApplicationFindingItem]
+
+
+class AnalysisExportResponse(BaseModel):
+    exported_at_utc: int
+    analysis: AnalysisOverviewResponse
+    delta_summary: AnalysisDeltaSummaryResponse | None
+    audit: AnalysisAuditResponse

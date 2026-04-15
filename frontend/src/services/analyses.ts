@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "./api";
+import { API_BASE_URL, apiGet, apiPost } from "./api";
 
 export type AnalysisStatusResponse = {
   analysis_id: string;
@@ -149,4 +149,8 @@ export function getAnalysisApplicationDetail(id: string, applicationId: string) 
   return apiGet<AnalysisApplicationDetailResponse>(
     `/analyses/${id}/applications/${applicationId}`,
   );
+}
+
+export function getAnalysisExportJsonUrl(id: string) {
+  return `${API_BASE_URL}/analyses/${id}/export.json`;
 }

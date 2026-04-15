@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
@@ -14,6 +14,7 @@ from app.schemas.analysis import (
 )
 from app.services.analysis_audit_service import AnalysisAuditService
 from app.services.analysis_delta_service import AnalysisDeltaService
+from app.services.analysis_export_service import AnalysisExportService
 from app.services.analysis_refresh_service import AnalysisRefreshService
 from app.services.analysis_service import AnalysisService
 from app.services.analysis_staleness_service import AnalysisStalenessService
@@ -30,6 +31,7 @@ staleness_service = AnalysisStalenessService()
 refresh_service = AnalysisRefreshService()
 delta_service = AnalysisDeltaService()
 audit_service = AnalysisAuditService()
+export_service = AnalysisExportService()
 
 transition_service = AnalysisTransitionService()
 
@@ -134,6 +136,24 @@ def get_analysis_audit(
     if not result:
         raise HTTPException(status_code=404, detail="Analysis not found")
     return result
+
+
+@router.get("/analyses/{analysis_id}/export.json")
+def export_analysis_json(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+) -> Response:
+    result = export_service.get_export(db, analysis_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Analysis not found")
+
+    return Response(
+        content=result.model_dump_json(indent=2),
+        media_type="application/json",
+        headers={
+            "Content-Disposition": f'attachment; filename="{analysis_id}_export.json"',
+        },
+    )
 
 
 @router.get("/analyses/{analysis_id}/status", response_model=AnalysisStatusResponse)

@@ -10,6 +10,7 @@ import {
   evaluateAnalysisStaleness,
   getAnalysisAudit,
   getAnalysisDeltaSummary,
+  getAnalysisExportJsonUrl,
   getAnalysisOverview,
   refreshAnalysis,
   type AnalysisAuditResponse,
@@ -162,6 +163,12 @@ export default function AnalysisOverviewPage() {
       <p>
         <Link to="/dashboard">Back to Dashboard</Link>
       </p>
+
+      {id && (
+        <p>
+          <a href={getAnalysisExportJsonUrl(id)}>Export Analysis JSON</a>
+        </p>
+      )}
 
       {message && <p>{message}</p>}
 
