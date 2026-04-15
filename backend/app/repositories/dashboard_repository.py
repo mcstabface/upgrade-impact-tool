@@ -85,6 +85,22 @@ class DashboardRepository:
         rows = db.execute(query).all()
         return [row.headline for row in rows]
 
+    def get_review_item_summary(self, db: Session) -> dict:
+        query = text("""
+            SELECT
+                COUNT(*) FILTER (WHERE review_status = 'OPEN') AS open_count,
+                COUNT(*) FILTER (WHERE review_status = 'IN_PROGRESS') AS in_progress_count,
+                COUNT(*) FILTER (WHERE review_status = 'DEFERRED') AS deferred_count
+            FROM review_items
+        """)
+        row = db.execute(query).first()
+
+        return {
+            "open_count": row.open_count or 0,
+            "in_progress_count": row.in_progress_count or 0,
+            "deferred_count": row.deferred_count or 0,
+        }
+
     def get_top_actions(self, db: Session) -> list[str]:
         query = text("""
             WITH ranked_actions AS (

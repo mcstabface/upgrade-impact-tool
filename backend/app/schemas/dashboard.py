@@ -14,7 +14,14 @@ class DashboardAnalysisItem(BaseModel):
     blocked_count: int
 
 
+class DashboardReviewItemSummary(BaseModel):
+    open_count: int
+    in_progress_count: int
+    deferred_count: int
+
+
 class DashboardResponse(BaseModel):
     analyses: list[DashboardAnalysisItem]
-    top_risks: list[str] = []
-    top_actions: list[str] = []
+    top_risks: list[str]
+    top_actions: list[str]
+    review_item_summary: DashboardReviewItemSummary
