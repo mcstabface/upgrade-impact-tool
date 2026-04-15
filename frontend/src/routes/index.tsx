@@ -7,6 +7,7 @@ import IntakeDetailPage from "../pages/IntakeDetailPage";
 import AnalysisOverviewPage from "../pages/AnalysisOverviewPage";
 import ApplicationDetailPage from "../pages/ApplicationDetailPage";
 import FindingDetailPage from "../pages/FindingDetailPage";
+import ReviewItemDetailPage from "../pages/ReviewItemDetailPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <DashboardPage /> },
@@ -19,5 +20,6 @@ export const router = createBrowserRouter([
     element: <ApplicationDetailPage />,
   },
   { path: "/findings/:id", element: <FindingDetailPage /> },
+  { path: "/review-items/:id", element: <ReviewItemDetailPage /> },
   { path: "/review-queue", element: <ReviewQueuePage /> },
 ]);

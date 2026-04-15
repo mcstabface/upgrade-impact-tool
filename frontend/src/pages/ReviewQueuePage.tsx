@@ -104,7 +104,7 @@ export default function ReviewQueuePage() {
 
       return b.review_item_id - a.review_item_id;
     });
-  }, [data, statusFilter, ownerFilter, searchText]);
+  }, [data, statusFilter, ownerFilter, searchText, showOverdueOnly]);
 
   function clearFilters() {
     setStatusFilter("ALL");
@@ -459,7 +459,7 @@ export default function ReviewQueuePage() {
               <div>
                 <strong>Review Item {item.review_item_id}</strong>
                 {" — "}
-                <Link to={`/findings/${item.finding_id}`}>{item.finding_headline}</Link>
+                <Link to={`/review-items/${item.review_item_id}`}>{item.finding_headline}</Link>
               </div>
               <div>Status: {formatStatusLabel(item.review_status)}</div>
               <div>Owner: {item.assigned_owner_user_id}</div>
