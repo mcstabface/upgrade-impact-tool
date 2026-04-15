@@ -137,6 +137,7 @@ export default function DashboardPage() {
 
   const topRisks = data?.top_risks ?? [];
   const topActions = data?.top_actions ?? [];
+  const reviewItemSummary = data.review_item_summary;
 
   function clearFilters() {
     setStatusFilter("ALL");
@@ -239,6 +240,9 @@ export default function DashboardPage() {
           <SummaryCard label="Running" value={dashboardMetrics.runningAnalyses} />
           <SummaryCard label="Unknown Findings" value={dashboardMetrics.unknownFindings} />
           <SummaryCard label="Blocked Findings" value={dashboardMetrics.blockedFindings} />
+          <SummaryCard label="Open Review Items" value={reviewItemSummary.open_count} />
+          <SummaryCard label="In Progress Review Items" value={reviewItemSummary.in_progress_count} />
+          <SummaryCard label="Deferred Review Items" value={reviewItemSummary.deferred_count} />        
         </div>
       </section>
 

@@ -17,6 +17,11 @@ export type DashboardResponse = {
   analyses: DashboardAnalysisItem[];
   top_risks: string[];
   top_actions: string[];
+  review_item_summary: {
+    open_count: number;
+    in_progress_count: number;
+    deferred_count: number;
+  };
 };
 
 export function getDashboard() {
