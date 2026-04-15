@@ -138,11 +138,18 @@ export default function ApplicationDetailPage() {
       </p>
 
       {id && applicationId && (
-        <p>
-          <a href={getAnalysisApplicationExportJsonUrl(id, applicationId)}>
-            Export Application JSON
-          </a>
-        </p>
+        <>
+          <p>
+            <a href={getAnalysisApplicationExportJsonUrl(id, applicationId)}>
+              Export Application JSON
+            </a>
+          </p>
+          <p>
+            <Link to={`/analyses/${id}/applications/${applicationId}/report`}>
+              Open Printable Application Report
+            </Link>
+          </p>
+        </>
       )}
 
       <h1>{data.application_name}</h1>

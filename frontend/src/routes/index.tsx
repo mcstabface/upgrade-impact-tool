@@ -7,6 +7,7 @@ import IntakeDetailPage from "../pages/IntakeDetailPage";
 import AnalysisOverviewPage from "../pages/AnalysisOverviewPage";
 import AnalysisReportPage from "../pages/AnalysisReportPage";
 import ApplicationDetailPage from "../pages/ApplicationDetailPage";
+import ApplicationReportPage from "../pages/ApplicationReportPage";
 import FindingDetailPage from "../pages/FindingDetailPage";
 import ReviewItemDetailPage from "../pages/ReviewItemDetailPage";
 import AdminInspectionPage from "../pages/AdminInspectionPage";
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
   {
     path: "/analyses/:id/applications/:applicationId",
     element: <ApplicationDetailPage />,
+  },
+  {
+    path: "/analyses/:id/applications/:applicationId/report",
+    element: <ApplicationReportPage />,
   },
   { path: "/findings/:id", element: <FindingDetailPage /> },
   { path: "/review-items/:id", element: <ReviewItemDetailPage /> },
