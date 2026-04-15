@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.auth import UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.review_items import (
     ReviewItemCreateRequest,
@@ -19,6 +20,7 @@ service = ReviewItemService()
 def create_review_item(
     payload: ReviewItemCreateRequest,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
 ) -> ReviewItemCreateResponse:
     try:
         result = service.create_review_item(db, payload)
@@ -47,11 +49,13 @@ def get_review_item(
         raise HTTPException(status_code=404, detail="Review item not found")
     return result
 
+
 @router.patch("/review-items/{review_item_id}", response_model=ReviewItemUpdateResponse)
 def update_review_item(
     review_item_id: int,
     payload: ReviewItemUpdateRequest,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
 ) -> ReviewItemUpdateResponse:
     try:
         result = service.update_review_item(db, review_item_id, payload)

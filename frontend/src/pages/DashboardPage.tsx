@@ -5,7 +5,13 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import StatusHelp from "../components/StatusHelp";
-import { getCurrentRole, isAdminRole, setCurrentRole, type UserRole } from "../auth/role";
+import {
+  canManageIntakes,
+  getCurrentRole,
+  isAdminRole,
+  setCurrentRole,
+  type UserRole,
+} from "../auth/role";
 import { formatStatusLabel } from "../utils/status";
 import { formatUnixSeconds } from "../utils/time";
 import { getDashboard, type DashboardAnalysisItem, type DashboardResponse } from "../services/dashboard";
@@ -197,9 +203,11 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <p>
-        <Link to="/intakes/new">Create Intake</Link>
-      </p>
+      {canManageIntakes(currentRole) && (
+        <p>
+          <Link to="/intakes/new">Create Intake</Link>
+        </p>
+      )}
       <p>
         <Link to="/review-queue">Open Review Queue</Link>
       </p>

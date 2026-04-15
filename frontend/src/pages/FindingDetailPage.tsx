@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
+import { canManageReviews, getCurrentRole } from "../auth/role";
 import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
@@ -16,6 +17,8 @@ import { createReviewItem } from "../services/reviewItems";
 export default function FindingDetailPage() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const currentRole = getCurrentRole();
+  const canCreateReviewItems = canManageReviews(currentRole);
 
   const [data, setData] = useState<FindingDetailResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +75,7 @@ export default function FindingDetailPage() {
 
   async function handleCreateReviewItem(event: React.FormEvent) {
     event.preventDefault();
-    if (!id || !data) return;
+    if (!id || !data || !canCreateReviewItems) return;
 
     const trimmedReason = reviewReason.trim();
     const trimmedOwner = assignedOwnerUserId.trim();
@@ -243,44 +246,51 @@ export default function FindingDetailPage() {
         </section>
       )}
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Create Review Item</h2>
-        <form onSubmit={handleCreateReviewItem}>
-          <div style={{ marginBottom: "1rem" }}>
-            <label>Review Reason </label>
-            <input
-              value={reviewReason}
-              onChange={(e) => setReviewReason(e.target.value)}
-              style={{ width: "32rem", maxWidth: "100%" }}
-            />
-          </div>
+      {canCreateReviewItems ? (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Create Review Item</h2>
+          <form onSubmit={handleCreateReviewItem}>
+            <div style={{ marginBottom: "1rem" }}>
+              <label>Review Reason </label>
+              <input
+                value={reviewReason}
+                onChange={(e) => setReviewReason(e.target.value)}
+                style={{ width: "32rem", maxWidth: "100%" }}
+              />
+            </div>
 
-          <div style={{ marginBottom: "1rem" }}>
-            <label>Assigned Owner </label>
-            <input
-              value={assignedOwnerUserId}
-              onChange={(e) => setAssignedOwnerUserId(e.target.value)}
-              placeholder="owner_user_id"
-              style={{ width: "20rem", maxWidth: "100%" }}
-            />
-          </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <label>Assigned Owner </label>
+              <input
+                value={assignedOwnerUserId}
+                onChange={(e) => setAssignedOwnerUserId(e.target.value)}
+                placeholder="owner_user_id"
+                style={{ width: "20rem", maxWidth: "100%" }}
+              />
+            </div>
 
-          <div style={{ marginBottom: "1rem" }}>
-            <label>Due Date </label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-          </div>
+            <div style={{ marginBottom: "1rem" }}>
+              <label>Due Date </label>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
 
-          <button type="submit" disabled={creatingReviewItem}>
-            {creatingReviewItem ? "Creating..." : "Create Review Item"}
-          </button>
-        </form>
+            <button type="submit" disabled={creatingReviewItem}>
+              {creatingReviewItem ? "Creating..." : "Create Review Item"}
+            </button>
+          </form>
 
-        {reviewItemMessage && <p>{reviewItemMessage}</p>}
-      </section>
+          {reviewItemMessage && <p>{reviewItemMessage}</p>}
+        </section>
+      ) : (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Create Review Item</h2>
+          <p>Reviewer or admin role is required to create review items.</p>
+        </section>
+      )}
 
       <section
         style={{

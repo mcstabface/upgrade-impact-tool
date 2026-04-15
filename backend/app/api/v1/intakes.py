@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.auth import UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.intake_api import (
     IntakeCreateRequest,
@@ -22,6 +23,7 @@ service = IntakeWorkflowService()
 def create_intake(
     payload: IntakeCreateRequest,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
 ) -> IntakeCreateResponse:
     return service.create_intake(db, payload)
 
@@ -39,6 +41,7 @@ def update_intake(
     intake_id: str,
     payload: IntakeUpdateRequest,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
 ) -> IntakeUpdateResponse:
     result = service.update_intake(db, intake_id, payload)
     if not result:
@@ -47,7 +50,11 @@ def update_intake(
 
 
 @router.post("/intakes/{intake_id}/validate", response_model=IntakeValidateResponse)
-def validate_intake(intake_id: str, db: Session = Depends(get_db)) -> IntakeValidateResponse:
+def validate_intake(
+    intake_id: str,
+    db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
+) -> IntakeValidateResponse:
     result = service.validate_intake(db, intake_id)
     if not result:
         raise HTTPException(status_code=404, detail="Intake not found")
@@ -59,6 +66,7 @@ def start_analysis(
     intake_id: str,
     _: StartAnalysisRequest,
     db: Session = Depends(get_db),
+    __: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
 ) -> StartAnalysisResponse:
     result = service.start_analysis(db, intake_id)
     if not result:

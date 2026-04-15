@@ -5,12 +5,16 @@ import { formatUnixSeconds } from "../utils/time";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
+import { canManageReviews, getCurrentRole } from "../auth/role";
 import { formatStatusLabel } from "../utils/status";
 import { getReviewItem, updateReviewItem, type ReviewItemDetailResponse } from "../services/reviewItems";
 import { createReviewComment, getReviewComments, type ReviewComment } from "../services/reviewComments";
 
 export default function ReviewItemDetailPage() {
   const { id } = useParams();
+  const currentRole = getCurrentRole();
+  const canEditReview = canManageReviews(currentRole);
+
   const [data, setData] = useState<ReviewItemDetailResponse | null>(null);
   const [comments, setComments] = useState<ReviewComment[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +47,7 @@ export default function ReviewItemDetailPage() {
   }, [id]);
 
   async function handleSaveAssignment() {
-    if (!data) return;
+    if (!data || !canEditReview) return;
 
     const assignedOwner = ownerEdit.trim();
     const dueDate = dueDateEdit.trim();
@@ -88,7 +92,7 @@ export default function ReviewItemDetailPage() {
   }
 
   async function handleStartOrResume() {
-    if (!data) return;
+    if (!data || !canEditReview) return;
 
     setWorking(true);
     setError(null);
@@ -116,7 +120,7 @@ export default function ReviewItemDetailPage() {
   }
 
   async function handleDefer() {
-    if (!data) return;
+    if (!data || !canEditReview) return;
 
     const trimmedReason = deferReason.trim();
     if (!trimmedReason) {
@@ -151,7 +155,7 @@ export default function ReviewItemDetailPage() {
   }
 
   async function handleResolve() {
-    if (!data) return;
+    if (!data || !canEditReview) return;
 
     const trimmedNote = resolutionNote.trim();
     if (!trimmedNote) {
@@ -186,7 +190,7 @@ export default function ReviewItemDetailPage() {
   }
 
   async function handleAddComment() {
-    if (!data) return;
+    if (!data || !canEditReview) return;
 
     const trimmedAuthor = commentAuthor.trim();
     const trimmedText = commentText.trim();
@@ -258,102 +262,118 @@ export default function ReviewItemDetailPage() {
         {data.resolution_note && <div>Resolution Note: {data.resolution_note}</div>}
       </section>
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Assignment</h2>
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Owner </label>
-          <input value={ownerEdit} onChange={(e) => setOwnerEdit(e.target.value)} />
-        </div>
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Due Date </label>
-          <input type="date" value={dueDateEdit} onChange={(e) => setDueDateEdit(e.target.value)} />
-        </div>
-        <button type="button" onClick={handleSaveAssignment} disabled={working}>
-          Save Assignment
-        </button>
-      </section>
-
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Workflow</h2>
-
-        {(data.review_status === "OPEN" || data.review_status === "DEFERRED") && (
-          <div style={{ marginBottom: "1rem" }}>
-            <button type="button" onClick={handleStartOrResume} disabled={working}>
-              {data.review_status === "OPEN" ? "Start Work" : "Resume Work"}
+      {canEditReview ? (
+        <>
+          <section style={{ marginBottom: "2rem" }}>
+            <h2>Assignment</h2>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <label>Owner </label>
+              <input value={ownerEdit} onChange={(e) => setOwnerEdit(e.target.value)} />
+            </div>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <label>Due Date </label>
+              <input type="date" value={dueDateEdit} onChange={(e) => setDueDateEdit(e.target.value)} />
+            </div>
+            <button type="button" onClick={handleSaveAssignment} disabled={working}>
+              Save Assignment
             </button>
-          </div>
-        )}
+          </section>
 
-        {data.review_status === "IN_PROGRESS" && (
-          <>
-            <div style={{ marginBottom: "1rem" }}>
-              <label>Resolution Note </label>
-              <input
-                value={resolutionNote}
-                onChange={(e) => setResolutionNote(e.target.value)}
-                style={{ width: "32rem", maxWidth: "100%" }}
+          <section style={{ marginBottom: "2rem" }}>
+            <h2>Workflow</h2>
+
+            {(data.review_status === "OPEN" || data.review_status === "DEFERRED") && (
+              <div style={{ marginBottom: "1rem" }}>
+                <button type="button" onClick={handleStartOrResume} disabled={working}>
+                  {data.review_status === "OPEN" ? "Start Work" : "Resume Work"}
+                </button>
+              </div>
+            )}
+
+            {data.review_status === "IN_PROGRESS" && (
+              <>
+                <div style={{ marginBottom: "1rem" }}>
+                  <label>Resolution Note </label>
+                  <input
+                    value={resolutionNote}
+                    onChange={(e) => setResolutionNote(e.target.value)}
+                    style={{ width: "32rem", maxWidth: "100%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleResolve}
+                    disabled={working}
+                    style={{ marginLeft: "0.5rem" }}
+                  >
+                    Resolve
+                  </button>
+                </div>
+
+                <div>
+                  <label>Defer Reason </label>
+                  <input
+                    value={deferReason}
+                    onChange={(e) => setDeferReason(e.target.value)}
+                    style={{ width: "32rem", maxWidth: "100%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleDefer}
+                    disabled={working}
+                    style={{ marginLeft: "0.5rem" }}
+                  >
+                    Defer
+                  </button>
+                </div>
+              </>
+            )}
+
+            {data.review_status === "RESOLVED" && (
+              <EmptyState
+                title="Review item resolved"
+                message="This item has been completed. You can still review its details and comment history here."
               />
-              <button
-                type="button"
-                onClick={handleResolve}
-                disabled={working}
-                style={{ marginLeft: "0.5rem" }}
-              >
-                Resolve
-              </button>
-            </div>
-
-            <div>
-              <label>Defer Reason </label>
-              <input
-                value={deferReason}
-                onChange={(e) => setDeferReason(e.target.value)}
-                style={{ width: "32rem", maxWidth: "100%" }}
-              />
-              <button
-                type="button"
-                onClick={handleDefer}
-                disabled={working}
-                style={{ marginLeft: "0.5rem" }}
-              >
-                Defer
-              </button>
-            </div>
-          </>
-        )}
-
-        {data.review_status === "RESOLVED" && (
+            )}
+          </section>
+        </>
+      ) : (
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Review Controls</h2>
           <EmptyState
-            title="Review item resolved"
-            message="This item has been completed. You can still review its details and comment history here."
+            title="Read-only access"
+            message="Reviewer or admin role is required to update assignments, workflow, or comments."
           />
-        )}
-      </section>
+        </section>
+      )}
 
       <section>
         <h2>Comments</h2>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Comment Author </label>
-          <input value={commentAuthor} onChange={(e) => setCommentAuthor(e.target.value)} />
-        </div>
+        {canEditReview && (
+          <>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <label>Comment Author </label>
+              <input value={commentAuthor} onChange={(e) => setCommentAuthor(e.target.value)} />
+            </div>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Comment </label>
-          <input
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            style={{ width: "32rem", maxWidth: "100%" }}
-          />
-          <button
-            type="button"
-            onClick={handleAddComment}
-            disabled={working}
-            style={{ marginLeft: "0.5rem" }}
-          >
-            Add Comment
-          </button>
-        </div>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <label>Comment </label>
+              <input
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                style={{ width: "32rem", maxWidth: "100%" }}
+              />
+              <button
+                type="button"
+                onClick={handleAddComment}
+                disabled={working}
+                style={{ marginLeft: "0.5rem" }}
+              >
+                Add Comment
+              </button>
+            </div>
+          </>
+        )}
 
         {comments.length === 0 ? (
           <EmptyState

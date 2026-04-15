@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.auth import UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.review_comments import (
     ReviewCommentCreateRequest,
@@ -18,6 +19,7 @@ def create_review_comment(
     review_item_id: int,
     payload: ReviewCommentCreateRequest,
     db: Session = Depends(get_db),
+    _: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
 ) -> ReviewCommentResponse:
     try:
         result = service.create_comment(db, review_item_id, payload)

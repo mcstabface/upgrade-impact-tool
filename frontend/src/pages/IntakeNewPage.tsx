@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import ErrorState from "../components/ErrorState";
+import { canManageIntakes, getCurrentRole } from "../auth/role";
 import {
   createIntake,
   startAnalysis,
@@ -10,6 +12,7 @@ import {
 
 export default function IntakeNewPage() {
   const navigate = useNavigate();
+  const currentRole = getCurrentRole();
 
   const [customerName, setCustomerName] = useState("Acme Health");
   const [environmentName, setEnvironmentName] = useState("Production Wave 2");
@@ -106,6 +109,15 @@ export default function IntakeNewPage() {
     }
 
     setSubmitting(false);
+  }
+
+  if (!canManageIntakes(currentRole)) {
+    return (
+      <ErrorState
+        title="Permission denied"
+        message="Analyst or admin role is required to create and run intakes."
+      />
+    );
   }
 
   return (
