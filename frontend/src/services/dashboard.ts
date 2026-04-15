@@ -6,6 +6,9 @@ export type DashboardAnalysisItem = {
   environment_name: string;
   analysis_date: number | null;
   overall_status: string;
+  previous_analysis_id: string | null;
+  stale_reason: string | null;
+  stale_detected_utc: number | null;
   applications_count: number;
   applies_count: number;
   review_required_count: number;

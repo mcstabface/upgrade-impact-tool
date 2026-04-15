@@ -102,6 +102,8 @@ export default function DashboardPage() {
         if (analysis.overall_status === "READY") acc.readyAnalyses += 1;
         if (analysis.overall_status === "REVIEW_REQUIRED") acc.reviewRequiredAnalyses += 1;
         if (analysis.overall_status === "ANALYSIS_RUNNING") acc.runningAnalyses += 1;
+        if (analysis.overall_status === "STALE") acc.staleAnalyses += 1;
+        if (analysis.previous_analysis_id) acc.refreshedAnalyses += 1;
         acc.unknownFindings += analysis.unknown_count;
         acc.blockedFindings += analysis.blocked_count;
         return acc;
@@ -111,6 +113,8 @@ export default function DashboardPage() {
         readyAnalyses: 0,
         reviewRequiredAnalyses: 0,
         runningAnalyses: 0,
+        staleAnalyses: 0,
+        refreshedAnalyses: 0,
         unknownFindings: 0,
         blockedFindings: 0,
       },
@@ -176,6 +180,9 @@ export default function DashboardPage() {
       <p>
         <Link to="/review-queue">Open Review Queue</Link>
       </p>
+      <p>
+        <Link to="/admin/inspection">Open Admin Inspection</Link>
+      </p>
 
       <section style={{ marginBottom: "2rem" }}>
         <h2>Filters</h2>
@@ -187,6 +194,7 @@ export default function DashboardPage() {
             <option value="READY">READY</option>
             <option value="REVIEW_REQUIRED">REVIEW_REQUIRED</option>
             <option value="ANALYSIS_RUNNING">ANALYSIS_RUNNING</option>
+            <option value="STALE">STALE</option>
             <option value="BLOCKED">BLOCKED</option>
             <option value="FAILED">FAILED</option>
           </select>
@@ -243,12 +251,14 @@ export default function DashboardPage() {
           <SummaryCard label="Ready" value={dashboardMetrics.readyAnalyses} />
           <SummaryCard label="Review Required" value={dashboardMetrics.reviewRequiredAnalyses} />
           <SummaryCard label="Running" value={dashboardMetrics.runningAnalyses} />
+          <SummaryCard label="Stale" value={dashboardMetrics.staleAnalyses} />
+          <SummaryCard label="Refreshed Runs" value={dashboardMetrics.refreshedAnalyses} />
           <SummaryCard label="Unknown Findings" value={dashboardMetrics.unknownFindings} />
           <SummaryCard label="Blocked Findings" value={dashboardMetrics.blockedFindings} />
           <SummaryCard label="Open Review Items" value={reviewItemSummary.open_count} />
           <SummaryCard label="In Progress Review Items" value={reviewItemSummary.in_progress_count} />
-          <SummaryCard label="Deferred Review Items" value={reviewItemSummary.deferred_count} />        
-          <SummaryCard label="Overdue Review Items" value={reviewItemSummary.overdue_count} />        
+          <SummaryCard label="Deferred Review Items" value={reviewItemSummary.deferred_count} />
+          <SummaryCard label="Overdue Review Items" value={reviewItemSummary.overdue_count} />
         </div>
       </section>
 

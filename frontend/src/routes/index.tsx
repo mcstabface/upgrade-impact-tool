@@ -8,10 +8,12 @@ import AnalysisOverviewPage from "../pages/AnalysisOverviewPage";
 import ApplicationDetailPage from "../pages/ApplicationDetailPage";
 import FindingDetailPage from "../pages/FindingDetailPage";
 import ReviewItemDetailPage from "../pages/ReviewItemDetailPage";
+import AdminInspectionPage from "../pages/AdminInspectionPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <DashboardPage /> },
   { path: "/dashboard", element: <DashboardPage /> },
+  { path: "/admin/inspection", element: <AdminInspectionPage /> },
   { path: "/intakes/new", element: <IntakeNewPage /> },
   { path: "/intakes/:id", element: <IntakeDetailPage /> },
   { path: "/analyses/:id", element: <AnalysisOverviewPage /> },

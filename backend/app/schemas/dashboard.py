@@ -7,6 +7,9 @@ class DashboardAnalysisItem(BaseModel):
     environment_name: str
     analysis_date: int | None
     overall_status: str
+    previous_analysis_id: str | None
+    stale_reason: str | None
+    stale_detected_utc: int | None
     applications_count: int
     applies_count: int
     review_required_count: int
