@@ -165,9 +165,14 @@ export default function AnalysisOverviewPage() {
       </p>
 
       {id && (
-        <p>
-          <a href={getAnalysisExportJsonUrl(id)}>Export Analysis JSON</a>
-        </p>
+        <>
+          <p>
+            <a href={getAnalysisExportJsonUrl(id)}>Export Analysis JSON</a>
+          </p>
+          <p>
+            <Link to={`/analyses/${id}/report`}>Open Printable Report</Link>
+          </p>
+        </>
       )}
 
       {message && <p>{message}</p>}
