@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
 
 
-class ReviewItemUpdateRequest(BaseModel):
-    review_status: str | None = None
-    assigned_owner_user_id: str | None = None
-    due_date: str | None = None
-    resolution_note: str | None = None
-    defer_reason: str | None = None
+class ReviewItemCreateRequest(BaseModel):
+    finding_id: int
+    review_reason: str = Field(min_length=1)
+    assigned_owner_user_id: str = Field(min_length=1)
+    due_date: str = Field(min_length=1)
+    created_by_user_id: str | None = None
 
 
 class ReviewItemCreateResponse(BaseModel):
@@ -19,7 +19,9 @@ class ReviewItemCreateResponse(BaseModel):
 
 
 class ReviewItemUpdateRequest(BaseModel):
-    review_status: str = Field(min_length=1)
+    review_status: str | None = None
+    assigned_owner_user_id: str | None = None
+    due_date: str | None = None
     resolution_note: str | None = None
     defer_reason: str | None = None
 
