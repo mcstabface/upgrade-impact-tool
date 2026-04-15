@@ -209,7 +209,7 @@ export default function ReviewQueuePage() {
           message="There are no open, in-progress, or deferred review items right now."
         />
       ) : (
-        <ul style={{ paddingLeft: "1.25rem" }}>
+        <ul style={{ paddingLeft: 0, listStyle: "none" }}>
           {filteredItems.map((item) => (
             <li
               key={item.review_item_id}
