@@ -1,11 +1,15 @@
 type Props = {
   message: string;
   title?: string;
+  onRetry?: () => void;
+  retryLabel?: string;
 };
 
 export default function ErrorState({
   message,
   title = "Something went wrong",
+  onRetry,
+  retryLabel = "Retry",
 }: Props) {
   const [primaryMessage, recoveryGuidance] = message.split("\nRecovery: ");
 
@@ -17,6 +21,13 @@ export default function ErrorState({
         {recoveryGuidance ??
           "Try refreshing the page. If the problem continues, return to the previous screen and retry the action."}
       </p>
+      {onRetry && (
+        <div style={{ marginTop: "1rem" }}>
+          <button type="button" onClick={onRetry}>
+            {retryLabel}
+          </button>
+        </div>
+      )}
     </main>
   );
 }

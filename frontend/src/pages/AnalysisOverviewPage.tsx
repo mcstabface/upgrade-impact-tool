@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { getCurrentRole, isAdminRole } from "../auth/role";
@@ -75,34 +75,36 @@ export default function AnalysisOverviewPage() {
   const [evaluatingStaleness, setEvaluatingStaleness] = useState(false);
   const [refreshingAnalysis, setRefreshingAnalysis] = useState(false);
 
-  useEffect(() => {
+  const loadPage = useCallback(async () => {
     if (!id) return;
 
-    async function loadPage() {
-      try {
-        const overview = await getAnalysisOverview(id);
-        setData(overview);
+    setError(null);
 
-        if (overview.previous_analysis_id) {
-          const delta = await getAnalysisDeltaSummary(id);
-          setDeltaData(delta);
-        } else {
-          setDeltaData(null);
-        }
+    try {
+      const overview = await getAnalysisOverview(id);
+      setData(overview);
 
-        if (canAdminAnalysis) {
-          const audit = await getAnalysisAudit(id);
-          setAuditData(audit);
-        } else {
-          setAuditData(null);
-        }
-      } catch (err) {
-        setError((err as Error).message);
+      if (overview.previous_analysis_id) {
+        const delta = await getAnalysisDeltaSummary(id);
+        setDeltaData(delta);
+      } else {
+        setDeltaData(null);
       }
-    }
 
-    loadPage();
+      if (canAdminAnalysis) {
+        const audit = await getAnalysisAudit(id);
+        setAuditData(audit);
+      } else {
+        setAuditData(null);
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, [id, canAdminAnalysis]);
+
+  useEffect(() => {
+    loadPage();
+  }, [loadPage]);
 
   async function handleEvaluateStaleness() {
     if (!id || !data || !canAdminAnalysis) return;
@@ -149,7 +151,17 @@ export default function AnalysisOverviewPage() {
     }
   }
 
-  if (error) return <ErrorState message={error} />;
+  if (error) {
+    return (
+      <ErrorState
+        title="Could not load analysis overview"
+        message={error}
+        onRetry={loadPage}
+        retryLabel="Retry Load"
+      />
+    );
+  }
+
   if (!data) return <LoadingState />;
 
   const reviewNote =

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import LoadingState from "../components/LoadingState";
@@ -51,9 +51,19 @@ export default function ReviewQueuePage() {
   const [searchText, setSearchText] = useState("");
   const [showOverdueOnly, setShowOverdueOnly] = useState(false);
 
-  useEffect(() => {
-    getReviewQueue().then(setData).catch((err: Error) => setError(err.message));
+  const loadQueue = useCallback(async () => {
+    setError(null);
+    try {
+      const result = await getReviewQueue();
+      setData(result);
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, []);
+
+  useEffect(() => {
+    loadQueue();
+  }, [loadQueue]);
 
   const filteredItems = useMemo(() => {
     if (!data) return [];
@@ -106,7 +116,14 @@ export default function ReviewQueuePage() {
   }
 
   if (error) {
-    return <ErrorState title="Could not load review queue" message={error} />;
+    return (
+      <ErrorState
+        title="Could not load review queue"
+        message={error}
+        onRetry={loadQueue}
+        retryLabel="Retry Load"
+      />
+    );
   }
 
   if (!data) {
