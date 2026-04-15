@@ -102,9 +102,61 @@ class ReviewItemRepository:
                 review_status,
                 created_utc,
                 updated_utc,
-                created_by_user_id
+                created_by_user_id,
+                resolution_note,
+                defer_reason
             FROM review_items
             WHERE review_item_id = :review_item_id
         """)
         row = db.execute(query, {"review_item_id": review_item_id}).first()
         return dict(row._mapping) if row else None
+
+    def get_review_item_status(self, db: Session, review_item_id: int) -> dict | None:
+        query = text("""
+            SELECT
+                review_item_id,
+                review_status,
+                resolution_note,
+                defer_reason
+            FROM review_items
+            WHERE review_item_id = :review_item_id
+        """)
+        row = db.execute(query, {"review_item_id": review_item_id}).first()
+        return dict(row._mapping) if row else None
+
+    def update_review_item_status(
+        self,
+        db: Session,
+        *,
+        review_item_id: int,
+        review_status: str,
+        updated_utc: int,
+        resolution_note: str | None,
+        defer_reason: str | None,
+    ) -> dict:
+        query = text("""
+            UPDATE review_items
+            SET
+                review_status = :review_status,
+                updated_utc = :updated_utc,
+                resolution_note = :resolution_note,
+                defer_reason = :defer_reason
+            WHERE review_item_id = :review_item_id
+            RETURNING
+                review_item_id,
+                review_status,
+                updated_utc,
+                resolution_note,
+                defer_reason
+        """)
+        row = db.execute(
+            query,
+            {
+                "review_item_id": review_item_id,
+                "review_status": review_status,
+                "updated_utc": updated_utc,
+                "resolution_note": resolution_note,
+                "defer_reason": defer_reason,
+            },
+        ).first()
+        return dict(row._mapping)

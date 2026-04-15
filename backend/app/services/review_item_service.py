@@ -3,11 +3,14 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
+from app.core.enums import ReviewItemStatus
 from app.repositories.review_item_repository import ReviewItemRepository
 from app.schemas.review_items import (
     ReviewItemCreateRequest,
     ReviewItemCreateResponse,
     ReviewItemDetailResponse,
+    ReviewItemUpdateRequest,
+    ReviewItemUpdateResponse,
 )
 
 
@@ -59,3 +62,66 @@ class ReviewItemService:
         if not row:
             return None
         return ReviewItemDetailResponse(**row)
+
+    def update_review_item(
+        self,
+        db: Session,
+        review_item_id: int,
+        payload: ReviewItemUpdateRequest,
+    ) -> ReviewItemUpdateResponse | None:
+        current = self.repository.get_review_item_status(db, review_item_id)
+        if not current:
+            return None
+
+        current_status = current["review_status"]
+        next_status = payload.review_status.strip()
+
+        allowed_transitions = {
+            ReviewItemStatus.OPEN.value: {ReviewItemStatus.IN_PROGRESS.value},
+            ReviewItemStatus.IN_PROGRESS.value: {
+                ReviewItemStatus.RESOLVED.value,
+                ReviewItemStatus.DEFERRED.value,
+            },
+            ReviewItemStatus.DEFERRED.value: {ReviewItemStatus.IN_PROGRESS.value},
+            ReviewItemStatus.RESOLVED.value: set(),
+        }
+
+        if next_status not in {
+            ReviewItemStatus.OPEN.value,
+            ReviewItemStatus.IN_PROGRESS.value,
+            ReviewItemStatus.RESOLVED.value,
+            ReviewItemStatus.DEFERRED.value,
+        }:
+            raise ValueError("review_status is invalid")
+
+        if next_status not in allowed_transitions.get(current_status, set()):
+            raise ValueError(
+                f"invalid review item transition: {current_status} -> {next_status}",
+            )
+
+        resolution_note = payload.resolution_note.strip() if payload.resolution_note else None
+        defer_reason = payload.defer_reason.strip() if payload.defer_reason else None
+
+        if next_status == ReviewItemStatus.RESOLVED.value and not resolution_note:
+            raise ValueError("resolution_note is required when moving to RESOLVED")
+
+        if next_status == ReviewItemStatus.DEFERRED.value and not defer_reason:
+            raise ValueError("defer_reason is required when moving to DEFERRED")
+
+        if next_status != ReviewItemStatus.RESOLVED.value:
+            resolution_note = None
+
+        if next_status != ReviewItemStatus.DEFERRED.value:
+            defer_reason = None
+
+        updated = self.repository.update_review_item_status(
+            db=db,
+            review_item_id=review_item_id,
+            review_status=next_status,
+            updated_utc=int(time.time()),
+            resolution_note=resolution_note,
+            defer_reason=defer_reason,
+        )
+
+        db.commit()
+        return ReviewItemUpdateResponse(**updated)

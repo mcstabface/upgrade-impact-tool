@@ -53,3 +53,38 @@ export async function apiPost<TResponse, TRequest>(
 
   return response.json() as Promise<TResponse>;
 }
+
+export async function apiPatch<TResponse, TRequest>(
+  path: string,
+  payload: TRequest,
+): Promise<TResponse> {
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    throw new Error(
+      `PATCH ${path} could not reach the backend. Check that the API is running and reachable at ${API_BASE_URL}.`,
+    );
+  }
+
+  if (!response.ok) {
+    let detail = "";
+    try {
+      detail = await response.text();
+    } catch {
+      detail = "";
+    }
+    throw new Error(
+      `PATCH ${path} failed with status ${response.status}${detail ? `: ${detail}` : ""}`,
+    );
+  }
+
+  return response.json() as Promise<TResponse>;
+}

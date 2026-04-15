@@ -6,6 +6,8 @@ from app.schemas.review_items import (
     ReviewItemCreateRequest,
     ReviewItemCreateResponse,
     ReviewItemDetailResponse,
+    ReviewItemUpdateRequest,
+    ReviewItemUpdateResponse,
 )
 from app.services.review_item_service import ReviewItemService
 
@@ -43,4 +45,26 @@ def get_review_item(
     result = service.get_review_item(db, review_item_id)
     if not result:
         raise HTTPException(status_code=404, detail="Review item not found")
+    return result
+
+@router.patch("/review-items/{review_item_id}", response_model=ReviewItemUpdateResponse)
+def update_review_item(
+    review_item_id: int,
+    payload: ReviewItemUpdateRequest,
+    db: Session = Depends(get_db),
+) -> ReviewItemUpdateResponse:
+    try:
+        result = service.update_review_item(db, review_item_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Review item update failed: {exc}",
+        ) from exc
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Review item not found")
+
     return result
