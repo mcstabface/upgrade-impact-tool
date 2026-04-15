@@ -38,6 +38,17 @@ class AnalysisStalenessResponse(BaseModel):
     current_analysis_input_hash: str
 
 
+class AnalysisRefreshResponse(BaseModel):
+    previous_analysis_id: str
+    new_analysis_id: str
+    status: str
+    started_utc: int
+    snapshot_id: int
+    snapshot_hash: str
+    kb_catalog_hash: str
+    analysis_input_hash: str
+
+
 class AnalysisOverviewResponse(BaseModel):
     analysis_id: str
     customer_name: str

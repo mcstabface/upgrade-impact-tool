@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { formatStatusLabel } from "../utils/status";
 import StatusHelp from "../components/StatusHelp";
@@ -9,6 +9,7 @@ import ErrorState from "../components/ErrorState";
 import {
   evaluateAnalysisStaleness,
   getAnalysisOverview,
+  refreshAnalysis,
   type AnalysisOverviewResponse,
 } from "../services/analyses";
 
@@ -56,10 +57,12 @@ function SummaryCard({
 
 export default function AnalysisOverviewPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [evaluatingStaleness, setEvaluatingStaleness] = useState(false);
+  const [refreshingAnalysis, setRefreshingAnalysis] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -91,6 +94,23 @@ export default function AnalysisOverviewPage() {
       setError((err as Error).message);
     } finally {
       setEvaluatingStaleness(false);
+    }
+  }
+
+  async function handleRefreshAnalysis() {
+    if (!id) return;
+
+    setRefreshingAnalysis(true);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const result = await refreshAnalysis(id);
+      navigate(`/analyses/${result.new_analysis_id}`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setRefreshingAnalysis(false);
     }
   }
 
@@ -136,14 +156,24 @@ export default function AnalysisOverviewPage() {
         {data.previous_analysis_id && <p>Previous Analysis: {data.previous_analysis_id}</p>}
         {reviewNote && <p>{reviewNote}</p>}
 
-        <div style={{ marginTop: "1rem" }}>
+        <div style={{ marginTop: "1rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
           <button
             type="button"
             onClick={handleEvaluateStaleness}
-            disabled={evaluatingStaleness}
+            disabled={evaluatingStaleness || refreshingAnalysis}
           >
             {evaluatingStaleness ? "Evaluating..." : "Evaluate Staleness"}
           </button>
+
+          {data.overall_status === "STALE" && (
+            <button
+              type="button"
+              onClick={handleRefreshAnalysis}
+              disabled={refreshingAnalysis || evaluatingStaleness}
+            >
+              {refreshingAnalysis ? "Refreshing..." : "Refresh Analysis"}
+            </button>
+          )}
         </div>
       </section>
 

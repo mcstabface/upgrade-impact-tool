@@ -196,6 +196,8 @@ class AnalysisRepository:
         query = text("""
             SELECT
                 analysis_id,
+                customer_id,
+                environment_id,
                 analysis_status,
                 overall_status,
                 snapshot_id,
@@ -304,5 +306,112 @@ class AnalysisRepository:
                 "trigger_event": trigger_event,
                 "user_id": user_id,
                 "transition_utc": transition_utc,
+            },
+        )
+
+    def get_active_snapshot_for_customer_environment(
+        self,
+        db: Session,
+        *,
+        customer_id: int,
+        environment_id: int,
+    ) -> dict | None:
+        query = text("""
+            SELECT
+                snapshot_id,
+                content_hash
+            FROM customer_state_snapshots
+            WHERE customer_id = :customer_id
+              AND environment_id = :environment_id
+              AND is_active = true
+            ORDER BY snapshot_version DESC
+            LIMIT 1
+        """)
+        row = db.execute(
+            query,
+            {
+                "customer_id": customer_id,
+                "environment_id": environment_id,
+            },
+        ).first()
+        return dict(row._mapping) if row else None
+
+    def create_refresh_analysis_run(
+        self,
+        db: Session,
+        *,
+        analysis_id: str,
+        previous_analysis_id: str,
+        customer_id: int,
+        environment_id: int,
+        snapshot_id: int,
+        kb_catalog_hash: str,
+        snapshot_hash: str,
+        analysis_input_hash: str,
+        started_utc: int,
+    ) -> None:
+        query = text("""
+            INSERT INTO analysis_runs (
+                analysis_id,
+                customer_id,
+                environment_id,
+                snapshot_id,
+                previous_analysis_id,
+                kb_catalog_version,
+                snapshot_hash,
+                analysis_input_hash,
+                stale_reason,
+                stale_detected_utc,
+                analysis_status,
+                overall_status,
+                applies_count,
+                review_required_count,
+                unknown_count,
+                blocked_count,
+                assumptions_count,
+                missing_inputs_count,
+                derived_risks_count,
+                started_utc,
+                completed_utc,
+                duration_ms,
+                created_by_user_id
+            ) VALUES (
+                :analysis_id,
+                :customer_id,
+                :environment_id,
+                :snapshot_id,
+                :previous_analysis_id,
+                :kb_catalog_hash,
+                :snapshot_hash,
+                :analysis_input_hash,
+                NULL,
+                NULL,
+                'REQUIRES_REFRESH',
+                'REQUIRES_REFRESH',
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                :started_utc,
+                NULL,
+                NULL,
+                'system'
+            )
+        """)
+        db.execute(
+            query,
+            {
+                "analysis_id": analysis_id,
+                "previous_analysis_id": previous_analysis_id,
+                "customer_id": customer_id,
+                "environment_id": environment_id,
+                "snapshot_id": snapshot_id,
+                "kb_catalog_hash": kb_catalog_hash,
+                "snapshot_hash": snapshot_hash,
+                "analysis_input_hash": analysis_input_hash,
+                "started_utc": started_utc,
             },
         )

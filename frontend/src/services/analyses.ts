@@ -21,6 +21,17 @@ export type AnalysisStalenessResponse = {
   current_analysis_input_hash: string;
 };
 
+export type AnalysisRefreshResponse = {
+  previous_analysis_id: string;
+  new_analysis_id: string;
+  status: string;
+  started_utc: number;
+  snapshot_id: number;
+  snapshot_hash: string;
+  kb_catalog_hash: string;
+  analysis_input_hash: string;
+};
+
 export type AnalysisOverviewResponse = {
   analysis_id: string;
   customer_name: string;
@@ -82,6 +93,13 @@ export function getAnalysisOverview(id: string) {
 export function evaluateAnalysisStaleness(id: string) {
   return apiPost<AnalysisStalenessResponse, Record<string, never>>(
     `/analyses/${id}/evaluate-staleness`,
+    {},
+  );
+}
+
+export function refreshAnalysis(id: string) {
+  return apiPost<AnalysisRefreshResponse, Record<string, never>>(
+    `/analyses/${id}/refresh`,
     {},
   );
 }

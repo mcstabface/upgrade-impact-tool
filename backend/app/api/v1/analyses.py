@@ -6,9 +6,11 @@ from app.db.session import get_db
 from app.schemas.analysis import (
     AnalysisApplicationDetailResponse,
     AnalysisOverviewResponse,
+    AnalysisRefreshResponse,
     AnalysisStalenessResponse,
     AnalysisStatusResponse,
 )
+from app.services.analysis_refresh_service import AnalysisRefreshService
 from app.services.analysis_service import AnalysisService
 from app.services.analysis_staleness_service import AnalysisStalenessService
 
@@ -21,6 +23,7 @@ from app.services.analysis_transition_service import (
 router = APIRouter(tags=["analyses"])
 service = AnalysisService()
 staleness_service = AnalysisStalenessService()
+refresh_service = AnalysisRefreshService()
 
 transition_service = AnalysisTransitionService()
 
@@ -77,6 +80,31 @@ def evaluate_analysis_staleness(
         raise HTTPException(
             status_code=500,
             detail=f"Staleness evaluation failed: {exc}",
+        ) from exc
+
+
+@router.post("/analyses/{analysis_id}/refresh", response_model=AnalysisRefreshResponse)
+def refresh_analysis(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+) -> AnalysisRefreshResponse:
+    try:
+        result = refresh_service.refresh_analysis(db, analysis_id)
+        if not result:
+            raise HTTPException(status_code=404, detail="Analysis not found")
+        db.commit()
+        return result
+    except ValueError as exc:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Refresh analysis failed: {exc}",
         ) from exc
 
 
