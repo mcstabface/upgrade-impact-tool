@@ -404,7 +404,10 @@ export default function ReviewQueuePage() {
         </button>
       </section>
 
-      {(statusFilter !== "ALL" || ownerFilter.trim().length > 0 || searchText.trim().length > 0) && (
+      {(statusFilter !== "ALL" ||
+        ownerFilter.trim().length > 0 ||
+        searchText.trim().length > 0 ||
+        showOverdueOnly) && (
         <section style={{ marginBottom: "2rem" }}>
           <h2>Active Filters</h2>
 

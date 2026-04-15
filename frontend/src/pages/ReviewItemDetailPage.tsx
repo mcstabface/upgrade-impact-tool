@@ -358,7 +358,7 @@ export default function ReviewItemDetailPage() {
           <ul>
             {comments.map((comment) => (
               <li key={comment.comment_id}>
-                {comment.created_by_user_id}: {comment.comment_text}
+                {comment.created_by_user_id} ({formatUnixSeconds(comment.created_utc)}): {comment.comment_text}
               </li>
             ))}
           </ul>
