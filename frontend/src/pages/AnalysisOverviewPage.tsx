@@ -6,7 +6,11 @@ import StatusHelp from "../components/StatusHelp";
 import { formatUnixSeconds } from "../utils/time";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
-import { getAnalysisOverview, type AnalysisOverviewResponse } from "../services/analyses";
+import {
+  evaluateAnalysisStaleness,
+  getAnalysisOverview,
+  type AnalysisOverviewResponse,
+} from "../services/analyses";
 
 function SectionList({
   title,
@@ -54,11 +58,41 @@ export default function AnalysisOverviewPage() {
   const { id } = useParams();
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [evaluatingStaleness, setEvaluatingStaleness] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     getAnalysisOverview(id).then(setData).catch((err: Error) => setError(err.message));
   }, [id]);
+
+  async function handleEvaluateStaleness() {
+    if (!id || !data) return;
+
+    setEvaluatingStaleness(true);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const result = await evaluateAnalysisStaleness(id);
+
+      if (result.is_stale) {
+        setData({
+          ...data,
+          overall_status: result.status,
+          stale_reason: result.triggers.join(", "),
+          stale_detected_utc: result.stale_detected_utc,
+        });
+        setMessage(`Analysis marked STALE. Triggers: ${result.triggers.join(", ")}`);
+      } else {
+        setMessage("No relevant source changes detected.");
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setEvaluatingStaleness(false);
+    }
+  }
 
   if (error) return <ErrorState message={error} />;
   if (!data) return <LoadingState />;
@@ -83,6 +117,8 @@ export default function AnalysisOverviewPage() {
         <Link to="/dashboard">Back to Dashboard</Link>
       </p>
 
+      {message && <p>{message}</p>}
+
       <section style={{ marginBottom: "2rem" }}>
         <p>Analysis ID: {data.analysis_id}</p>
         <p>
@@ -93,7 +129,22 @@ export default function AnalysisOverviewPage() {
         <p>Started: {formatUnixSeconds(data.started_utc)}</p>
         <p>Completed: {formatUnixSeconds(data.completed_utc)}</p>
         <p>Duration (ms): {data.duration_ms ?? "N/A"}</p>
+        {data.stale_reason && <p>Stale Reason: {data.stale_reason}</p>}
+        {data.stale_detected_utc && (
+          <p>Stale Detected: {formatUnixSeconds(data.stale_detected_utc)}</p>
+        )}
+        {data.previous_analysis_id && <p>Previous Analysis: {data.previous_analysis_id}</p>}
         {reviewNote && <p>{reviewNote}</p>}
+
+        <div style={{ marginTop: "1rem" }}>
+          <button
+            type="button"
+            onClick={handleEvaluateStaleness}
+            disabled={evaluatingStaleness}
+          >
+            {evaluatingStaleness ? "Evaluating..." : "Evaluate Staleness"}
+          </button>
+        </div>
       </section>
 
       <section style={{ marginBottom: "2rem" }}>

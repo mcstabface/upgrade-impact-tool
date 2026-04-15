@@ -1,10 +1,24 @@
-import { apiGet } from "./api";
+import { apiGet, apiPost } from "./api";
 
 export type AnalysisStatusResponse = {
   analysis_id: string;
   status: string;
   progress_pct: number;
   current_stage: string;
+};
+
+export type AnalysisStalenessResponse = {
+  analysis_id: string;
+  status: string;
+  is_stale: boolean;
+  triggers: string[];
+  stale_detected_utc: number | null;
+  recorded_snapshot_hash: string | null;
+  current_snapshot_hash: string | null;
+  recorded_kb_catalog_hash: string | null;
+  current_kb_catalog_hash: string;
+  recorded_analysis_input_hash: string | null;
+  current_analysis_input_hash: string;
 };
 
 export type AnalysisOverviewResponse = {
@@ -25,6 +39,11 @@ export type AnalysisOverviewResponse = {
   started_utc: number | null;
   completed_utc: number | null;
   duration_ms: number | null;
+  stale_reason: string | null;
+  stale_detected_utc: number | null;
+  previous_analysis_id: string | null;
+  top_risks: string[];
+  top_actions: string[];
   applications: {
     analysis_application_id: number;
     application_name: string;
@@ -58,6 +77,13 @@ export function getAnalysisStatus(id: string) {
 
 export function getAnalysisOverview(id: string) {
   return apiGet<AnalysisOverviewResponse>(`/analyses/${id}`);
+}
+
+export function evaluateAnalysisStaleness(id: string) {
+  return apiPost<AnalysisStalenessResponse, Record<string, never>>(
+    `/analyses/${id}/evaluate-staleness`,
+    {},
+  );
 }
 
 export function getAnalysisApplicationDetail(id: string, applicationId: string) {
