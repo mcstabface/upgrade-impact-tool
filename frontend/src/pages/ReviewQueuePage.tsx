@@ -56,6 +56,10 @@ export default function ReviewQueuePage() {
   const [ownerEdits, setOwnerEdits] = useState<Record<number, string>>({});
   const [dueDateEdits, setDueDateEdits] = useState<Record<number, string>>({});
 
+  const [commentsByItem, setCommentsByItem] = useState<Record<number, { comment_id: number; review_item_id: number; comment_text: string; created_by_user_id: string; created_utc: number }[]>>({});
+  const [commentDrafts, setCommentDrafts] = useState<Record<number, string>>({});
+  const [commentAuthors, setCommentAuthors] = useState<Record<number, string>>({});
+
   useEffect(() => {
     getReviewQueue().then(setData).catch((err: Error) => setError(err.message));
   }, []);
@@ -100,6 +104,62 @@ export default function ReviewQueuePage() {
     setStatusFilter("ALL");
     setOwnerFilter("");
     setSearchText("");
+  }
+
+  async function handleLoadComments(reviewItemId: number) {
+    setError(null);
+
+    try {
+      const result = await getReviewComments(reviewItemId);
+      setCommentsByItem((current) => ({
+        ...current,
+        [reviewItemId]: result.items,
+      }));
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  }
+
+  async function handleAddComment(reviewItemId: number) {
+    const commentText = (commentDrafts[reviewItemId] ?? "").trim();
+    const createdByUserId = (commentAuthors[reviewItemId] ?? "").trim();
+
+    if (!commentText) {
+      setError("Comment text is required.");
+      return;
+    }
+
+    if (!createdByUserId) {
+      setError("Comment author is required.");
+      return;
+    }
+
+    setWorkingItemId(reviewItemId);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const created = await createReviewComment(reviewItemId, {
+        comment_text: commentText,
+        created_by_user_id: createdByUserId,
+      });
+
+      setCommentsByItem((current) => ({
+        ...current,
+        [reviewItemId]: [...(current[reviewItemId] ?? []), created],
+      }));
+
+      setCommentDrafts((current) => ({
+        ...current,
+        [reviewItemId]: "",
+      }));
+
+      setMessage(`Comment added to review item ${reviewItemId}.`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setWorkingItemId(null);
+    }
   }
 
   async function handleSaveAssignment(reviewItemId: number) {
@@ -486,6 +546,64 @@ export default function ReviewQueuePage() {
                   </div>
                 </div>
               )}
+              <div style={{ marginTop: "1rem" }}>
+                <button
+                  type="button"
+                  onClick={() => handleLoadComments(item.review_item_id)}
+                  disabled={workingItemId === item.review_item_id}
+                >
+                  Load Comments
+                </button>
+              </div>
+
+              <div style={{ marginTop: "1rem" }}>
+                <div style={{ marginBottom: "0.75rem" }}>
+                  <label>Comment Author </label>
+                  <input
+                    value={commentAuthors[item.review_item_id] ?? ""}
+                    onChange={(e) =>
+                      setCommentAuthors((current) => ({
+                        ...current,
+                        [item.review_item_id]: e.target.value,
+                      }))
+                    }
+                    placeholder="user_id"
+                    style={{ width: "16rem", maxWidth: "100%" }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: "0.75rem" }}>
+                  <label>Comment </label>
+                  <input
+                    value={commentDrafts[item.review_item_id] ?? ""}
+                    onChange={(e) =>
+                      setCommentDrafts((current) => ({
+                        ...current,
+                        [item.review_item_id]: e.target.value,
+                      }))
+                    }
+                    style={{ width: "32rem", maxWidth: "100%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleAddComment(item.review_item_id)}
+                    disabled={workingItemId === item.review_item_id}
+                    style={{ marginLeft: "0.5rem" }}
+                  >
+                    Add Comment
+                  </button>
+                </div>
+
+                {(commentsByItem[item.review_item_id] ?? []).length > 0 && (
+                  <ul>
+                    {(commentsByItem[item.review_item_id] ?? []).map((comment) => (
+                      <li key={comment.comment_id}>
+                        {comment.created_by_user_id}: {comment.comment_text}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </li>
           ))}
         </ul>
