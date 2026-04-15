@@ -19,10 +19,20 @@ class ReviewQueueRepository:
                 created_utc,
                 updated_utc,
                 resolution_note,
-                defer_reason
+                defer_reason,
+                CASE
+                    WHEN review_status IN ('OPEN', 'IN_PROGRESS', 'DEFERRED')
+                     AND due_date < CURRENT_DATE
+                    THEN true
+                    ELSE false
+                END AS is_overdue
             FROM review_items
             WHERE review_status IN ('OPEN', 'IN_PROGRESS', 'DEFERRED')
             ORDER BY
+                CASE
+                    WHEN due_date < CURRENT_DATE THEN 0
+                    ELSE 1
+                END,
                 CASE review_status
                     WHEN 'OPEN' THEN 1
                     WHEN 'IN_PROGRESS' THEN 2

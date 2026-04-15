@@ -247,6 +247,7 @@ export default function DashboardPage() {
           <SummaryCard label="Open Review Items" value={reviewItemSummary.open_count} />
           <SummaryCard label="In Progress Review Items" value={reviewItemSummary.in_progress_count} />
           <SummaryCard label="Deferred Review Items" value={reviewItemSummary.deferred_count} />        
+          <SummaryCard label="Overdue Review Items" value={reviewItemSummary.overdue_count} />        
         </div>
       </section>
 

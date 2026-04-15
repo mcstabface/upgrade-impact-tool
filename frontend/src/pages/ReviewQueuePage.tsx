@@ -61,6 +61,8 @@ export default function ReviewQueuePage() {
   const [commentDrafts, setCommentDrafts] = useState<Record<number, string>>({});
   const [commentAuthors, setCommentAuthors] = useState<Record<number, string>>({});
 
+  const [showOverdueOnly, setShowOverdueOnly] = useState(false);
+
   useEffect(() => {
     getReviewQueue().then(setData).catch((err: Error) => setError(err.message));
   }, []);
@@ -72,6 +74,7 @@ export default function ReviewQueuePage() {
       const statusMatches = statusFilter === "ALL" ? true : item.review_status === statusFilter;
 
       const ownerSearch = ownerFilter.trim().toLowerCase();
+
       const ownerMatches =
         ownerSearch.length === 0
           ? true
@@ -87,7 +90,9 @@ export default function ReviewQueuePage() {
             item.kb_reference.toLowerCase().includes(search) ||
             item.review_reason.toLowerCase().includes(search);
 
-      return statusMatches && ownerMatches && searchMatches;
+      const overdueMatches = showOverdueOnly ? item.is_overdue : true;
+
+      return statusMatches && ownerMatches && searchMatches && overdueMatches;
     });
 
     return [...filtered].sort((a, b) => {
@@ -105,6 +110,7 @@ export default function ReviewQueuePage() {
     setStatusFilter("ALL");
     setOwnerFilter("");
     setSearchText("");
+    setShowOverdueOnly(false);
   }
 
   async function handleLoadComments(reviewItemId: number) {
@@ -365,6 +371,17 @@ export default function ReviewQueuePage() {
         </div>
 
         <div style={{ marginBottom: "1rem" }}>
+          <label>
+            <input
+              type="checkbox"
+              checked={showOverdueOnly}
+              onChange={(e) => setShowOverdueOnly(e.target.checked)}
+            />{" "}
+            Show overdue only
+          </label>
+        </div>
+
+        <div style={{ marginBottom: "1rem" }}>
           <label>Owner </label>
           <input
             value={ownerFilter}
@@ -412,6 +429,13 @@ export default function ReviewQueuePage() {
                 onClear={() => setSearchText("")}
               />
             )}
+
+            {showOverdueOnly && (
+              <FilterChip
+                label="Overdue Only"
+                onClear={() => setShowOverdueOnly(false)}
+              />
+            )}
           </div>
         </section>
       )}
@@ -424,7 +448,14 @@ export default function ReviewQueuePage() {
       ) : (
         <ul>
           {filteredItems.map((item) => (
-            <li key={item.review_item_id} style={{ marginBottom: "2rem" }}>
+            <li
+              key={item.review_item_id}
+              style={{
+                marginBottom: "2rem",
+                border: item.is_overdue ? "1px solid #ccc" : undefined,
+                padding: item.is_overdue ? "0.75rem" : undefined,
+              }}
+            >
               <div>
                 <strong>Review Item {item.review_item_id}</strong>
                 {" — "}

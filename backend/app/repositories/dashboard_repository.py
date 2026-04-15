@@ -90,7 +90,11 @@ class DashboardRepository:
             SELECT
                 COUNT(*) FILTER (WHERE review_status = 'OPEN') AS open_count,
                 COUNT(*) FILTER (WHERE review_status = 'IN_PROGRESS') AS in_progress_count,
-                COUNT(*) FILTER (WHERE review_status = 'DEFERRED') AS deferred_count
+                COUNT(*) FILTER (WHERE review_status = 'DEFERRED') AS deferred_count,
+                COUNT(*) FILTER (
+                    WHERE review_status IN ('OPEN', 'IN_PROGRESS', 'DEFERRED')
+                      AND due_date < CURRENT_DATE
+                ) AS overdue_count
             FROM review_items
         """)
         row = db.execute(query).first()
@@ -99,6 +103,7 @@ class DashboardRepository:
             "open_count": row.open_count or 0,
             "in_progress_count": row.in_progress_count or 0,
             "deferred_count": row.deferred_count or 0,
+            "overdue_count": row.overdue_count or 0,
         }
 
     def get_top_actions(self, db: Session) -> list[str]:

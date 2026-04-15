@@ -25,3 +25,10 @@ class DashboardResponse(BaseModel):
     top_risks: list[str]
     top_actions: list[str]
     review_item_summary: DashboardReviewItemSummary
+
+
+class DashboardReviewItemSummary(BaseModel):
+    open_count: int
+    in_progress_count: int
+    deferred_count: int
+    overdue_count: int
