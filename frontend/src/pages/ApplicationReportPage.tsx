@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import ErrorState from "../components/ErrorState";
@@ -72,16 +72,32 @@ export default function ApplicationReportPage() {
   const [data, setData] = useState<AnalysisApplicationDetailResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadReport = useCallback(async () => {
     if (!id || !applicationId) return;
 
-    getAnalysisApplicationDetail(id, applicationId)
-      .then(setData)
-      .catch((err: Error) => setError(err.message));
+    setError(null);
+
+    try {
+      const result = await getAnalysisApplicationDetail(id, applicationId);
+      setData(result);
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, [id, applicationId]);
 
+  useEffect(() => {
+    loadReport();
+  }, [loadReport]);
+
   if (error) {
-    return <ErrorState title="Could not load application report" message={error} />;
+    return (
+      <ErrorState
+        title="Could not load application report"
+        message={error}
+        onRetry={loadReport}
+        retryLabel="Retry Load"
+      />
+    );
   }
 
   if (!data) {

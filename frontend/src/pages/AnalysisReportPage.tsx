@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import ErrorState from "../components/ErrorState";
@@ -77,33 +77,42 @@ export default function AnalysisReportPage() {
   const [audit, setAudit] = useState<AnalysisAuditResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadReport = useCallback(async () => {
     if (!id) return;
 
-    async function loadPage() {
-      try {
-        const overviewResult = await getAnalysisOverview(id);
-        setOverview(overviewResult);
+    setError(null);
 
-        if (overviewResult.previous_analysis_id) {
-          const deltaResult = await getAnalysisDeltaSummary(id);
-          setDelta(deltaResult);
-        } else {
-          setDelta(null);
-        }
+    try {
+      const overviewResult = await getAnalysisOverview(id);
+      setOverview(overviewResult);
 
-        const auditResult = await getAnalysisAudit(id);
-        setAudit(auditResult);
-      } catch (err) {
-        setError((err as Error).message);
+      if (overviewResult.previous_analysis_id) {
+        const deltaResult = await getAnalysisDeltaSummary(id);
+        setDelta(deltaResult);
+      } else {
+        setDelta(null);
       }
-    }
 
-    loadPage();
+      const auditResult = await getAnalysisAudit(id);
+      setAudit(auditResult);
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, [id]);
 
+  useEffect(() => {
+    loadReport();
+  }, [loadReport]);
+
   if (error) {
-    return <ErrorState title="Could not load analysis report" message={error} />;
+    return (
+      <ErrorState
+        title="Could not load analysis report"
+        message={error}
+        onRetry={loadReport}
+        retryLabel="Retry Load"
+      />
+    );
   }
 
   if (!overview || !audit) {
