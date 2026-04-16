@@ -30,26 +30,12 @@ class ObservabilityRepository:
         row = db.execute(query).first()
         return dict(row._mapping)
 
-    def get_most_common_blocked_fields(self, db: Session) -> list[dict]:
+    def get_blocked_intake_payloads(self, db: Session) -> list[dict]:
         query = text(
             """
-            WITH blocked_fields AS (
-                SELECT
-                    unnest(missing_required_fields) AS blocked_field
-                FROM intake_drafts
-                WHERE validation_status = 'BLOCKED'
-                  AND missing_required_fields IS NOT NULL
-                  AND cardinality(missing_required_fields) > 0
-            )
-            SELECT
-                blocked_field AS label,
-                COUNT(*) AS value
-            FROM blocked_fields
-            WHERE blocked_field IS NOT NULL
-              AND blocked_field <> ''
-            GROUP BY blocked_field
-            ORDER BY COUNT(*) DESC, blocked_field
-            LIMIT 5
+            SELECT payload_json
+            FROM intake_drafts
+            WHERE status = 'BLOCKED'
             """
         )
         return [dict(row._mapping) for row in db.execute(query).all()]
