@@ -7,6 +7,10 @@ import EmptyState from "../components/EmptyState";
 import { getCurrentRole, isAdminRole } from "../auth/role";
 import { getDashboard, type DashboardAnalysisItem } from "../services/dashboard";
 import { getAnalysisAudit, type AnalysisAuditResponse } from "../services/analyses";
+import {
+  getObservabilitySummary,
+  type ObservabilitySummaryResponse,
+} from "../services/observability";
 import { formatStatusLabel } from "../utils/status";
 import { formatUnixSeconds } from "../utils/time";
 
@@ -15,7 +19,7 @@ function SummaryCard({
   value,
 }: {
   label: string;
-  value: number;
+  value: number | string;
 }) {
   return (
     <div
@@ -80,6 +84,7 @@ function AnalysisInspectionCard({
 export default function AdminInspectionPage() {
   const currentRole = getCurrentRole();
   const [analyses, setAnalyses] = useState<DashboardAnalysisItem[] | null>(null);
+  const [observability, setObservability] = useState<ObservabilitySummaryResponse | null>(null);
   const [audit, setAudit] = useState<AnalysisAuditResponse | null>(null);
   const [selectedAnalysisId, setSelectedAnalysisId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -94,8 +99,12 @@ export default function AdminInspectionPage() {
     setError(null);
 
     try {
-      const result = await getDashboard();
-      setAnalyses(result.analyses);
+      const [dashboardResult, observabilityResult] = await Promise.all([
+        getDashboard(),
+        getObservabilitySummary(),
+      ]);
+      setAnalyses(dashboardResult.analyses);
+      setObservability(observabilityResult);
     } catch (err) {
       setError((err as Error).message);
     }
@@ -158,7 +167,7 @@ export default function AdminInspectionPage() {
     );
   }
 
-  if (!analyses) {
+  if (!analyses || !observability) {
     return <LoadingState message="Loading admin inspection view..." />;
   }
 
@@ -171,7 +180,23 @@ export default function AdminInspectionPage() {
       </p>
 
       <section style={{ marginBottom: "2rem" }}>
-        <h2>Summary</h2>
+        <h2>System Health Summary</h2>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <SummaryCard label="Health Status" value={observability.system_health_status} />
+          {observability.counts.map((item) => (
+            <SummaryCard key={item.label} label={item.label} value={item.value} />
+          ))}
+        </div>
+      </section>
+
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Inspection Summary</h2>
         <div
           style={{
             display: "flex",
@@ -183,6 +208,42 @@ export default function AdminInspectionPage() {
           <SummaryCard label="Stale Analyses" value={staleAnalyses.length} />
           <SummaryCard label="Refreshed Analyses" value={refreshedAnalyses.length} />
         </div>
+      </section>
+
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Most Common Missing Inputs</h2>
+        {observability.most_common_missing_inputs.length === 0 ? (
+          <EmptyState
+            title="No missing-input patterns"
+            message="No missing-input text is currently available to summarize."
+          />
+        ) : (
+          <ul>
+            {observability.most_common_missing_inputs.map((item) => (
+              <li key={item.label}>
+                {item.label} — {item.value}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section style={{ marginBottom: "2rem" }}>
+        <h2>Most Frequent Review Reasons</h2>
+        {observability.most_frequent_review_reasons.length === 0 ? (
+          <EmptyState
+            title="No review reasons recorded"
+            message="No review-item reasons are currently available to summarize."
+          />
+        ) : (
+          <ul>
+            {observability.most_frequent_review_reasons.map((item) => (
+              <li key={item.label}>
+                {item.label} — {item.value}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section style={{ marginBottom: "2rem" }}>
