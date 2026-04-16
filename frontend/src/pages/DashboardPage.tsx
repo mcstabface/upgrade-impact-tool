@@ -15,7 +15,11 @@ import {
 } from "../auth/role";
 import { formatStatusLabel } from "../utils/status";
 import { formatUnixSeconds } from "../utils/time";
-import { getDashboard, type DashboardAnalysisItem, type DashboardResponse } from "../services/dashboard";
+import {
+  getDashboard,
+  type DashboardAnalysisItem,
+  type DashboardResponse,
+} from "../services/dashboard";
 import {
   getNotifications,
   type NotificationSummaryResponse,
@@ -91,6 +95,8 @@ export default function DashboardPage() {
   const [showUnresolvedOnly, setShowUnresolvedOnly] = useState(false);
 
   useEffect(() => {
+    setError(null);
+
     Promise.all([getDashboard(), getNotifications()])
       .then(([dashboardResult, notificationResult]) => {
         setData(dashboardResult);

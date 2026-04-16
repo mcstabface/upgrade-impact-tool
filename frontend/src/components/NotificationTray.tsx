@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { NotificationItem } from "../services/notifications";
@@ -7,17 +8,65 @@ type Props = {
   items: NotificationItem[];
 };
 
-export default function NotificationTray({ unreadCount, items }: Props) {
-  return (
-    <section style={{ marginBottom: "2rem" }}>
-      <h2>Notifications</h2>
-      <p>Unread notifications: {unreadCount}</p>
+function severityLabel(severity: string) {
+  if (severity === "HIGH") return "High";
+  if (severity === "MEDIUM") return "Medium";
+  if (severity === "LOW") return "Low";
+  return severity;
+}
 
-      {items.length === 0 ? (
-        <p>No active notifications.</p>
-      ) : (
-        <ul style={{ paddingLeft: 0, listStyle: "none" }}>
-          {items.map((item) => (
+export default function NotificationTray({ unreadCount, items }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const previewItems = useMemo(() => {
+    return isOpen ? items : items.slice(0, 3);
+  }, [isOpen, items]);
+
+  const hiddenCount = Math.max(items.length - previewItems.length, 0);
+
+  return (
+    <section
+      style={{
+        marginBottom: "2rem",
+        border: "1px solid #ccc",
+        padding: "1rem",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "1rem",
+          flexWrap: "wrap",
+        }}
+      >
+        <div>
+          <h2 style={{ margin: 0 }}>Notifications</h2>
+          <p style={{ margin: "0.5rem 0 0 0" }}>
+            {unreadCount === 0
+              ? "No active notifications."
+              : `${unreadCount} active notification${unreadCount === 1 ? "" : "s"}.`}
+          </p>
+        </div>
+
+        <button type="button" onClick={() => setIsOpen((current) => !current)}>
+          {isOpen ? "Collapse Notifications" : `Open Notifications (${unreadCount})`}
+        </button>
+      </div>
+
+      {isOpen && items.length === 0 && (
+        <div style={{ marginTop: "1rem" }}>
+          <p>No active notifications.</p>
+          <p>
+            When the system detects stale analyses or overdue review work, they will appear here.
+          </p>
+        </div>
+      )}
+
+      {items.length > 0 && (
+        <ul style={{ paddingLeft: 0, listStyle: "none", marginTop: "1rem", marginBottom: 0 }}>
+          {previewItems.map((item) => (
             <li
               key={item.notification_id}
               style={{
@@ -26,19 +75,29 @@ export default function NotificationTray({ unreadCount, items }: Props) {
                 marginBottom: "1rem",
               }}
             >
-              <div>
+              <div style={{ marginBottom: "0.5rem" }}>
                 <strong>{item.headline}</strong>
               </div>
+
               <div>{item.message}</div>
+
               <div style={{ marginTop: "0.5rem" }}>
-                Severity: {item.severity} | Type: {item.notification_type}
+                Severity: {severityLabel(item.severity)} | Type: {item.notification_type}
               </div>
+
               <div style={{ marginTop: "0.75rem" }}>
                 <Link to={item.target_path}>Open Target</Link>
               </div>
             </li>
           ))}
         </ul>
+      )}
+
+      {!isOpen && hiddenCount > 0 && (
+        <p style={{ marginTop: "1rem", marginBottom: 0 }}>
+          {hiddenCount} more notification{hiddenCount === 1 ? "" : "s"} hidden. Open the tray to
+          view all.
+        </p>
       )}
     </section>
   );
