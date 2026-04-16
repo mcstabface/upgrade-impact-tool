@@ -30,6 +30,25 @@ class ObservabilityRepository:
         row = db.execute(query).first()
         return dict(row._mapping)
 
+    def get_usage_events(self, db: Session) -> list[dict]:
+        query = text(
+            """
+            SELECT
+                usage_event_id,
+                event_type,
+                actor_role,
+                actor_user_id,
+                entity_type,
+                entity_id,
+                related_analysis_id,
+                event_payload,
+                created_utc
+            FROM usage_events
+            ORDER BY usage_event_id ASC
+            """
+        )
+        return [dict(row._mapping) for row in db.execute(query).all()]
+
     def get_blocked_intake_payloads(self, db: Session) -> list[dict]:
         query = text(
             """

@@ -196,6 +196,21 @@ export default function AdminInspectionPage() {
       </section>
 
       <section style={{ marginBottom: "2rem" }}>
+        <h2>Pilot Usage Summary</h2>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
+          {observability.pilot_usage_metrics.map((item) => (
+            <SummaryCard key={item.label} label={item.label} value={item.value} />
+          ))}
+        </div>
+      </section>
+
+      <section style={{ marginBottom: "2rem" }}>
         <h2>Inspection Summary</h2>
         <div
           style={{
