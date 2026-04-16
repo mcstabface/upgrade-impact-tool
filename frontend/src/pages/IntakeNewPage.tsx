@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ErrorState from "../components/ErrorState";
-import { canManageIntakes, getCurrentRole } from "../auth/role";
+import { canManageIntakes, getCurrentRole, type UserRole } from "../auth/role";
 import {
   createIntake,
   startAnalysis,
@@ -104,7 +104,6 @@ const SAMPLE_INTAKE_TEMPLATE_LINES = [
 
 export default function IntakeNewPage() {
   const navigate = useNavigate();
-  const currentRole = getCurrentRole();
 
   const [customerName, setCustomerName] = useState("Acme Health");
   const [environmentName, setEnvironmentName] = useState("Production Wave 2");
@@ -132,8 +131,20 @@ export default function IntakeNewPage() {
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
+  const currentRole: UserRole = getCurrentRole();
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+
+    const submitRole = getCurrentRole();
+    if (!canManageIntakes(submitRole)) {
+      setError(
+        `Current role ${submitRole} is not permitted to create intakes.\nRecovery: Switch to ANALYST or ADMIN on the dashboard, then retry the intake flow.`,
+      );
+      setSubmitting(false);
+      return;
+    }
+
     setSubmitting(true);
     setError(null);
     setWarnings([]);
@@ -225,6 +236,8 @@ export default function IntakeNewPage() {
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "56rem" }}>
       <h1>Create Intake</h1>
+
+      <p>Current Role: {currentRole}</p>
 
       <section style={{ marginBottom: "2rem" }}>
         <h2>Before you start</h2>
