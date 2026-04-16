@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.core.errors import AppError
 from app.db.session import get_db
 from app.schemas.review_queue import ReviewQueueResponse
@@ -15,20 +16,40 @@ usage_event_service = UsageEventService()
 
 
 @router.get("/review-queue", response_model=ReviewQueueResponse)
-def get_review_queue(db: Session = Depends(get_db)) -> ReviewQueueResponse:
+def get_review_queue(
+    db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
+) -> ReviewQueueResponse:
     return service.get_review_queue(db)
 
 
 @router.get("/review-queue/export.csv")
-def export_review_queue_csv(db: Session = Depends(get_db)) -> Response:
+def export_review_queue_csv(
+    db: Session = Depends(get_db),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
+) -> Response:
     try:
         csv_content = export_service.export_csv(db)
 
         usage_event_service.record_event(
             db=db,
             event_type="EXPORT_TRIGGERED",
-            actor_role="VIEWER",
-            actor_user_id="system",
+            actor_role=current_user.role.value,
+            actor_user_id=current_user.user_id,
             entity_type="REVIEW_QUEUE_EXPORT",
             entity_id="review_queue",
             related_analysis_id=None,

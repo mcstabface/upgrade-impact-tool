@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from app.core.auth import UserRole, require_roles
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.core.errors import AppError
 from app.db.session import get_db
 from app.schemas.analysis import (
@@ -52,7 +52,7 @@ def transition_analysis(
     analysis_id: str,
     payload: AnalysisTransitionRequest,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
+    current_user: AuthenticatedUser = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisStatusResponse:
     try:
         transition_service.transition_analysis(
@@ -60,7 +60,7 @@ def transition_analysis(
             analysis_id=analysis_id,
             new_state=payload.new_state,
             trigger_event=payload.trigger_event,
-            user_id="system",
+            user_id=current_user.user_id,
         )
         db.commit()
     except InvalidAnalysisTransitionError as exc:
@@ -77,7 +77,7 @@ def transition_analysis(
 def evaluate_analysis_staleness(
     analysis_id: str,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
+    _: AuthenticatedUser = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisStalenessResponse:
     try:
         result = staleness_service.evaluate_analysis(db, analysis_id)
@@ -109,7 +109,7 @@ def evaluate_analysis_staleness(
 def refresh_analysis(
     analysis_id: str,
     db: Session = Depends(get_db),
-    role: UserRole = Depends(require_roles(UserRole.ADMIN)),
+    current_user: AuthenticatedUser = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisRefreshResponse:
     try:
         result = refresh_service.refresh_analysis(db, analysis_id)
@@ -119,8 +119,8 @@ def refresh_analysis(
         usage_event_service.record_event(
             db=db,
             event_type="ANALYSIS_REFRESH_CREATED",
-            actor_role=role.value,
-            actor_user_id="system",
+            actor_role=current_user.role.value,
+            actor_user_id=current_user.user_id,
             entity_type="ANALYSIS",
             entity_id=result.new_analysis_id,
             related_analysis_id=result.new_analysis_id,
@@ -159,6 +159,14 @@ def refresh_analysis(
 def get_analysis_delta_summary(
     analysis_id: str,
     db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> AnalysisDeltaSummaryResponse:
     result = delta_service.get_delta_summary(db, analysis_id)
     if not result:
@@ -170,7 +178,7 @@ def get_analysis_delta_summary(
 def get_analysis_audit(
     analysis_id: str,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
+    _: AuthenticatedUser = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisAuditResponse:
     result = audit_service.get_audit(db, analysis_id)
     if not result:
@@ -182,6 +190,14 @@ def get_analysis_audit(
 def export_analysis_json(
     analysis_id: str,
     db: Session = Depends(get_db),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> Response:
     try:
         result = export_service.get_export(db, analysis_id)
@@ -191,8 +207,8 @@ def export_analysis_json(
         usage_event_service.record_event(
             db=db,
             event_type="EXPORT_TRIGGERED",
-            actor_role="VIEWER",
-            actor_user_id="system",
+            actor_role=current_user.role.value,
+            actor_user_id=current_user.user_id,
             entity_type="ANALYSIS_EXPORT",
             entity_id=analysis_id,
             related_analysis_id=analysis_id,
@@ -228,6 +244,14 @@ def export_analysis_application_json(
     analysis_id: str,
     analysis_application_id: int,
     db: Session = Depends(get_db),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> Response:
     try:
         result = application_export_service.get_export(db, analysis_id, analysis_application_id)
@@ -237,8 +261,8 @@ def export_analysis_application_json(
         usage_event_service.record_event(
             db=db,
             event_type="EXPORT_TRIGGERED",
-            actor_role="VIEWER",
-            actor_user_id="system",
+            actor_role=current_user.role.value,
+            actor_user_id=current_user.user_id,
             entity_type="APPLICATION_EXPORT",
             entity_id=str(analysis_application_id),
             related_analysis_id=analysis_id,
@@ -274,7 +298,18 @@ def export_analysis_application_json(
 
 
 @router.get("/analyses/{analysis_id}/status", response_model=AnalysisStatusResponse)
-def get_analysis_status(analysis_id: str, db: Session = Depends(get_db)) -> AnalysisStatusResponse:
+def get_analysis_status(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
+) -> AnalysisStatusResponse:
     result = service.get_status(db, analysis_id)
     if not result:
         raise HTTPException(status_code=404, detail="Analysis not found")
@@ -282,7 +317,18 @@ def get_analysis_status(analysis_id: str, db: Session = Depends(get_db)) -> Anal
 
 
 @router.get("/analyses/{analysis_id}", response_model=AnalysisOverviewResponse)
-def get_analysis_overview(analysis_id: str, db: Session = Depends(get_db)) -> AnalysisOverviewResponse:
+def get_analysis_overview(
+    analysis_id: str,
+    db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
+) -> AnalysisOverviewResponse:
     result = service.get_overview(db, analysis_id)
     if not result:
         raise HTTPException(status_code=404, detail="Analysis not found")
@@ -297,6 +343,14 @@ def get_analysis_application_detail(
     analysis_id: str,
     analysis_application_id: int,
     db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> AnalysisApplicationDetailResponse:
     result = service.get_application_detail(db, analysis_id, analysis_application_id)
     if not result:

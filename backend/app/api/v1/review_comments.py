@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.auth import UserRole, require_roles
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.review_comments import (
     ReviewCommentCreateRequest,
@@ -19,7 +19,7 @@ def create_review_comment(
     review_item_id: int,
     payload: ReviewCommentCreateRequest,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
+    _: AuthenticatedUser = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
 ) -> ReviewCommentResponse:
     try:
         result = service.create_comment(db, review_item_id, payload)
@@ -42,6 +42,14 @@ def create_review_comment(
 def get_review_comments(
     review_item_id: int,
     db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> ReviewCommentListResponse:
     result = service.get_comments(db, review_item_id)
     if not result:

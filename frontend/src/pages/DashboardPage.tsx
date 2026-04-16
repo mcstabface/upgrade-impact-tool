@@ -6,13 +6,8 @@ import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
 import NotificationTray from "../components/NotificationTray";
 import StatusHelp from "../components/StatusHelp";
-import {
-  canManageIntakes,
-  getCurrentRole,
-  isAdminRole,
-  setCurrentRole,
-  type UserRole,
-} from "../auth/role";
+import { canManageIntakes, isAdminRole, type UserRole } from "../auth/role";
+import { useAuth } from "../auth/AuthContext";
 import { formatStatusLabel } from "../utils/status";
 import { formatUnixSeconds } from "../utils/time";
 import {
@@ -87,10 +82,13 @@ function SummaryCard({
 }
 
 export default function DashboardPage() {
+  const { user, logout } = useAuth();
+
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [notifications, setNotifications] = useState<NotificationSummaryResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [currentRole, setRoleState] = useState<UserRole>(getCurrentRole());
+
+  const currentRole: UserRole = user?.role ?? "VIEWER";
 
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [showUnresolvedOnly, setShowUnresolvedOnly] = useState(false);
@@ -104,7 +102,7 @@ export default function DashboardPage() {
         setNotifications(notificationResult);
       })
       .catch((err: Error) => setError(err.message));
-  }, [currentRole]);
+  }, []);
 
   const filteredAnalyses = useMemo(() => {
     if (!data) return [];
@@ -179,11 +177,6 @@ export default function DashboardPage() {
     setShowUnresolvedOnly(false);
   }
 
-  function handleRoleChange(nextRole: UserRole) {
-    setCurrentRole(nextRole);
-    setRoleState(nextRole);
-  }
-
   async function handleMarkNotificationRead(notificationId: string) {
     await markNotificationRead(notificationId);
     const refreshed = await getNotifications();
@@ -212,19 +205,15 @@ export default function DashboardPage() {
       <h1>Dashboard</h1>
 
       <section style={{ marginBottom: "2rem" }}>
-        <h2>Role</h2>
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Current Role </label>
-          <select
-            value={currentRole}
-            onChange={(e) => handleRoleChange(e.target.value as UserRole)}
-          >
-            <option value="VIEWER">VIEWER</option>
-            <option value="ANALYST">ANALYST</option>
-            <option value="REVIEWER">REVIEWER</option>
-            <option value="ADMIN">ADMIN</option>
-          </select>
+        <h2>Signed In</h2>
+        <div style={{ marginBottom: "0.5rem" }}>
+          <strong>{user?.display_name}</strong>
         </div>
+        <div style={{ marginBottom: "0.5rem" }}>{user?.email}</div>
+        <div style={{ marginBottom: "1rem" }}>Role: {currentRole}</div>
+        <button type="button" onClick={() => void logout()}>
+          Log Out
+        </button>
       </section>
 
       <NotificationTray

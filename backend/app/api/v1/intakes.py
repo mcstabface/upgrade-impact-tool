@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.auth import UserRole, require_roles
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.intake_api import (
     IntakeCreateRequest,
@@ -25,15 +25,17 @@ usage_event_service = UsageEventService()
 def create_intake(
     payload: IntakeCreateRequest,
     db: Session = Depends(get_db),
-    role: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(UserRole.ANALYST, UserRole.ADMIN)
+    ),
 ) -> IntakeCreateResponse:
     result = service.create_intake(db, payload)
 
     usage_event_service.record_event(
         db=db,
         event_type="INTAKE_CREATED",
-        actor_role=role.value,
-        actor_user_id="system",
+        actor_role=current_user.role.value,
+        actor_user_id=current_user.user_id,
         entity_type="INTAKE",
         entity_id=result.intake_id,
         event_payload={
@@ -47,7 +49,18 @@ def create_intake(
 
 
 @router.get("/intakes/{intake_id}", response_model=IntakeDetailResponse)
-def get_intake(intake_id: str, db: Session = Depends(get_db)) -> IntakeDetailResponse:
+def get_intake(
+    intake_id: str,
+    db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
+) -> IntakeDetailResponse:
     result = service.get_intake(db, intake_id)
     if not result:
         raise HTTPException(status_code=404, detail="Intake not found")
@@ -59,7 +72,9 @@ def update_intake(
     intake_id: str,
     payload: IntakeUpdateRequest,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
+    _: AuthenticatedUser = Depends(
+        require_roles(UserRole.ANALYST, UserRole.ADMIN)
+    ),
 ) -> IntakeUpdateResponse:
     result = service.update_intake(db, intake_id, payload)
     if not result:
@@ -71,7 +86,9 @@ def update_intake(
 def validate_intake(
     intake_id: str,
     db: Session = Depends(get_db),
-    role: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(UserRole.ANALYST, UserRole.ADMIN)
+    ),
 ) -> IntakeValidateResponse:
     result = service.validate_intake(db, intake_id)
     if not result:
@@ -82,8 +99,8 @@ def validate_intake(
     usage_event_service.record_event(
         db=db,
         event_type=event_type,
-        actor_role=role.value,
-        actor_user_id="system",
+        actor_role=current_user.role.value,
+        actor_user_id=current_user.user_id,
         entity_type="INTAKE",
         entity_id=result.intake_id,
         event_payload={
@@ -102,7 +119,9 @@ def start_analysis(
     intake_id: str,
     _: StartAnalysisRequest,
     db: Session = Depends(get_db),
-    role: UserRole = Depends(require_roles(UserRole.ANALYST, UserRole.ADMIN)),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(UserRole.ANALYST, UserRole.ADMIN)
+    ),
 ) -> StartAnalysisResponse:
     result = service.start_analysis(db, intake_id)
     if not result:
@@ -114,8 +133,8 @@ def start_analysis(
     usage_event_service.record_event(
         db=db,
         event_type="ANALYSIS_STARTED",
-        actor_role=role.value,
-        actor_user_id="system",
+        actor_role=current_user.role.value,
+        actor_user_id=current_user.user_id,
         entity_type="ANALYSIS",
         entity_id=result.analysis_id,
         related_analysis_id=result.analysis_id,
@@ -131,8 +150,8 @@ def start_analysis(
         usage_event_service.record_event(
             db=db,
             event_type="ANALYSIS_COMPLETED",
-            actor_role=role.value,
-            actor_user_id="system",
+            actor_role=current_user.role.value,
+            actor_user_id=current_user.user_id,
             entity_type="ANALYSIS",
             entity_id=result.analysis_id,
             related_analysis_id=result.analysis_id,

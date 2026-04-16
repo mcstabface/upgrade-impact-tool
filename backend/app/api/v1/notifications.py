@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.notifications import NotificationReadResponse, NotificationSummaryResponse
 from app.services.notification_service import NotificationService
@@ -10,7 +11,17 @@ service = NotificationService()
 
 
 @router.get("/notifications", response_model=NotificationSummaryResponse)
-def get_notifications(db: Session = Depends(get_db)) -> NotificationSummaryResponse:
+def get_notifications(
+    db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
+) -> NotificationSummaryResponse:
     return service.get_notifications(db)
 
 
@@ -18,6 +29,14 @@ def get_notifications(db: Session = Depends(get_db)) -> NotificationSummaryRespo
 def mark_notification_read(
     notification_id: str,
     db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> NotificationReadResponse:
     result = service.mark_notification_read(db, notification_id)
     if not result:

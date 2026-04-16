@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 
-from app.core.auth import UserRole, require_roles
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.usage_events import ResultsOverviewSessionEventRequest
 from app.services.usage_event_service import UsageEventService
@@ -14,7 +14,7 @@ usage_event_service = UsageEventService()
 def record_results_overview_session(
     payload: ResultsOverviewSessionEventRequest,
     db: Session = Depends(get_db),
-    role: UserRole = Depends(
+    current_user: AuthenticatedUser = Depends(
         require_roles(
             UserRole.VIEWER,
             UserRole.ANALYST,
@@ -26,8 +26,8 @@ def record_results_overview_session(
     usage_event_service.record_event(
         db=db,
         event_type="RESULTS_OVERVIEW_SESSION_RECORDED",
-        actor_role=role.value,
-        actor_user_id="system",
+        actor_role=current_user.role.value,
+        actor_user_id=current_user.user_id,
         entity_type="ANALYSIS",
         entity_id=payload.analysis_id,
         related_analysis_id=payload.analysis_id,

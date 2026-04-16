@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.core.auth import UserRole, require_roles
+from app.core.auth import AuthenticatedUser, UserRole, require_roles
 from app.db.session import get_db
 from app.schemas.review_items import (
     ReviewItemCreateRequest,
@@ -22,7 +22,9 @@ usage_event_service = UsageEventService()
 def create_review_item(
     payload: ReviewItemCreateRequest,
     db: Session = Depends(get_db),
-    role: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
+    current_user: AuthenticatedUser = Depends(
+        require_roles(UserRole.REVIEWER, UserRole.ADMIN)
+    ),
 ) -> ReviewItemCreateResponse:
     try:
         result = service.create_review_item(db, payload)
@@ -41,8 +43,8 @@ def create_review_item(
     usage_event_service.record_event(
         db=db,
         event_type="REVIEW_ITEM_CREATED",
-        actor_role=role.value,
-        actor_user_id="system",
+        actor_role=current_user.role.value,
+        actor_user_id=current_user.user_id,
         entity_type="REVIEW_ITEM",
         entity_id=str(result.review_item_id),
         related_analysis_id=None,
@@ -61,6 +63,14 @@ def create_review_item(
 def get_review_item(
     review_item_id: int,
     db: Session = Depends(get_db),
+    _: AuthenticatedUser = Depends(
+        require_roles(
+            UserRole.VIEWER,
+            UserRole.ANALYST,
+            UserRole.REVIEWER,
+            UserRole.ADMIN,
+        )
+    ),
 ) -> ReviewItemDetailResponse:
     result = service.get_review_item(db, review_item_id)
     if not result:
@@ -73,7 +83,7 @@ def update_review_item(
     review_item_id: int,
     payload: ReviewItemUpdateRequest,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
+    _: AuthenticatedUser = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
 ) -> ReviewItemUpdateResponse:
     try:
         result = service.update_review_item(db, review_item_id, payload)
