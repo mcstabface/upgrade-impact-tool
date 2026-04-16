@@ -441,6 +441,13 @@ class AnalysisRepository:
 
     def get_analysis_finding_projection(self, db: Session, analysis_id: str) -> list[dict]:
         query = text("""
+            WITH evidence_by_finding AS (
+                SELECT
+                    finding_id,
+                    MIN(kb_article_number) AS kb_reference
+                FROM finding_evidence
+                GROUP BY finding_id
+            )
             SELECT
                 af.finding_id,
                 af.change_id,
@@ -449,21 +456,13 @@ class AnalysisRepository:
                 af.severity,
                 af.headline,
                 af.recommended_action,
-                MIN(fe.kb_article_number) AS kb_reference
+                ebf.kb_reference
             FROM analysis_findings af
             JOIN analysis_applications aa
               ON aa.analysis_application_id = af.analysis_application_id
-            LEFT JOIN finding_evidence fe
-              ON fe.finding_id = af.finding_id
+            LEFT JOIN evidence_by_finding ebf
+              ON ebf.finding_id = af.finding_id
             WHERE af.analysis_id = :analysis_id
-            GROUP BY
-                af.finding_id,
-                af.change_id,
-                aa.application_name,
-                af.finding_status,
-                af.severity,
-                af.headline,
-                af.recommended_action
             ORDER BY aa.application_name, af.change_id, af.finding_id
         """)
         return [dict(row._mapping) for row in db.execute(query, {"analysis_id": analysis_id}).all()]
