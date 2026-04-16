@@ -22,6 +22,7 @@ import {
 } from "../services/dashboard";
 import {
   getNotifications,
+  markNotificationRead,
   type NotificationSummaryResponse,
 } from "../services/notifications";
 
@@ -183,6 +184,12 @@ export default function DashboardPage() {
     setRoleState(nextRole);
   }
 
+  async function handleMarkNotificationRead(notificationId: string) {
+    await markNotificationRead(notificationId);
+    const refreshed = await getNotifications();
+    setNotifications(refreshed);
+  }
+
   if (error) {
     return <ErrorState title="Could not load dashboard" message={error} />;
   }
@@ -223,6 +230,7 @@ export default function DashboardPage() {
       <NotificationTray
         unreadCount={notifications.unread_count}
         items={notifications.items}
+        onMarkRead={handleMarkNotificationRead}
       />
 
       {canManageIntakes(currentRole) && (

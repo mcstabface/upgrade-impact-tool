@@ -6,6 +6,7 @@ import type { NotificationItem } from "../services/notifications";
 type Props = {
   unreadCount: number;
   items: NotificationItem[];
+  onMarkRead: (notificationId: string) => Promise<void>;
 };
 
 function severityLabel(severity: string) {
@@ -15,11 +16,21 @@ function severityLabel(severity: string) {
   return severity;
 }
 
-export default function NotificationTray({ unreadCount, items }: Props) {
+export default function NotificationTray({ unreadCount, items, onMarkRead }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [workingNotificationId, setWorkingNotificationId] = useState<string | null>(null);
 
   const previewHeadlines = items.slice(0, 3).map((item) => item.headline);
   const hiddenCount = Math.max(items.length - previewHeadlines.length, 0);
+
+  async function handleMarkRead(notificationId: string) {
+    setWorkingNotificationId(notificationId);
+    try {
+      await onMarkRead(notificationId);
+    } finally {
+      setWorkingNotificationId(null);
+    }
+  }
 
   return (
     <section
@@ -41,9 +52,9 @@ export default function NotificationTray({ unreadCount, items }: Props) {
         <div>
           <h2 style={{ margin: 0 }}>Notifications</h2>
           <p style={{ margin: "0.5rem 0 0 0" }}>
-            {unreadCount === 0
+            {items.length === 0
               ? "No active notifications."
-              : `${unreadCount} active notification${unreadCount === 1 ? "" : "s"}.`}
+              : `${items.length} active notification${items.length === 1 ? "" : "s"}; ${unreadCount} unread.`}
           </p>
         </div>
 
@@ -88,6 +99,7 @@ export default function NotificationTray({ unreadCount, items }: Props) {
                 border: "1px solid #ccc",
                 padding: "1rem",
                 marginBottom: "1rem",
+                opacity: item.is_read ? 0.75 : 1,
               }}
             >
               <div style={{ marginBottom: "0.5rem" }}>
@@ -97,11 +109,21 @@ export default function NotificationTray({ unreadCount, items }: Props) {
               <div>{item.message}</div>
 
               <div style={{ marginTop: "0.5rem" }}>
-                Severity: {severityLabel(item.severity)} | Type: {item.notification_type}
+                Severity: {severityLabel(item.severity)} | Type: {item.notification_type} | Status:{" "}
+                {item.is_read ? "Read" : "Unread"}
               </div>
 
-              <div style={{ marginTop: "0.75rem" }}>
+              <div style={{ marginTop: "0.75rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
                 <Link to={item.target_path}>Open Target</Link>
+                {!item.is_read && (
+                  <button
+                    type="button"
+                    onClick={() => handleMarkRead(item.notification_id)}
+                    disabled={workingNotificationId === item.notification_id}
+                  >
+                    {workingNotificationId === item.notification_id ? "Marking..." : "Mark Read"}
+                  </button>
+                )}
               </div>
             </li>
           ))}
