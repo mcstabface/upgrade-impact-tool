@@ -80,13 +80,24 @@ class AnalysisRepository:
                 af.change_taxonomy,
                 af.headline,
                 af.recommended_action,
-                fe.kb_article_number
+                MIN(fe.kb_article_number) AS kb_article_number
             FROM analysis_findings af
-            JOIN finding_evidence fe ON fe.finding_id = af.finding_id
+            LEFT JOIN finding_evidence fe
+              ON fe.finding_id = af.finding_id
             WHERE af.analysis_application_id = :analysis_application_id
+            GROUP BY
+                af.finding_id,
+                af.finding_status,
+                af.severity,
+                af.change_taxonomy,
+                af.headline,
+                af.recommended_action
             ORDER BY af.finding_id
         """)
-        return [dict(row._mapping) for row in db.execute(query, {"analysis_application_id": analysis_application_id}).all()]
+        return [
+            dict(row._mapping)
+            for row in db.execute(query, {"analysis_application_id": analysis_application_id}).all()
+        ]
 
     def get_top_risks(self, db: Session, analysis_id: str) -> list[str]:
         rows = db.execute(
