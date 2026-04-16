@@ -49,6 +49,25 @@ class ObservabilityRepository:
         )
         return [dict(row._mapping) for row in db.execute(query).all()]
 
+    def get_refresh_turnaround_rows(self, db: Session) -> list[dict]:
+        query = text(
+            """
+            SELECT
+                refreshed.analysis_id AS refreshed_analysis_id,
+                refreshed.started_utc AS refresh_started_utc,
+                refreshed.previous_analysis_id,
+                previous.stale_detected_utc
+            FROM analysis_runs refreshed
+            JOIN analysis_runs previous
+              ON previous.analysis_id = refreshed.previous_analysis_id
+            WHERE refreshed.previous_analysis_id IS NOT NULL
+              AND refreshed.started_utc IS NOT NULL
+              AND previous.stale_detected_utc IS NOT NULL
+            ORDER BY refreshed.started_utc ASC
+            """
+        )
+        return [dict(row._mapping) for row in db.execute(query).all()]
+
     def get_blocked_intake_payloads(self, db: Session) -> list[dict]:
         query = text(
             """

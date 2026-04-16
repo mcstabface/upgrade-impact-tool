@@ -19,6 +19,7 @@ class ObservabilityService:
     def get_summary(self, db: Session) -> ObservabilitySummaryResponse:
         counts = self.repository.get_system_counts(db)
         usage_events = self.repository.get_usage_events(db)
+        refresh_turnaround_rows = self.repository.get_refresh_turnaround_rows(db)
         blocked_payload_rows = self.repository.get_blocked_intake_payloads(db)
         missing_inputs = self.repository.get_most_common_missing_inputs(db)
         review_reasons = self.repository.get_most_frequent_review_reasons(db)
@@ -37,7 +38,10 @@ class ObservabilityService:
             )[:5]
         ]
 
-        usage_metrics = self._build_pilot_usage_metrics(usage_events)
+        usage_metrics = self._build_pilot_usage_metrics(
+            usage_events=usage_events,
+            refresh_turnaround_rows=refresh_turnaround_rows,
+        )
 
         health_status = "ATTENTION_REQUIRED" if (
             counts["stale_analyses"] > 0 or counts["overdue_review_items"] > 0
@@ -62,7 +66,12 @@ class ObservabilityService:
             ],
         )
 
-    def _build_pilot_usage_metrics(self, usage_events: list[dict]) -> list[ObservabilityMetricItem]:
+    def _build_pilot_usage_metrics(
+        self,
+        *,
+        usage_events: list[dict],
+        refresh_turnaround_rows: list[dict],
+    ) -> list[ObservabilityMetricItem]:
         intake_created = 0
         intake_validated = 0
         intake_blocked = 0
@@ -124,6 +133,26 @@ class ObservabilityService:
         else:
             time_to_first_success = "N/A"
 
+        refresh_turnaround_durations: list[int] = []
+        for row in refresh_turnaround_rows:
+            stale_detected_utc = row["stale_detected_utc"]
+            refresh_started_utc = row["refresh_started_utc"]
+
+            if (
+                stale_detected_utc is not None
+                and refresh_started_utc is not None
+                and refresh_started_utc >= stale_detected_utc
+            ):
+                refresh_turnaround_durations.append(refresh_started_utc - stale_detected_utc)
+
+        if refresh_turnaround_durations:
+            average_refresh_seconds = round(
+                sum(refresh_turnaround_durations) / len(refresh_turnaround_durations)
+            )
+            stale_to_refresh_turnaround = f"{average_refresh_seconds}s avg"
+        else:
+            stale_to_refresh_turnaround = "N/A"
+
         return [
             ObservabilityMetricItem(
                 label="Intake Completion Rate",
@@ -136,6 +165,10 @@ class ObservabilityService:
             ObservabilityMetricItem(
                 label="Time to First Successful Analysis",
                 value=time_to_first_success,
+            ),
+            ObservabilityMetricItem(
+                label="Stale-to-Refresh Turnaround",
+                value=stale_to_refresh_turnaround,
             ),
             ObservabilityMetricItem(
                 label="Review Item Creation Rate",
