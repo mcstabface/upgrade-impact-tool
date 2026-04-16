@@ -211,6 +211,24 @@ export default function AdminInspectionPage() {
       </section>
 
       <section style={{ marginBottom: "2rem" }}>
+        <h2>Most Common Blocked Fields</h2>
+        {observability.most_common_blocked_fields.length === 0 ? (
+          <EmptyState
+            title="No blocked-field patterns"
+            message="No blocked validation field patterns are currently available to summarize."
+          />
+        ) : (
+          <ul>
+            {observability.most_common_blocked_fields.map((item) => (
+              <li key={item.label}>
+                {item.label} — {item.value}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section style={{ marginBottom: "2rem" }}>
         <h2>Most Common Missing Inputs</h2>
         {observability.most_common_missing_inputs.length === 0 ? (
           <EmptyState

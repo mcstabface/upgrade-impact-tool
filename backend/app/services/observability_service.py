@@ -10,6 +10,7 @@ class ObservabilityService:
 
     def get_summary(self, db: Session) -> ObservabilitySummaryResponse:
         counts = self.repository.get_system_counts(db)
+        blocked_fields = self.repository.get_most_common_blocked_fields(db)
         missing_inputs = self.repository.get_most_common_missing_inputs(db)
         review_reasons = self.repository.get_most_frequent_review_reasons(db)
 
@@ -25,6 +26,9 @@ class ObservabilityService:
                 ObservabilityCountItem(label="Refreshed Analyses", value=counts["refreshed_analyses"]),
                 ObservabilityCountItem(label="Active Review Items", value=counts["active_review_items"]),
                 ObservabilityCountItem(label="Overdue Review Items", value=counts["overdue_review_items"]),
+            ],
+            most_common_blocked_fields=[
+                ObservabilityCountItem(**row) for row in blocked_fields
             ],
             most_common_missing_inputs=[
                 ObservabilityCountItem(**row) for row in missing_inputs

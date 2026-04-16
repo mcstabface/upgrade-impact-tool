@@ -8,6 +8,7 @@ export type ObservabilityCountItem = {
 export type ObservabilitySummaryResponse = {
   system_health_status: string;
   counts: ObservabilityCountItem[];
+  most_common_blocked_fields: ObservabilityCountItem[];
   most_common_missing_inputs: ObservabilityCountItem[];
   most_frequent_review_reasons: ObservabilityCountItem[];
 };
