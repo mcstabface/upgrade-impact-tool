@@ -186,6 +186,32 @@ export default function AnalysisOverviewPage() {
   }
 
   if (error) {
+    return (
+      <ErrorState
+        title="Could not load analysis overview"
+        message={error}
+        onRetry={loadPage}
+        retryLabel="Retry Load"
+      />
+    );
+  }
+
+  if (!data) {
+    return <LoadingState />;
+  }
+
+  const reviewNote =
+    data.summary.unknown_count > 0
+      ? "Overall status requires review because unresolved unknown findings remain."
+      : data.summary.blocked_count > 0
+        ? "Overall status requires review because blocked findings remain."
+        : data.summary.review_required_count > 0
+          ? "Overall status requires review because review-required findings remain."
+          : null;
+
+  const topRisks = data.top_risks ?? [];
+  const topActions = data.top_actions ?? [];
+
   return (
     <AppShell
       title="Analysis Overview"
@@ -267,9 +293,7 @@ export default function AnalysisOverviewPage() {
             <StatusHelp status={data.overall_status} />
           </div>
 
-          {reviewNote ? (
-            <p className="ui-status-note">{reviewNote}</p>
-          ) : null}
+          {reviewNote ? <p className="ui-status-note">{reviewNote}</p> : null}
 
           {canAdminAnalysis ? (
             <div className="ui-inline-actions" style={{ marginTop: "1rem" }}>
@@ -405,7 +429,9 @@ export default function AnalysisOverviewPage() {
             {data.applications.map((app) => (
               <article key={app.analysis_application_id} className="ui-analysis-card">
                 <h3 className="ui-analysis-card__title">
-                  <Link to={`/analyses/${data.analysis_id}/applications/${app.analysis_application_id}`}>
+                  <Link
+                    to={`/analyses/${data.analysis_id}/applications/${app.analysis_application_id}`}
+                  >
                     {app.application_name}
                   </Link>
                 </h3>

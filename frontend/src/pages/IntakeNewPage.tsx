@@ -31,24 +31,6 @@ function HelperText({
       {children}
     </p>
   );
-}function HelperText({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <p
-      style={{
-        marginTop: "0.35rem",
-        marginBottom: 0,
-        maxWidth: "48rem",
-        color: "var(--text-secondary)",
-        fontSize: "0.95rem",
-      }}
-    >
-      {children}
-    </p>
-  );
 }
 
 function WhyWeAsk({
