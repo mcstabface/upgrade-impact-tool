@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ErrorState from "../components/ErrorState";
-import { canManageIntakes, getCurrentRole, type UserRole } from "../auth/role";
+import { canManageIntakes, type UserRole } from "../auth/role";
+import { useCurrentRole } from "../auth/AuthContext";
 import {
   createIntake,
   startAnalysis,
@@ -131,15 +132,14 @@ export default function IntakeNewPage() {
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
-  const currentRole: UserRole = getCurrentRole();
+  const currentRole: UserRole = useCurrentRole();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const submitRole = getCurrentRole();
-    if (!canManageIntakes(submitRole)) {
+    if (!canManageIntakes(currentRole)) {
       setError(
-        `Current role ${submitRole} is not permitted to create intakes.\nRecovery: Switch to ANALYST or ADMIN on the dashboard, then retry the intake flow.`,
+        `Current role ${currentRole} is not permitted to create intakes.\nRecovery: Sign in with an ANALYST or ADMIN account, then retry the intake flow.`,
       );
       setSubmitting(false);
       return;

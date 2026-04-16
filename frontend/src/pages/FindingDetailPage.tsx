@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
-import { canManageReviews, getCurrentRole } from "../auth/role";
+import { canManageReviews } from "../auth/role";
+import { useCurrentRole } from "../auth/AuthContext";
 import { formatStatusLabel } from "../utils/status";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
@@ -17,7 +18,7 @@ import { createReviewItem } from "../services/reviewItems";
 export default function FindingDetailPage() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  const currentRole = getCurrentRole();
+  const currentRole = useCurrentRole();
   const canManageReviewWork = canManageReviews(currentRole);
 
   const [data, setData] = useState<FindingDetailResponse | null>(null);

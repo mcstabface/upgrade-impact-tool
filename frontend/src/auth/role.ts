@@ -1,15 +1,5 @@
 export type UserRole = "VIEWER" | "ANALYST" | "REVIEWER" | "ADMIN";
 
-let currentRole: UserRole = "VIEWER";
-
-export function getCurrentRole(): UserRole {
-    return currentRole;
-}
-
-export function setCurrentRole(role: UserRole) {
-    currentRole = role;
-}
-
 export function isAdminRole(role: UserRole) {
     return role === "ADMIN";
 }

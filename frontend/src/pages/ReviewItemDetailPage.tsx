@@ -5,14 +5,15 @@ import { formatUnixSeconds } from "../utils/time";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
-import { canManageReviews, getCurrentRole } from "../auth/role";
+import { canManageReviews } from "../auth/role";
+import { useCurrentRole } from "../auth/AuthContext";
 import { formatStatusLabel } from "../utils/status";
 import { getReviewItem, updateReviewItem, type ReviewItemDetailResponse } from "../services/reviewItems";
 import { createReviewComment, getReviewComments, type ReviewComment } from "../services/reviewComments";
 
 export default function ReviewItemDetailPage() {
   const { id } = useParams();
-  const currentRole = getCurrentRole();
+  const currentRole = useCurrentRole();
   const canEditReview = canManageReviews(currentRole);
 
   const [data, setData] = useState<ReviewItemDetailResponse | null>(null);

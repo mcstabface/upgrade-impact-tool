@@ -181,7 +181,7 @@ def revoke_session(
 
 def get_current_user(
     db: Session = Depends(get_db),
-    session_token: str | None = Cookie(default=None, alias="uit_session"),
+    session_token: str | None = Cookie(default=None, alias=settings.auth_cookie_name),
 ) -> AuthenticatedUser:
     if session_token is None:
         raise HTTPException(status_code=401, detail="Authentication required")

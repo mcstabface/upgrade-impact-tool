@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
@@ -82,6 +82,7 @@ function SummaryCard({
 }
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
 
   const [data, setData] = useState<DashboardResponse | null>(null);
@@ -177,6 +178,11 @@ export default function DashboardPage() {
     setShowUnresolvedOnly(false);
   }
 
+  async function handleLogout() {
+    await logout();
+    navigate("/login", { replace: true });
+  }
+  
   async function handleMarkNotificationRead(notificationId: string) {
     await markNotificationRead(notificationId);
     const refreshed = await getNotifications();
@@ -211,7 +217,7 @@ export default function DashboardPage() {
         </div>
         <div style={{ marginBottom: "0.5rem" }}>{user?.email}</div>
         <div style={{ marginBottom: "1rem" }}>Role: {currentRole}</div>
-        <button type="button" onClick={() => void logout()}>
+        <button type="button" onClick={() => void handleLogout()}>
           Log Out
         </button>
       </section>

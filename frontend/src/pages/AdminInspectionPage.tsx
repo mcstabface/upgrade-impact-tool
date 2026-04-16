@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import ErrorState from "../components/ErrorState";
 import LoadingState from "../components/LoadingState";
 import EmptyState from "../components/EmptyState";
-import { getCurrentRole, isAdminRole } from "../auth/role";
+import { isAdminRole } from "../auth/role";
+import { useCurrentRole } from "../auth/AuthContext";
 import { getDashboard, type DashboardAnalysisItem } from "../services/dashboard";
 import { getAnalysisAudit, type AnalysisAuditResponse } from "../services/analyses";
 import {
@@ -82,7 +83,7 @@ function AnalysisInspectionCard({
 }
 
 export default function AdminInspectionPage() {
-  const currentRole = getCurrentRole();
+  const currentRole = useCurrentRole();
   const [analyses, setAnalyses] = useState<DashboardAnalysisItem[] | null>(null);
   const [observability, setObservability] = useState<ObservabilitySummaryResponse | null>(null);
   const [audit, setAudit] = useState<AnalysisAuditResponse | null>(null);

@@ -67,7 +67,7 @@ def login(
 def logout(
     response: Response,
     db: Session = Depends(get_db),
-    session_token: str | None = Cookie(default=None, alias="uit_session"),
+    session_token: str | None = Cookie(default=None, alias=settings.auth_cookie_name),
 ) -> Response:
     if session_token:
         revoke_session(db, session_token=session_token)

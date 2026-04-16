@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { getCurrentRole, isAdminRole } from "../auth/role";
+import { isAdminRole } from "../auth/role";
+import { useCurrentRole } from "../auth/AuthContext";
 import { formatStatusLabel } from "../utils/status";
 import StatusHelp from "../components/StatusHelp";
 import { formatUnixSeconds } from "../utils/time";
@@ -65,7 +66,7 @@ function SummaryCard({
 export default function AnalysisOverviewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const currentRole = getCurrentRole();
+  const currentRole = useCurrentRole();
   const canAdminAnalysis = isAdminRole(currentRole);
 
   const [data, setData] = useState<AnalysisOverviewResponse | null>(null);

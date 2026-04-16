@@ -8,7 +8,7 @@ import {
     type ReactNode,
 } from "react";
 
-import { setCurrentRole, type UserRole } from "./role";
+import type { UserRole } from "./role";
 import {
     getMe,
     login as loginRequest,
@@ -36,10 +36,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             const nextUser = await getMe();
             setUser(nextUser);
-            setCurrentRole(nextUser.role);
         } catch {
             setUser(null);
-            setCurrentRole("VIEWER");
         } finally {
             setIsLoading(false);
         }
@@ -52,7 +50,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const login = useCallback(async (payload: LoginRequest) => {
         const nextUser = await loginRequest(payload);
         setUser(nextUser);
-        setCurrentRole(nextUser.role);
     }, []);
 
     const logout = useCallback(async () => {
@@ -60,7 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             await logoutRequest();
         } finally {
             setUser(null);
-            setCurrentRole("VIEWER");
         }
     }, []);
 
