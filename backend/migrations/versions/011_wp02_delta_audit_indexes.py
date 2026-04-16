@@ -9,12 +9,6 @@ depends_on = None
 
 def upgrade() -> None:
     op.create_index(
-        "ix_ar_prev_analysis_id",
-        "analysis_runs",
-        ["previous_analysis_id"],
-    )
-
-    op.create_index(
         "ix_st_analysis_id_transition_utc",
         "state_transitions",
         ["analysis_id", "transition_utc"],
@@ -45,8 +39,4 @@ def downgrade() -> None:
     op.drop_index(
         "ix_st_analysis_id_transition_utc",
         table_name="state_transitions",
-    )
-    op.drop_index(
-        "ix_ar_prev_analysis_id",
-        table_name="analysis_runs",
     )
