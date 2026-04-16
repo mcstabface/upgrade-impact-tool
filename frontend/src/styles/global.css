@@ -1,10 +1,10 @@
 :root {
     color-scheme: light;
 
-    --bg-app: #f3f5f8;
-    --bg-surface: #ffffff;
-    --bg-surface-muted: #f8fafc;
-    --bg-surface-strong: #eef2f7;
+    --bg-app: #e9eef4;
+    --bg-surface: #fcfdff;
+    --bg-surface-muted: #f3f6fa;
+    --bg-surface-strong: #e7edf5;
 
     --border-subtle: #d7dee7;
     --border-strong: #b8c4d2;
