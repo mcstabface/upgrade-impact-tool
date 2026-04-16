@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
+import NotificationTray from "../components/NotificationTray";
 import StatusHelp from "../components/StatusHelp";
 import {
   canManageIntakes,
@@ -15,6 +16,10 @@ import {
 import { formatStatusLabel } from "../utils/status";
 import { formatUnixSeconds } from "../utils/time";
 import { getDashboard, type DashboardAnalysisItem, type DashboardResponse } from "../services/dashboard";
+import {
+  getNotifications,
+  type NotificationSummaryResponse,
+} from "../services/notifications";
 
 function AnalysisCard({ analysis }: { analysis: DashboardAnalysisItem }) {
   return (
@@ -78,6 +83,7 @@ function SummaryCard({
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardResponse | null>(null);
+  const [notifications, setNotifications] = useState<NotificationSummaryResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currentRole, setRoleState] = useState<UserRole>(getCurrentRole());
 
@@ -85,7 +91,12 @@ export default function DashboardPage() {
   const [showUnresolvedOnly, setShowUnresolvedOnly] = useState(false);
 
   useEffect(() => {
-    getDashboard().then(setData).catch((err: Error) => setError(err.message));
+    Promise.all([getDashboard(), getNotifications()])
+      .then(([dashboardResult, notificationResult]) => {
+        setData(dashboardResult);
+        setNotifications(notificationResult);
+      })
+      .catch((err: Error) => setError(err.message));
   }, [currentRole]);
 
   const filteredAnalyses = useMemo(() => {
@@ -170,7 +181,7 @@ export default function DashboardPage() {
     return <ErrorState title="Could not load dashboard" message={error} />;
   }
 
-  if (!data) {
+  if (!data || !notifications) {
     return <LoadingState message="Loading dashboard..." />;
   }
 
@@ -202,6 +213,11 @@ export default function DashboardPage() {
           </select>
         </div>
       </section>
+
+      <NotificationTray
+        unreadCount={notifications.unread_count}
+        items={notifications.items}
+      />
 
       {canManageIntakes(currentRole) && (
         <p>

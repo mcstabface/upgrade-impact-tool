@@ -15,6 +15,7 @@ from app.api.v1.health import router as health_router
 from app.api.v1.meta import router as meta_router
 from app.api.v1.intakes import router as intakes_router
 from app.api.v1.review_comments import router as review_comments_router
+from app.api.v1.notifications import router as notifications_router
 from app.core.errors import AppError
 
 logger = logging.getLogger(__name__)
@@ -136,6 +137,7 @@ app.add_middleware(
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(meta_router, prefix="/api/v1")
 app.include_router(dashboard_router, prefix="/api/v1")
+app.include_router(notifications_router, prefix="/api/v1")
 app.include_router(analyses_router, prefix="/api/v1")
 app.include_router(findings_router, prefix="/api/v1")
 app.include_router(intakes_router, prefix="/api/v1")
