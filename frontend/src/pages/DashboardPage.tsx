@@ -19,25 +19,65 @@ import {
   getNotifications,
   markNotificationRead,
   type NotificationSummaryResponse,
+} from "../services/notifications";import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import AppShell from "../components/layout/AppShell";
+import LoadingState from "../components/LoadingState";
+import ErrorState from "../components/ErrorState";
+import EmptyState from "../components/EmptyState";
+import NotificationTray from "../components/NotificationTray";
+import StatusHelp from "../components/StatusHelp";
+import Card from "../components/ui/Card";
+import StatCard from "../components/ui/StatCard";
+import ButtonLink from "../components/ui/ButtonLink";
+import { canManageIntakes, isAdminRole, type UserRole } from "../auth/role";
+import { useAuth } from "../auth/AuthContext";
+import { formatStatusLabel } from "../utils/status";
+import { formatUnixSeconds } from "../utils/time";
+import {
+  getDashboard,
+  type DashboardAnalysisItem,
+  type DashboardResponse,
+} from "../services/dashboard";
+import {
+  getNotifications,
+  markNotificationRead,
+  type NotificationSummaryResponse,
 } from "../services/notifications";
 
 function AnalysisCard({ analysis }: { analysis: DashboardAnalysisItem }) {
   return (
-    <article style={{ marginBottom: "1.5rem" }}>
-      <h3>
+    <article className="ui-analysis-card">
+      <h3 className="ui-analysis-card__title">
         <Link to={`/analyses/${analysis.analysis_id}`}>
           {analysis.customer_name} — {analysis.environment_name}
         </Link>
       </h3>
-      <p>Analysis ID: {analysis.analysis_id}</p>
-      <p>Status: {formatStatusLabel(analysis.overall_status)}</p>
+
+      <div className="ui-meta-list">
+        <div className="ui-meta-list__row">
+          <span className="ui-meta-list__label">Analysis ID</span>
+          <span>{analysis.analysis_id}</span>
+        </div>
+        <div className="ui-meta-list__row">
+          <span className="ui-meta-list__label">Status</span>
+          <span>{formatStatusLabel(analysis.overall_status)}</span>
+        </div>
+      </div>
+
       <StatusHelp status={analysis.overall_status} />
-      <p>
+
+      <p className="ui-analysis-card__summary">
         Applies: {analysis.applies_count} | Review Required: {analysis.review_required_count} | Unknown:{" "}
         {analysis.unknown_count} | Blocked: {analysis.blocked_count}
       </p>
-      <p>Applications in Scope: {analysis.applications_count}</p>
-      <p>Analysis Date: {formatUnixSeconds(analysis.analysis_date)}</p>
+      <p className="ui-analysis-card__summary">
+        Applications in Scope: {analysis.applications_count}
+      </p>
+      <p className="ui-analysis-card__summary">
+        Analysis Date: {formatUnixSeconds(analysis.analysis_date)}
+      </p>
     </article>
   );
 }
@@ -50,34 +90,9 @@ function FilterChip({
   onClear: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClear}
-      style={{ marginRight: "0.5rem", marginBottom: "0.5rem" }}
-    >
+    <button type="button" className="ui-chip" onClick={onClear}>
       {label} ×
     </button>
-  );
-}
-
-function SummaryCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: number;
-}) {
-  return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "0.75rem 1rem",
-        minWidth: "10rem",
-      }}
-    >
-      <div style={{ fontSize: "0.9rem" }}>{label}</div>
-      <div style={{ fontSize: "1.5rem", fontWeight: 700 }}>{value}</div>
-    </div>
   );
 }
 
@@ -207,172 +222,179 @@ export default function DashboardPage() {
   }
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "64rem" }}>
-      <h1>Dashboard</h1>
+    <AppShell
+      title="Dashboard"
+      subtitle="Track analysis status, review pressure, and stale refresh activity from a calmer operator view."
+      actions={
+        <>
+          {canManageIntakes(currentRole) ? (
+            <ButtonLink to="/intakes/new" variant="primary">
+              Create Intake
+            </ButtonLink>
+          ) : null}
+          <ButtonLink to="/review-queue" variant="subtle">
+            Review Queue
+          </ButtonLink>
+          {isAdminRole(currentRole) ? (
+            <ButtonLink to="/admin/inspection" variant="subtle">
+              Admin Inspection
+            </ButtonLink>
+          ) : null}
+        </>
+      }
+    >
+      <div className="ui-grid ui-grid--two">
+        <div className="ui-stack">
+          <Card muted>
+            <div className="ui-kicker">Signed In</div>
+            <div style={{ fontSize: "1.05rem", fontWeight: 700 }}>{user?.display_name}</div>
+            <div style={{ color: "var(--text-secondary)", marginTop: "0.35rem" }}>{user?.email}</div>
+            <div style={{ color: "var(--text-secondary)", marginTop: "0.35rem" }}>Role: {currentRole}</div>
+            <div style={{ marginTop: "1rem" }}>
+              <button type="button" className="ui-button" onClick={() => void handleLogout()}>
+                Log Out
+              </button>
+            </div>
+          </Card>
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Signed In</h2>
-        <div style={{ marginBottom: "0.5rem" }}>
-          <strong>{user?.display_name}</strong>
-        </div>
-        <div style={{ marginBottom: "0.5rem" }}>{user?.email}</div>
-        <div style={{ marginBottom: "1rem" }}>Role: {currentRole}</div>
-        <button type="button" onClick={() => void handleLogout()}>
-          Log Out
-        </button>
-      </section>
-
-      <NotificationTray
-        unreadCount={notifications.unread_count}
-        items={notifications.items}
-        onMarkRead={handleMarkNotificationRead}
-      />
-
-      {canManageIntakes(currentRole) && (
-        <p>
-          <Link to="/intakes/new">Create Intake</Link>
-        </p>
-      )}
-      <p>
-        <Link to="/review-queue">Open Review Queue</Link>
-      </p>
-      {isAdminRole(currentRole) && (
-        <p>
-          <Link to="/admin/inspection">Open Admin Inspection</Link>
-        </p>
-      )}
-
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Filters</h2>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Status </label>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="ALL">ALL</option>
-            <option value="READY">READY</option>
-            <option value="REVIEW_REQUIRED">REVIEW_REQUIRED</option>
-            <option value="ANALYSIS_RUNNING">ANALYSIS_RUNNING</option>
-            <option value="STALE">STALE</option>
-            <option value="BLOCKED">BLOCKED</option>
-            <option value="FAILED">FAILED</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={showUnresolvedOnly}
-              onChange={(e) => setShowUnresolvedOnly(e.target.checked)}
-            />{" "}
-            Show unresolved only
-          </label>
-        </div>
-
-        <button type="button" onClick={clearFilters}>
-          Clear Filters
-        </button>
-      </section>
-
-      {(statusFilter !== "ALL" || showUnresolvedOnly) && (
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>Active Filters</h2>
-
-          <div>
-            {statusFilter !== "ALL" && (
-              <FilterChip
-                label={`Status: ${formatStatusLabel(statusFilter)}`}
-                onClear={() => setStatusFilter("ALL")}
+          <Card title="Summary">
+            <div className="ui-grid ui-grid--stats">
+              <StatCard label="Analyses in View" value={dashboardMetrics.totalAnalyses} />
+              <StatCard label="Ready" value={dashboardMetrics.readyAnalyses} />
+              <StatCard label="Review Required" value={dashboardMetrics.reviewRequiredAnalyses} />
+              <StatCard label="Running" value={dashboardMetrics.runningAnalyses} />
+              <StatCard label="Stale" value={dashboardMetrics.staleAnalyses} />
+              <StatCard label="Refreshed Runs" value={dashboardMetrics.refreshedAnalyses} />
+              <StatCard label="Unknown Findings" value={dashboardMetrics.unknownFindings} />
+              <StatCard label="Blocked Findings" value={dashboardMetrics.blockedFindings} />
+              <StatCard label="Open Review Items" value={reviewItemSummary.open_count} />
+              <StatCard
+                label="In Progress Review Items"
+                value={reviewItemSummary.in_progress_count}
               />
-            )}
+              <StatCard label="Deferred Review Items" value={reviewItemSummary.deferred_count} />
+              <StatCard label="Overdue Review Items" value={reviewItemSummary.overdue_count} />
+            </div>
+          </Card>
 
-            {showUnresolvedOnly && (
-              <FilterChip
-                label="Unresolved Only"
-                onClear={() => setShowUnresolvedOnly(false)}
-              />
-            )}
-          </div>
-        </section>
-      )}
+          <Card title="Filters" muted>
+            <div className="ui-toolbar">
+              <div className="ui-toolbar__group">
+                <label className="ui-label">Status</label>
+                <select
+                  className="ui-select"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="ALL">ALL</option>
+                  <option value="READY">READY</option>
+                  <option value="REVIEW_REQUIRED">REVIEW_REQUIRED</option>
+                  <option value="ANALYSIS_RUNNING">ANALYSIS_RUNNING</option>
+                  <option value="STALE">STALE</option>
+                  <option value="BLOCKED">BLOCKED</option>
+                  <option value="FAILED">FAILED</option>
+                </select>
+              </div>
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Summary</h2>
-        <div
-          style={{
-            display: "flex",
-            gap: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <SummaryCard label="Analyses in View" value={dashboardMetrics.totalAnalyses} />
-          <SummaryCard label="Ready" value={dashboardMetrics.readyAnalyses} />
-          <SummaryCard label="Review Required" value={dashboardMetrics.reviewRequiredAnalyses} />
-          <SummaryCard label="Running" value={dashboardMetrics.runningAnalyses} />
-          <SummaryCard label="Stale" value={dashboardMetrics.staleAnalyses} />
-          <SummaryCard label="Refreshed Runs" value={dashboardMetrics.refreshedAnalyses} />
-          <SummaryCard label="Unknown Findings" value={dashboardMetrics.unknownFindings} />
-          <SummaryCard label="Blocked Findings" value={dashboardMetrics.blockedFindings} />
-          <SummaryCard label="Open Review Items" value={reviewItemSummary.open_count} />
-          <SummaryCard label="In Progress Review Items" value={reviewItemSummary.in_progress_count} />
-          <SummaryCard label="Deferred Review Items" value={reviewItemSummary.deferred_count} />
-          <SummaryCard label="Overdue Review Items" value={reviewItemSummary.overdue_count} />
+              <div className="ui-toolbar__group">
+                <label className="ui-label">View</label>
+                <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={showUnresolvedOnly}
+                    onChange={(e) => setShowUnresolvedOnly(e.target.checked)}
+                  />
+                  <span>Show unresolved only</span>
+                </label>
+              </div>
+
+              <div className="ui-toolbar__group">
+                <label className="ui-label">Actions</label>
+                <button type="button" className="ui-button" onClick={clearFilters}>
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+
+            {statusFilter !== "ALL" || showUnresolvedOnly ? (
+              <div style={{ marginTop: "1rem" }}>
+                <div className="ui-chip-row">
+                  {statusFilter !== "ALL" ? (
+                    <FilterChip
+                      label={`Status: ${formatStatusLabel(statusFilter)}`}
+                      onClear={() => setStatusFilter("ALL")}
+                    />
+                  ) : null}
+
+                  {showUnresolvedOnly ? (
+                    <FilterChip
+                      label="Unresolved Only"
+                      onClear={() => setShowUnresolvedOnly(false)}
+                    />
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+          </Card>
+
+          {latestCompletedAnalysis ? (
+            <Card title="Latest Completed Analysis">
+              <AnalysisCard analysis={latestCompletedAnalysis} />
+            </Card>
+          ) : null}
+
+          {activeAnalyses.length > 0 ? (
+            <Card title="Active / Incomplete Analyses">
+              {activeAnalyses.map((analysis) => (
+                <AnalysisCard key={analysis.analysis_id} analysis={analysis} />
+              ))}
+            </Card>
+          ) : null}
+
+          {completedHistory.length > 0 ? (
+            <Card title="Completed Analysis History">
+              {completedHistory.map((analysis) => (
+                <AnalysisCard key={analysis.analysis_id} analysis={analysis} />
+              ))}
+            </Card>
+          ) : null}
+
+          {filteredAnalyses.length === 0 ? (
+            <EmptyState
+              title="No matching analyses"
+              message="No analyses match the current filters. Clear or adjust the filters to see more results."
+            />
+          ) : null}
         </div>
-      </section>
 
-      {latestCompletedAnalysis && (
-        <>
-          <h2>Latest Completed Analysis</h2>
-          <AnalysisCard analysis={latestCompletedAnalysis} />
-        </>
-      )}
+        <div className="ui-stack">
+          <NotificationTray
+            unreadCount={notifications.unread_count}
+            items={notifications.items}
+            onMarkRead={handleMarkNotificationRead}
+          />
 
-      {topRisks.length > 0 && (
-        <>
-          <h2>Top Risks</h2>
-          <ul>
-            {topRisks.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
+          {topRisks.length > 0 ? (
+            <Card title="Top Risks">
+              <ul className="ui-list ui-list--compact">
+                {topRisks.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </Card>
+          ) : null}
 
-      {topActions.length > 0 && (
-        <>
-          <h2>Top Actions</h2>
-          <ul>
-            {topActions.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {activeAnalyses.length > 0 && (
-        <>
-          <h2>Active / Incomplete Analyses</h2>
-          {activeAnalyses.map((analysis) => (
-            <AnalysisCard key={analysis.analysis_id} analysis={analysis} />
-          ))}
-        </>
-      )}
-
-      {completedHistory.length > 0 && (
-        <>
-          <h2>Completed Analysis History</h2>
-          {completedHistory.map((analysis) => (
-            <AnalysisCard key={analysis.analysis_id} analysis={analysis} />
-          ))}
-        </>
-      )}
-
-      {filteredAnalyses.length === 0 && (
-        <EmptyState
-          title="No matching analyses"
-          message="No analyses match the current filters. Clear or adjust the filters to see more results."
-        />
-      )}
-    </main>
+          {topActions.length > 0 ? (
+            <Card title="Top Actions">
+              <ul className="ui-list ui-list--compact">
+                {topActions.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </Card>
+          ) : null}
+        </div>
+      </div>
+    </AppShell>
   );
 }

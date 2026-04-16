@@ -1,12 +1,12 @@
 type Props = {
-  message?: string;
+    message?: string;
 };
 
 export default function LoadingState({ message = "Loading data..." }: Props) {
-  return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>Loading</h1>
-      <p>{message}</p>
-    </main>
-  );
+    return (
+        <main className="ui-state-page">
+            <h1 className="ui-state-page__title">Loading</h1>
+            <p className="ui-state-page__message">{message}</p>
+        </main>
+    );
 }
