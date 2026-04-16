@@ -21,6 +21,7 @@ from app.services.analysis_export_service import AnalysisExportService
 from app.services.analysis_refresh_service import AnalysisRefreshService
 from app.services.analysis_service import AnalysisService
 from app.services.analysis_staleness_service import AnalysisStalenessService
+from app.services.usage_event_service import UsageEventService
 
 from app.core.enums import AnalysisStatus
 from app.services.analysis_transition_service import (
@@ -36,6 +37,7 @@ delta_service = AnalysisDeltaService()
 audit_service = AnalysisAuditService()
 export_service = AnalysisExportService()
 application_export_service = AnalysisApplicationExportService()
+usage_event_service = UsageEventService()
 
 transition_service = AnalysisTransitionService()
 
@@ -107,12 +109,30 @@ def evaluate_analysis_staleness(
 def refresh_analysis(
     analysis_id: str,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.ADMIN)),
+    role: UserRole = Depends(require_roles(UserRole.ADMIN)),
 ) -> AnalysisRefreshResponse:
     try:
         result = refresh_service.refresh_analysis(db, analysis_id)
         if not result:
             raise HTTPException(status_code=404, detail="Analysis not found")
+
+        usage_event_service.record_event(
+            db=db,
+            event_type="ANALYSIS_REFRESH_CREATED",
+            actor_role=role.value,
+            actor_user_id="system",
+            entity_type="ANALYSIS",
+            entity_id=result.new_analysis_id,
+            related_analysis_id=result.new_analysis_id,
+            event_payload={
+                "previous_analysis_id": result.previous_analysis_id,
+                "status": result.status,
+                "started_utc": result.started_utc,
+                "snapshot_id": result.snapshot_id,
+            },
+            commit=False,
+        )
+
         db.commit()
         return result
     except ValueError as exc:
@@ -168,6 +188,19 @@ def export_analysis_json(
         if not result:
             raise HTTPException(status_code=404, detail="Analysis not found")
 
+        usage_event_service.record_event(
+            db=db,
+            event_type="EXPORT_TRIGGERED",
+            actor_role="VIEWER",
+            actor_user_id="system",
+            entity_type="ANALYSIS_EXPORT",
+            entity_id=analysis_id,
+            related_analysis_id=analysis_id,
+            event_payload={
+                "export_scope": "analysis_json",
+            },
+        )
+
         return Response(
             content=result.model_dump_json(indent=2),
             media_type="application/json",
@@ -200,6 +233,21 @@ def export_analysis_application_json(
         result = application_export_service.get_export(db, analysis_id, analysis_application_id)
         if not result:
             raise HTTPException(status_code=404, detail="Analysis application not found")
+
+        usage_event_service.record_event(
+            db=db,
+            event_type="EXPORT_TRIGGERED",
+            actor_role="VIEWER",
+            actor_user_id="system",
+            entity_type="APPLICATION_EXPORT",
+            entity_id=str(analysis_application_id),
+            related_analysis_id=analysis_id,
+            event_payload={
+                "analysis_id": analysis_id,
+                "analysis_application_id": analysis_application_id,
+                "export_scope": "application_json",
+            },
+        )
 
         return Response(
             content=result.model_dump_json(indent=2),

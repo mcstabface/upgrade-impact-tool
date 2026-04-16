@@ -11,16 +11,18 @@ from app.schemas.review_items import (
     ReviewItemUpdateResponse,
 )
 from app.services.review_item_service import ReviewItemService
+from app.services.usage_event_service import UsageEventService
 
 router = APIRouter(tags=["review-items"])
 service = ReviewItemService()
+usage_event_service = UsageEventService()
 
 
 @router.post("/review-items", response_model=ReviewItemCreateResponse)
 def create_review_item(
     payload: ReviewItemCreateRequest,
     db: Session = Depends(get_db),
-    _: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
+    role: UserRole = Depends(require_roles(UserRole.REVIEWER, UserRole.ADMIN)),
 ) -> ReviewItemCreateResponse:
     try:
         result = service.create_review_item(db, payload)
@@ -35,6 +37,22 @@ def create_review_item(
 
     if not result:
         raise HTTPException(status_code=404, detail="Finding not found")
+
+    usage_event_service.record_event(
+        db=db,
+        event_type="REVIEW_ITEM_CREATED",
+        actor_role=role.value,
+        actor_user_id="system",
+        entity_type="REVIEW_ITEM",
+        entity_id=str(result.review_item_id),
+        related_analysis_id=None,
+        event_payload={
+            "finding_id": payload.finding_id,
+            "review_status": result.review_status,
+            "assigned_owner_user_id": result.assigned_owner_user_id,
+            "due_date": str(result.due_date),
+        },
+    )
 
     return result
 
