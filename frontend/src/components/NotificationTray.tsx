@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { NotificationItem } from "../services/notifications";
@@ -18,11 +18,8 @@ function severityLabel(severity: string) {
 export default function NotificationTray({ unreadCount, items }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const previewItems = useMemo(() => {
-    return isOpen ? items : items.slice(0, 3);
-  }, [isOpen, items]);
-
-  const hiddenCount = Math.max(items.length - previewItems.length, 0);
+  const previewHeadlines = items.slice(0, 3).map((item) => item.headline);
+  const hiddenCount = Math.max(items.length - previewHeadlines.length, 0);
 
   return (
     <section
@@ -55,18 +52,36 @@ export default function NotificationTray({ unreadCount, items }: Props) {
         </button>
       </div>
 
-      {isOpen && items.length === 0 && (
+      {!isOpen && items.length === 0 && (
         <div style={{ marginTop: "1rem" }}>
-          <p>No active notifications.</p>
-          <p>
+          <p style={{ marginBottom: 0 }}>
             When the system detects stale analyses or overdue review work, they will appear here.
           </p>
         </div>
       )}
 
-      {items.length > 0 && (
+      {!isOpen && items.length > 0 && (
+        <div style={{ marginTop: "1rem" }}>
+          <p style={{ marginBottom: "0.5rem" }}>
+            Most recent notification{previewHeadlines.length === 1 ? "" : "s"}:
+          </p>
+          <ul style={{ marginTop: 0, marginBottom: 0 }}>
+            {previewHeadlines.map((headline) => (
+              <li key={headline}>{headline}</li>
+            ))}
+          </ul>
+          {hiddenCount > 0 && (
+            <p style={{ marginTop: "0.75rem", marginBottom: 0 }}>
+              {hiddenCount} more notification{hiddenCount === 1 ? "" : "s"} hidden. Open the tray
+              to view all.
+            </p>
+          )}
+        </div>
+      )}
+
+      {isOpen && items.length > 0 && (
         <ul style={{ paddingLeft: 0, listStyle: "none", marginTop: "1rem", marginBottom: 0 }}>
-          {previewItems.map((item) => (
+          {items.map((item) => (
             <li
               key={item.notification_id}
               style={{
@@ -91,13 +106,6 @@ export default function NotificationTray({ unreadCount, items }: Props) {
             </li>
           ))}
         </ul>
-      )}
-
-      {!isOpen && hiddenCount > 0 && (
-        <p style={{ marginTop: "1rem", marginBottom: 0 }}>
-          {hiddenCount} more notification{hiddenCount === 1 ? "" : "s"} hidden. Open the tray to
-          view all.
-        </p>
       )}
     </section>
   );
