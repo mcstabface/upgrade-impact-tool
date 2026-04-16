@@ -1,4 +1,4 @@
-from sqlalchemy import text
+from sqlalchemy import bindparam, text
 from sqlalchemy.orm import Session
 
 
@@ -65,22 +65,24 @@ class NotificationRepository:
         now_utc: int,
     ) -> None:
         if active_notification_ids:
-            query = text(
-                """
-                UPDATE notification_deliveries
-                SET
-                    is_active = false,
-                    updated_utc = :now_utc
-                WHERE notification_type = :notification_type
-                  AND is_active = true
-                  AND notification_id NOT IN :active_notification_ids
-                """
+            query = (
+                text(
+                    """
+                    UPDATE notification_deliveries
+                    SET
+                        is_active = false,
+                        updated_utc = :now_utc
+                    WHERE notification_type = :notification_type
+                      AND is_active = true
+                      AND notification_id NOT IN :active_notification_ids
+                    """
+                ).bindparams(bindparam("active_notification_ids", expanding=True))
             )
             db.execute(
                 query,
                 {
                     "notification_type": notification_type,
-                    "active_notification_ids": tuple(active_notification_ids),
+                    "active_notification_ids": active_notification_ids,
                     "now_utc": now_utc,
                 },
             )
