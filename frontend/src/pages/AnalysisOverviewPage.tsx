@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { getCurrentRole, isAdminRole } from "../auth/role";
@@ -18,6 +18,7 @@ import {
   type AnalysisDeltaSummaryResponse,
   type AnalysisOverviewResponse,
 } from "../services/analyses";
+import { recordResultsOverviewSession } from "../services/usageEvents";
 
 function SectionList({
   title,
@@ -75,6 +76,9 @@ export default function AnalysisOverviewPage() {
   const [evaluatingStaleness, setEvaluatingStaleness] = useState(false);
   const [refreshingAnalysis, setRefreshingAnalysis] = useState(false);
 
+  const sessionStartRef = useRef<number | null>(null);
+  const sessionRecordedRef = useRef(false);
+
   const loadPage = useCallback(async () => {
     if (!id) return;
 
@@ -105,6 +109,53 @@ export default function AnalysisOverviewPage() {
   useEffect(() => {
     loadPage();
   }, [loadPage]);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    sessionStartRef.current = Date.now();
+    sessionRecordedRef.current = false;
+
+    const flushOverviewSession = () => {
+      if (!id || sessionRecordedRef.current || sessionStartRef.current === null) {
+        return;
+      }
+
+      const durationSeconds = Math.max(
+        1,
+        Math.round((Date.now() - sessionStartRef.current) / 1000),
+      );
+
+      if (durationSeconds < 5) {
+        sessionRecordedRef.current = true;
+        return;
+      }
+
+      sessionRecordedRef.current = true;
+
+      void recordResultsOverviewSession({
+        analysis_id: id,
+        duration_seconds: durationSeconds,
+      });
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        flushOverviewSession();
+      }
+    };
+
+    window.addEventListener("pagehide", flushOverviewSession);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", flushOverviewSession);
+      flushOverviewSession();
+    };
+  }, [id]);
 
   async function handleEvaluateStaleness() {
     if (!id || !data || !canAdminAnalysis) return;

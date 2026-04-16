@@ -80,6 +80,7 @@ class ObservabilityService:
 
         intake_created_times: dict[str, int] = {}
         first_analysis_completed_times: dict[str, int] = {}
+        results_overview_durations: list[int] = []
 
         for event in usage_events:
             event_type = event["event_type"]
@@ -105,6 +106,12 @@ class ObservabilityService:
                 intake_id = payload.get("intake_id")
                 if intake_id and intake_id not in first_analysis_completed_times:
                     first_analysis_completed_times[intake_id] = event["created_utc"]
+
+            elif event_type == "RESULTS_OVERVIEW_SESSION_RECORDED":
+                payload = event.get("event_payload") or {}
+                duration_seconds = payload.get("duration_seconds")
+                if isinstance(duration_seconds, int) and duration_seconds > 0:
+                    results_overview_durations.append(duration_seconds)
 
         validation_attempts = intake_validated + intake_blocked
 
@@ -153,6 +160,14 @@ class ObservabilityService:
         else:
             stale_to_refresh_turnaround = "N/A"
 
+        if results_overview_durations:
+            average_overview_seconds = round(
+                sum(results_overview_durations) / len(results_overview_durations)
+            )
+            average_time_on_results_overview = f"{average_overview_seconds}s avg"
+        else:
+            average_time_on_results_overview = "N/A"
+
         return [
             ObservabilityMetricItem(
                 label="Intake Completion Rate",
@@ -165,6 +180,10 @@ class ObservabilityService:
             ObservabilityMetricItem(
                 label="Time to First Successful Analysis",
                 value=time_to_first_success,
+            ),
+            ObservabilityMetricItem(
+                label="Average Time on Results Overview",
+                value=average_time_on_results_overview,
             ),
             ObservabilityMetricItem(
                 label="Stale-to-Refresh Turnaround",

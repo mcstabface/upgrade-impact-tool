@@ -87,6 +87,33 @@ export async function apiPost<TResponse, TRequest>(
   return response.json() as Promise<TResponse>;
 }
 
+export async function apiPostNoContent<TRequest>(
+  path: string,
+  payload: TRequest,
+): Promise<void> {
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method: "POST",
+      headers: buildHeaders({
+        "Content-Type": "application/json",
+      }),
+      body: JSON.stringify(payload),
+      keepalive: true,
+    });
+  } catch {
+    throw new Error(
+      `Could not reach the backend.\nRecovery: Check that the API is running and reachable at ${API_BASE_URL}, then retry the action.`,
+    );
+  }
+
+  if (!response.ok) {
+    const fallbackMessage = `Request failed with status ${response.status}.`;
+    throw new Error(await buildErrorMessage(response, fallbackMessage));
+  }
+}
+
 export async function apiPatch<TResponse, TRequest>(
   path: string,
   payload: TRequest,
