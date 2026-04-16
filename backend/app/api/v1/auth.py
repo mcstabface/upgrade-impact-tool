@@ -65,20 +65,20 @@ def login(
 
 @router.post("/auth/logout", status_code=204)
 def logout(
+    response: Response,
     db: Session = Depends(get_db),
     session_token: str | None = Cookie(default=None, alias=settings.auth_cookie_name),
-) -> Response:
+) -> None:
     if session_token:
         revoke_session(db, session_token=session_token)
         db.commit()
 
-    response = Response(status_code=204)
     response.delete_cookie(
         key=settings.auth_cookie_name,
         path="/",
     )
 
-    return response
+    return None
 
 
 @router.get("/auth/me", response_model=AuthMeResponse)
