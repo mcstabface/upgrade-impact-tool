@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import ErrorState from "../components/ErrorState";
@@ -86,15 +86,24 @@ export default function AdminInspectionPage() {
   const [auditError, setAuditError] = useState<string | null>(null);
   const [loadingAudit, setLoadingAudit] = useState(false);
 
-  useEffect(() => {
+  const loadInspectionView = useCallback(async () => {
     if (!isAdminRole(currentRole)) {
       return;
     }
 
-    getDashboard()
-      .then((result) => setAnalyses(result.analyses))
-      .catch((err: Error) => setError(err.message));
+    setError(null);
+
+    try {
+      const result = await getDashboard();
+      setAnalyses(result.analyses);
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, [currentRole]);
+
+  useEffect(() => {
+    loadInspectionView();
+  }, [loadInspectionView]);
 
   const staleAnalyses = useMemo(() => {
     if (!analyses) return [];
@@ -113,7 +122,7 @@ export default function AdminInspectionPage() {
     ]).size;
   }, [staleAnalyses, refreshedAnalyses]);
 
-  async function handleInspectAudit(analysisId: string) {
+  const loadAudit = useCallback(async (analysisId: string) => {
     setSelectedAnalysisId(analysisId);
     setAuditError(null);
     setLoadingAudit(true);
@@ -127,7 +136,7 @@ export default function AdminInspectionPage() {
     } finally {
       setLoadingAudit(false);
     }
-  }
+  }, []);
 
   if (!isAdminRole(currentRole)) {
     return (
@@ -139,7 +148,14 @@ export default function AdminInspectionPage() {
   }
 
   if (error) {
-    return <ErrorState title="Could not load admin inspection view" message={error} />;
+    return (
+      <ErrorState
+        title="Could not load admin inspection view"
+        message={error}
+        onRetry={loadInspectionView}
+        retryLabel="Retry Load"
+      />
+    );
   }
 
   if (!analyses) {
@@ -181,7 +197,7 @@ export default function AdminInspectionPage() {
             <AnalysisInspectionCard
               key={analysis.analysis_id}
               analysis={analysis}
-              onInspect={handleInspectAudit}
+              onInspect={loadAudit}
               selected={selectedAnalysisId === analysis.analysis_id}
             />
           ))
@@ -200,7 +216,7 @@ export default function AdminInspectionPage() {
             <AnalysisInspectionCard
               key={analysis.analysis_id}
               analysis={analysis}
-              onInspect={handleInspectAudit}
+              onInspect={loadAudit}
               selected={selectedAnalysisId === analysis.analysis_id}
             />
           ))
@@ -219,8 +235,13 @@ export default function AdminInspectionPage() {
 
         {loadingAudit && <LoadingState message="Loading audit..." />}
 
-        {auditError && (
-          <ErrorState title="Could not load audit" message={auditError} />
+        {auditError && selectedAnalysisId && (
+          <ErrorState
+            title="Could not load audit"
+            message={auditError}
+            onRetry={() => loadAudit(selectedAnalysisId)}
+            retryLabel="Retry Audit Load"
+          />
         )}
 
         {!loadingAudit && !auditError && audit && (

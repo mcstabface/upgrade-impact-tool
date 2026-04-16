@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import LoadingState from "../components/LoadingState";
@@ -75,12 +75,22 @@ export default function ApplicationDetailPage() {
   const [severityFilter, setSeverityFilter] = useState("ALL");
   const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
+  const loadApplicationDetail = useCallback(async () => {
     if (!id || !applicationId) return;
-    getAnalysisApplicationDetail(id, applicationId)
-      .then(setData)
-      .catch((err: Error) => setError(err.message));
+
+    setError(null);
+
+    try {
+      const result = await getAnalysisApplicationDetail(id, applicationId);
+      setData(result);
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, [id, applicationId]);
+
+  useEffect(() => {
+    loadApplicationDetail();
+  }, [loadApplicationDetail]);
 
   const filteredFindings = useMemo(() => {
     if (!data) return [];
@@ -123,6 +133,8 @@ export default function ApplicationDetailPage() {
       <ErrorState
         title="Could not load application detail"
         message={error}
+        onRetry={loadApplicationDetail}
+        retryLabel="Retry Load"
       />
     );
   }

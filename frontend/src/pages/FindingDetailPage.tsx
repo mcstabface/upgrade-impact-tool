@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import { canManageReviews, getCurrentRole } from "../auth/role";
@@ -39,10 +39,22 @@ export default function FindingDetailPage() {
   const analysisId = searchParams.get("analysisId");
   const applicationId = searchParams.get("applicationId");
 
-  useEffect(() => {
+  const loadFindingDetail = useCallback(async () => {
     if (!id) return;
-    getFindingDetail(id).then(setData).catch((err: Error) => setError(err.message));
+
+    setError(null);
+
+    try {
+      const result = await getFindingDetail(id);
+      setData(result);
+    } catch (err) {
+      setError((err as Error).message);
+    }
   }, [id]);
+
+  useEffect(() => {
+    loadFindingDetail();
+  }, [loadFindingDetail]);
 
   async function handleResolve(event: React.FormEvent) {
     event.preventDefault();
@@ -132,7 +144,17 @@ export default function FindingDetailPage() {
     }
   }
 
-  if (error) return <ErrorState message={error} />;
+  if (error) {
+    return (
+      <ErrorState
+        title="Could not load finding detail"
+        message={error}
+        onRetry={loadFindingDetail}
+        retryLabel="Retry Load"
+      />
+    );
+  }
+
   if (!data) return <LoadingState />;
 
   const canResolve =
