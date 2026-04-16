@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import AppShell from "../components/layout/AppShell";
 import ErrorState from "../components/ErrorState";
+import Card from "../components/ui/Card";
+import ButtonLink from "../components/ui/ButtonLink";
 import { canManageIntakes, type UserRole } from "../auth/role";
 import { useCurrentRole } from "../auth/AuthContext";
 import {
@@ -28,6 +31,24 @@ function HelperText({
       {children}
     </p>
   );
+}function HelperText({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <p
+      style={{
+        marginTop: "0.35rem",
+        marginBottom: 0,
+        maxWidth: "48rem",
+        color: "var(--text-secondary)",
+        fontSize: "0.95rem",
+      }}
+    >
+      {children}
+    </p>
+  );
 }
 
 function WhyWeAsk({
@@ -38,11 +59,12 @@ function WhyWeAsk({
   return (
     <p
       style={{
-        marginTop: "0.25rem",
-        marginBottom: "0.75rem",
+        marginTop: "0.35rem",
+        marginBottom: 0,
         maxWidth: "48rem",
         fontStyle: "italic",
-        color: "#444",
+        color: "var(--text-muted)",
+        fontSize: "0.92rem",
       }}
     >
       Why we ask: {children}
@@ -60,21 +82,14 @@ function GuidanceBlock({
   lines: string[];
 }) {
   return (
-    <section
-      style={{
-        border: "1px solid #ccc",
-        padding: "1rem",
-        marginBottom: "1.5rem",
-      }}
-    >
-      <h3 style={{ marginTop: 0 }}>{title}</h3>
-      <p>{body}</p>
-      <ul>
+    <Card title={title} muted>
+      <p style={{ color: "var(--text-secondary)" }}>{body}</p>
+      <ul className="ui-list ui-list--compact">
         {lines.map((line) => (
           <li key={line}>{line}</li>
         ))}
       </ul>
-    </section>
+    </Card>
   );
 }
 
@@ -102,6 +117,21 @@ const SAMPLE_INTAKE_TEMPLATE_LINES = [
   "Publication Date: 2026-04-12",
   "Source Link: https://example.com/kb/4000001-1",
 ];
+
+function FieldBlock({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ display: "grid", gap: "0.35rem" }}>
+      <label className="ui-label">{label}</label>
+      {children}
+    </div>
+  );
+}
 
 export default function IntakeNewPage() {
   const navigate = useNavigate();
@@ -234,266 +264,308 @@ export default function IntakeNewPage() {
   }
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "56rem" }}>
-      <h1>Create Intake</h1>
+    <AppShell
+      title="Create Intake"
+      subtitle="Capture the minimum environment, application, contact, and source evidence needed to produce a reviewable pilot analysis."
+      actions={<ButtonLink to="/dashboard" variant="subtle">Back to Dashboard</ButtonLink>}
+    >
+      <div className="ui-stack">
+        <Card title="Before you start" muted>
+          <p style={{ color: "var(--text-secondary)" }}>
+            This form is meant to capture just enough environment, application, contact, and vendor
+            KB context to produce a reviewable upgrade impact analysis.
+          </p>
+          <ul className="ui-list ui-list--compact">
+            <li>Use the environment and application names your team already recognizes.</li>
+            <li>Enter the exact current and target versions when possible.</li>
+            <li>List enabled modules as comma-separated values.</li>
+            <li>Use a KB article that actually represents the change set being reviewed.</li>
+          </ul>
+        </Card>
 
-      <p>Current Role: {currentRole}</p>
+        <GuidanceBlock
+          title="Sample intake prep checklist"
+          body="Use this quick checklist before you submit the intake. It reduces blocked validation and later unknown findings."
+          lines={SAMPLE_PREP_CHECKLIST}
+        />
 
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Before you start</h2>
-        <p>
-          This form is meant to capture just enough environment, application, contact, and vendor
-          KB context to produce a reviewable upgrade impact analysis.
-        </p>
-        <ul>
-          <li>Use the environment and application names your team already recognizes.</li>
-          <li>Enter the exact current and target versions when possible.</li>
-          <li>List enabled modules as comma-separated values.</li>
-          <li>Use a KB article that actually represents the change set being reviewed.</li>
-        </ul>
-      </section>
-
-      <GuidanceBlock
-        title="Sample intake prep checklist"
-        body="Use this quick checklist before you submit the intake. It reduces blocked validation and later unknown findings."
-        lines={SAMPLE_PREP_CHECKLIST}
-      />
-
-      <section
-        style={{
-          border: "1px solid #ccc",
-          padding: "1rem",
-          marginBottom: "2rem",
-        }}
-      >
-        <h3 style={{ marginTop: 0 }}>Sample intake template</h3>
-        <p>
-          This is a simple example of the level of detail the system expects. Use it as prep
-          guidance, not as a replacement for real customer context.
-        </p>
-        <pre
-          style={{
-            whiteSpace: "pre-wrap",
-            border: "1px solid #ccc",
-            padding: "0.75rem",
-            backgroundColor: "#f8f8f8",
-          }}
-        >
-          {SAMPLE_INTAKE_TEMPLATE_LINES.join("\n")}
-        </pre>
-        <button type="button" onClick={handleCopyTemplate}>
-          Copy Sample Template
-        </button>
-        {copyMessage && <p>{copyMessage}</p>}
-      </section>
-
-      <form onSubmit={handleSubmit}>
-        <h2>Environment</h2>
-        <HelperText>
-          Start with the environment this upgrade decision is actually about. Keep names practical
-          and recognizable to both technical and business reviewers.
-        </HelperText>
-        <WhyWeAsk>
-          environment identity drives analysis context, review expectations, and later staleness /
-          refresh interpretation.
-        </WhyWeAsk>
-
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Customer Name </label>
-          <input value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
-          <HelperText>
-            Example: Acme Health, Northwind Distribution, City Utilities.
-          </HelperText>
-        </div>
-
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Environment Name </label>
-          <input value={environmentName} onChange={(e) => setEnvironmentName(e.target.value)} />
-          <HelperText>
-            Example: Production, UAT Wave 2, Payroll Test, AP Validation Sandbox.
-          </HelperText>
-        </div>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Environment Type </label>
-          <select
-            value={environmentType}
-            onChange={(e) => setEnvironmentType(e.target.value as "DEV" | "TEST" | "PROD")}
+        <Card title="Sample intake template" muted>
+          <p style={{ color: "var(--text-secondary)" }}>
+            This is a simple example of the level of detail the system expects. Use it as prep
+            guidance, not as a replacement for real customer context.
+          </p>
+          <pre
+            style={{
+              whiteSpace: "pre-wrap",
+              border: "1px solid var(--border-subtle)",
+              borderRadius: "12px",
+              padding: "0.9rem",
+              backgroundColor: "var(--bg-surface)",
+              overflowX: "auto",
+            }}
           >
-            <option value="DEV">DEV</option>
-            <option value="TEST">TEST</option>
-            <option value="PROD">PROD</option>
-          </select>
-          <HelperText>
-            Choose the type that matches the real operating context for this analysis.
-          </HelperText>
-        </div>
+            {SAMPLE_INTAKE_TEMPLATE_LINES.join("\n")}
+          </pre>
+          <div style={{ marginTop: "1rem" }}>
+            <button type="button" className="ui-button" onClick={handleCopyTemplate}>
+              Copy Sample Template
+            </button>
+          </div>
+          {copyMessage ? <p className="ui-status-note">{copyMessage}</p> : null}
+        </Card>
 
-        <h2>Application</h2>
-        <HelperText>
-          Capture the application and version range as your team would describe them in an upgrade
-          review or cutover discussion.
-        </HelperText>
-        <WhyWeAsk>
-          version and module scope determine which findings may apply and which missing inputs will
-          matter later.
-        </WhyWeAsk>
+        <form onSubmit={handleSubmit} className="ui-stack">
+          <Card title="Environment">
+            <p style={{ color: "var(--text-secondary)" }}>
+              Start with the environment this upgrade decision is actually about. Keep names practical
+              and recognizable to both technical and business reviewers.
+            </p>
+            <p style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+              Why we ask: environment identity drives analysis context, review expectations, and
+              later staleness / refresh interpretation.
+            </p>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Application Name </label>
-          <input value={applicationName} onChange={(e) => setApplicationName(e.target.value)} />
-          <HelperText>
-            Use the specific application or functional area, not just the broad platform name.
-          </HelperText>
-        </div>
+            <div className="ui-field-grid">
+              <FieldBlock label="Customer Name">
+                <input
+                  className="ui-input"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                />
+                <HelperText>
+                  Example: Acme Health, Northwind Distribution, City Utilities.
+                </HelperText>
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Product Line </label>
-          <input value={productLine} onChange={(e) => setProductLine(e.target.value)} />
-        </div>
+              <FieldBlock label="Environment Name">
+                <input
+                  className="ui-input"
+                  value={environmentName}
+                  onChange={(e) => setEnvironmentName(e.target.value)}
+                />
+                <HelperText>
+                  Example: Production, UAT Wave 2, Payroll Test, AP Validation Sandbox.
+                </HelperText>
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Current Version </label>
-          <input value={currentVersion} onChange={(e) => setCurrentVersion(e.target.value)} />
-        </div>
+              <FieldBlock label="Environment Type">
+                <select
+                  className="ui-select"
+                  value={environmentType}
+                  onChange={(e) => setEnvironmentType(e.target.value as "DEV" | "TEST" | "PROD")}
+                >
+                  <option value="DEV">DEV</option>
+                  <option value="TEST">TEST</option>
+                  <option value="PROD">PROD</option>
+                </select>
+                <HelperText>
+                  Choose the type that matches the real operating context for this analysis.
+                </HelperText>
+              </FieldBlock>
+            </div>
+          </Card>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Target Version </label>
-          <input value={targetVersion} onChange={(e) => setTargetVersion(e.target.value)} />
-        </div>
+          <Card title="Application">
+            <p style={{ color: "var(--text-secondary)" }}>
+              Capture the application and version range as your team would describe them in an upgrade
+              review or cutover discussion.
+            </p>
+            <p style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+              Why we ask: version and module scope determine which findings may apply and which
+              missing inputs will matter later.
+            </p>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Modules Enabled </label>
-          <input value={modulesEnabled} onChange={(e) => setModulesEnabled(e.target.value)} />
-          <HelperText>
-            Enter modules as comma-separated values, for example: Invoice Processing, Payment
-            Scheduling, Supplier Management.
-          </HelperText>
-        </div>
+            <div className="ui-field-grid">
+              <FieldBlock label="Application Name">
+                <input
+                  className="ui-input"
+                  value={applicationName}
+                  onChange={(e) => setApplicationName(e.target.value)}
+                />
+                <HelperText>
+                  Use the specific application or functional area, not just the broad platform name.
+                </HelperText>
+              </FieldBlock>
 
-        <h2>Contacts</h2>
-        <HelperText>
-          Add the people most likely to confirm whether a change is real, acceptable, or risky in
-          this environment.
-        </HelperText>
-        <WhyWeAsk>
-          contact context helps explain who can resolve unknowns, validate assumptions, and review
-          findings when the system cannot fully infer customer-specific behavior.
-        </WhyWeAsk>
+              <FieldBlock label="Product Line">
+                <input
+                  className="ui-input"
+                  value={productLine}
+                  onChange={(e) => setProductLine(e.target.value)}
+                />
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Technical Contact Name </label>
-          <input
-            value={technicalContactName}
-            onChange={(e) => setTechnicalContactName(e.target.value)}
-          />
-        </div>
+              <FieldBlock label="Current Version">
+                <input
+                  className="ui-input"
+                  value={currentVersion}
+                  onChange={(e) => setCurrentVersion(e.target.value)}
+                />
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Technical Contact Email </label>
-          <input
-            value={technicalContactEmail}
-            onChange={(e) => setTechnicalContactEmail(e.target.value)}
-          />
-        </div>
+              <FieldBlock label="Target Version">
+                <input
+                  className="ui-input"
+                  value={targetVersion}
+                  onChange={(e) => setTargetVersion(e.target.value)}
+                />
+              </FieldBlock>
+            </div>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Business Contact Name </label>
-          <input
-            value={businessContactName}
-            onChange={(e) => setBusinessContactName(e.target.value)}
-          />
-        </div>
+            <div style={{ marginTop: "1rem" }}>
+              <FieldBlock label="Modules Enabled">
+                <input
+                  className="ui-input"
+                  value={modulesEnabled}
+                  onChange={(e) => setModulesEnabled(e.target.value)}
+                />
+                <HelperText>
+                  Enter modules as comma-separated values, for example: Invoice Processing, Payment
+                  Scheduling, Supplier Management.
+                </HelperText>
+              </FieldBlock>
+            </div>
+          </Card>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Business Contact Email </label>
-          <input
-            value={businessContactEmail}
-            onChange={(e) => setBusinessContactEmail(e.target.value)}
-          />
-        </div>
+          <Card title="Contacts">
+            <p style={{ color: "var(--text-secondary)" }}>
+              Add the people most likely to confirm whether a change is real, acceptable, or risky in
+              this environment.
+            </p>
+            <p style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+              Why we ask: contact context helps explain who can resolve unknowns, validate
+              assumptions, and review findings when the system cannot fully infer customer-specific
+              behavior.
+            </p>
 
-        <h2>KB Document</h2>
-        <HelperText>
-          Use the vendor article that best represents the change set under review. Titles and links
-          should be good enough for a reviewer to verify provenance later.
-        </HelperText>
-        <WhyWeAsk>
-          visible source evidence is part of the system’s trust model. If provenance is weak here,
-          the downstream report gets weaker too.
-        </WhyWeAsk>
+            <div className="ui-field-grid">
+              <FieldBlock label="Technical Contact Name">
+                <input
+                  className="ui-input"
+                  value={technicalContactName}
+                  onChange={(e) => setTechnicalContactName(e.target.value)}
+                />
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>KB Article Number </label>
-          <input value={kbArticleNumber} onChange={(e) => setKbArticleNumber(e.target.value)} />
-        </div>
+              <FieldBlock label="Technical Contact Email">
+                <input
+                  className="ui-input"
+                  value={technicalContactEmail}
+                  onChange={(e) => setTechnicalContactEmail(e.target.value)}
+                />
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>KB Title </label>
-          <input value={kbTitle} onChange={(e) => setKbTitle(e.target.value)} />
-        </div>
+              <FieldBlock label="Business Contact Name">
+                <input
+                  className="ui-input"
+                  value={businessContactName}
+                  onChange={(e) => setBusinessContactName(e.target.value)}
+                />
+              </FieldBlock>
 
-        <div style={{ marginBottom: "0.75rem" }}>
-          <label>Publication Date </label>
-          <input
-            value={kbPublicationDate}
-            onChange={(e) => setKbPublicationDate(e.target.value)}
-          />
-          <HelperText>Use ISO format when possible: YYYY-MM-DD.</HelperText>
-        </div>
+              <FieldBlock label="Business Contact Email">
+                <input
+                  className="ui-input"
+                  value={businessContactEmail}
+                  onChange={(e) => setBusinessContactEmail(e.target.value)}
+                />
+              </FieldBlock>
+            </div>
+          </Card>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Source Link </label>
-          <input value={kbSourceLink} onChange={(e) => setKbSourceLink(e.target.value)} />
-        </div>
+          <Card title="KB Document">
+            <p style={{ color: "var(--text-secondary)" }}>
+              Use the vendor article that best represents the change set under review. Titles and
+              links should be good enough for a reviewer to verify provenance later.
+            </p>
+            <p style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
+              Why we ask: visible source evidence is part of the system’s trust model. If provenance
+              is weak here, the downstream report gets weaker too.
+            </p>
 
-        <div style={{ marginTop: "1rem" }}>
-          <button type="submit" disabled={submitting}>
-            {submitting ? "Submitting..." : "Create, Validate, and Run Analysis"}
-          </button>
-        </div>
-      </form>
+            <div className="ui-field-grid">
+              <FieldBlock label="KB Article Number">
+                <input
+                  className="ui-input"
+                  value={kbArticleNumber}
+                  onChange={(e) => setKbArticleNumber(e.target.value)}
+                />
+              </FieldBlock>
 
-      {error && (
-        <section style={{ marginTop: "2rem" }}>
-          <h2>Submission Error</h2>
-          <p>{error}</p>
-          <p>
-            Review the current values, correct anything incomplete or malformed, and retry the
-            intake flow.
-          </p>
-        </section>
-      )}
+              <FieldBlock label="KB Title">
+                <input
+                  className="ui-input"
+                  value={kbTitle}
+                  onChange={(e) => setKbTitle(e.target.value)}
+                />
+              </FieldBlock>
 
-      {missingFields.length > 0 && (
-        <section style={{ marginTop: "2rem" }}>
-          <h2>Blocked: Required intake details are still missing</h2>
-          <p>
-            The system could not validate this intake yet. Fill the missing items below, then retry
-            the analysis flow.
-          </p>
-          <ul>
-            {missingFields.map((field) => (
-              <li key={field}>{field}</li>
-            ))}
-          </ul>
-        </section>
-      )}
+              <FieldBlock label="Publication Date">
+                <input
+                  className="ui-input"
+                  value={kbPublicationDate}
+                  onChange={(e) => setKbPublicationDate(e.target.value)}
+                />
+                <HelperText>Use ISO format when possible: YYYY-MM-DD.</HelperText>
+              </FieldBlock>
 
-      {warnings.length > 0 && (
-        <section style={{ marginTop: "2rem" }}>
-          <h2>Warnings</h2>
-          <p>
-            These warnings do not always block analysis, but they usually mean a reviewer will have
-            less context later.
-          </p>
-          <ul>
-            {warnings.map((warning) => (
-              <li key={warning}>{warning}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </main>
+              <FieldBlock label="Source Link">
+                <input
+                  className="ui-input"
+                  value={kbSourceLink}
+                  onChange={(e) => setKbSourceLink(e.target.value)}
+                />
+              </FieldBlock>
+            </div>
+          </Card>
+
+          <Card muted>
+            <div className="ui-inline-actions">
+              <button type="submit" className="ui-button ui-button--primary" disabled={submitting}>
+                {submitting ? "Submitting..." : "Create, Validate, and Run Analysis"}
+              </button>
+            </div>
+          </Card>
+        </form>
+
+        {error ? (
+          <Card title="Submission Error" tone="danger">
+            <p>{error}</p>
+            <p style={{ color: "var(--text-secondary)" }}>
+              Review the current values, correct anything incomplete or malformed, and retry the
+              intake flow.
+            </p>
+          </Card>
+        ) : null}
+
+        {missingFields.length > 0 ? (
+          <Card title="Blocked: Required intake details are still missing" tone="warning">
+            <p style={{ color: "var(--text-secondary)" }}>
+              The system could not validate this intake yet. Fill the missing items below, then retry
+              the analysis flow.
+            </p>
+            <ul className="ui-list ui-list--compact">
+              {missingFields.map((field) => (
+                <li key={field}>{field}</li>
+              ))}
+            </ul>
+          </Card>
+        ) : null}
+
+        {warnings.length > 0 ? (
+          <Card title="Warnings" tone="warning">
+            <p style={{ color: "var(--text-secondary)" }}>
+              These warnings do not always block analysis, but they usually mean a reviewer will have
+              less context later.
+            </p>
+            <ul className="ui-list ui-list--compact">
+              {warnings.map((warning) => (
+                <li key={warning}>{warning}</li>
+              ))}
+            </ul>
+          </Card>
+        ) : null}
+      </div>
+    </AppShell>
   );
 }

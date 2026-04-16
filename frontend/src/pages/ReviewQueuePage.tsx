@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import AppShell from "../components/layout/AppShell";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import EmptyState from "../components/EmptyState";
+import Card from "../components/ui/Card";
+import ButtonLink from "../components/ui/ButtonLink";
 import { formatStatusLabel } from "../utils/status";
 import {
   getReviewQueue,
@@ -32,11 +35,7 @@ function FilterChip({
   onClear: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClear}
-      style={{ marginRight: "0.5rem", marginBottom: "0.5rem" }}
-    >
+    <button type="button" className="ui-chip" onClick={onClear}>
       {label} ×
     </button>
   );
@@ -131,151 +130,196 @@ export default function ReviewQueuePage() {
   }
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "72rem" }}>
-      <h1>Review Queue</h1>
-
-      <p>
-        <Link to="/dashboard">Back to Dashboard</Link>
-      </p>
-
-      <p>
-        <a href={getReviewQueueCsvExportUrl()}>Export Review Queue CSV</a>
-      </p>
-
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>Filters</h2>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Status </label>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="ALL">ALL</option>
-            <option value="OPEN">OPEN</option>
-            <option value="IN_PROGRESS">IN_PROGRESS</option>
-            <option value="DEFERRED">DEFERRED</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={showOverdueOnly}
-              onChange={(e) => setShowOverdueOnly(e.target.checked)}
-            />{" "}
-            Show overdue only
-          </label>
-        </div>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Owner </label>
-          <input
-            value={ownerFilter}
-            onChange={(e) => setOwnerFilter(e.target.value)}
-            placeholder="Filter by owner"
-          />
-        </div>
-
-        <div style={{ marginBottom: "1rem" }}>
-          <label>Search </label>
-          <input
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            placeholder="Search headline, app, analysis, KB, or reason"
-          />
-        </div>
-
-        <button type="button" onClick={clearFilters}>
-          Clear Filters
-        </button>
-      </section>
-
-      {(statusFilter !== "ALL" ||
-        ownerFilter.trim().length > 0 ||
-        searchText.trim().length > 0 ||
-        showOverdueOnly) && (
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>Active Filters</h2>
-
-          <div>
-            {statusFilter !== "ALL" && (
-              <FilterChip
-                label={`Status: ${formatStatusLabel(statusFilter)}`}
-                onClear={() => setStatusFilter("ALL")}
-              />
-            )}
-
-            {showOverdueOnly && (
-              <FilterChip
-                label="Overdue Only"
-                onClear={() => setShowOverdueOnly(false)}
-              />
-            )}
-
-            {ownerFilter.trim().length > 0 && (
-              <FilterChip
-                label={`Owner: ${ownerFilter}`}
-                onClear={() => setOwnerFilter("")}
-              />
-            )}
-
-            {searchText.trim().length > 0 && (
-              <FilterChip
-                label={`Search: ${searchText}`}
-                onClear={() => setSearchText("")}
-              />
-            )}
-          </div>
-        </section>
-      )}
-
-      {filteredItems.length === 0 ? (
-        <EmptyState
-          title="Review queue is clear"
-          message="There are no open, in-progress, or deferred review items right now."
-        />
-      ) : (
-        <ul style={{ paddingLeft: 0, listStyle: "none" }}>
-          {filteredItems.map((item) => (
-            <li
-              key={item.review_item_id}
-              style={{
-                marginBottom: "1.5rem",
-              }}
-            >
-              <article
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "1rem",
-                  backgroundColor: item.is_overdue ? "#fff8f8" : undefined,
-                }}
+    <AppShell
+      title="Review Queue"
+      subtitle="Track open review work, overdue items, and owner assignments before pilot issues become somebody else’s archaeology."
+      actions={
+        <>
+          <ButtonLink to="/dashboard" variant="subtle">
+            Back to Dashboard
+          </ButtonLink>
+          <a className="ui-button" href={getReviewQueueCsvExportUrl()}>
+            Export Review Queue CSV
+          </a>
+        </>
+      }
+    >
+      <div className="ui-stack">
+        <Card title="Filters" muted>
+          <div className="ui-toolbar">
+            <div className="ui-toolbar__group">
+              <label className="ui-label">Status</label>
+              <select
+                className="ui-select"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
               >
-                <div style={{ marginBottom: "0.5rem" }}>
-                  <strong>Review Item {item.review_item_id}</strong>
-                  {" — "}
-                  <Link to={`/review-items/${item.review_item_id}`}>
-                    {item.finding_headline}
-                  </Link>
+                <option value="ALL">ALL</option>
+                <option value="OPEN">OPEN</option>
+                <option value="IN_PROGRESS">IN_PROGRESS</option>
+                <option value="DEFERRED">DEFERRED</option>
+              </select>
+            </div>
+
+            <div className="ui-toolbar__group">
+              <label className="ui-label">Owner</label>
+              <input
+                className="ui-input"
+                value={ownerFilter}
+                onChange={(e) => setOwnerFilter(e.target.value)}
+                placeholder="Filter by owner"
+              />
+            </div>
+
+            <div className="ui-toolbar__group" style={{ minWidth: "260px" }}>
+              <label className="ui-label">Search</label>
+              <input
+                className="ui-input"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                placeholder="Search headline, app, analysis, KB, or reason"
+              />
+            </div>
+
+            <div className="ui-toolbar__group">
+              <label className="ui-label">View</label>
+              <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <input
+                  type="checkbox"
+                  checked={showOverdueOnly}
+                  onChange={(e) => setShowOverdueOnly(e.target.checked)}
+                />
+                <span>Show overdue only</span>
+              </label>
+            </div>
+
+            <div className="ui-toolbar__group">
+              <label className="ui-label">Actions</label>
+              <button type="button" className="ui-button" onClick={clearFilters}>
+                Clear Filters
+              </button>
+            </div>
+          </div>
+
+          {statusFilter !== "ALL" ||
+          ownerFilter.trim().length > 0 ||
+          searchText.trim().length > 0 ||
+          showOverdueOnly ? (
+            <div style={{ marginTop: "1rem" }}>
+              <div className="ui-chip-row">
+                {statusFilter !== "ALL" ? (
+                  <FilterChip
+                    label={`Status: ${formatStatusLabel(statusFilter)}`}
+                    onClear={() => setStatusFilter("ALL")}
+                  />
+                ) : null}
+
+                {showOverdueOnly ? (
+                  <FilterChip
+                    label="Overdue Only"
+                    onClear={() => setShowOverdueOnly(false)}
+                  />
+                ) : null}
+
+                {ownerFilter.trim().length > 0 ? (
+                  <FilterChip label={`Owner: ${ownerFilter}`} onClear={() => setOwnerFilter("")} />
+                ) : null}
+
+                {searchText.trim().length > 0 ? (
+                  <FilterChip
+                    label={`Search: ${searchText}`}
+                    onClear={() => setSearchText("")}
+                  />
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+        </Card>
+
+        {filteredItems.length === 0 ? (
+          <EmptyState
+            title="Review queue is clear"
+            message="There are no open, in-progress, or deferred review items right now."
+          />
+        ) : (
+          <div className="ui-stack" style={{ gap: "1rem" }}>
+            {filteredItems.map((item) => (
+              <Card
+                key={item.review_item_id}
+                tone={item.is_overdue ? "danger" : "default"}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                    alignItems: "start",
+                  }}
+                >
+                  <div>
+                    <div style={{ marginBottom: "0.35rem", fontWeight: 700 }}>
+                      Review Item {item.review_item_id} —{" "}
+                      <Link to={`/review-items/${item.review_item_id}`}>
+                        {item.finding_headline}
+                      </Link>
+                    </div>
+                    <div className="ui-status-note">
+                      Status: {formatStatusLabel(item.review_status)}
+                    </div>
+                    <div className="ui-status-note">Owner: {item.assigned_owner_user_id}</div>
+                    <div className="ui-status-note">Due Date: {item.due_date}</div>
+                    {item.is_overdue ? (
+                      <div style={{ color: "var(--danger-text)", fontWeight: 600, marginTop: "0.35rem" }}>
+                        Overdue
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="ui-inline-actions">
+                    <ButtonLink to={`/review-items/${item.review_item_id}`} variant="subtle">
+                      Open Review Item
+                    </ButtonLink>
+                  </div>
                 </div>
 
-                <div>Status: {formatStatusLabel(item.review_status)}</div>
-                <div>Owner: {item.assigned_owner_user_id}</div>
-                <div>Due Date: {item.due_date}</div>
-                {item.is_overdue && <div>Overdue: Yes</div>}
-                <div>Application: {item.application_name}</div>
-                <div>Analysis: {item.analysis_id}</div>
-                <div>KB: {item.kb_reference}</div>
-                <div>Reason: {item.review_reason}</div>
-                {item.defer_reason && <div>Deferred Because: {item.defer_reason}</div>}
-                {item.resolution_note && <div>Resolution Note: {item.resolution_note}</div>}
+                <hr className="ui-divider" style={{ marginTop: "1rem", marginBottom: "1rem" }} />
 
-                <div style={{ marginTop: "0.75rem" }}>
-                  <Link to={`/review-items/${item.review_item_id}`}>Open Review Item</Link>
+                <div className="ui-meta-list">
+                  <div className="ui-meta-list__row">
+                    <span className="ui-meta-list__label">Application</span>
+                    <span>{item.application_name}</span>
+                  </div>
+                  <div className="ui-meta-list__row">
+                    <span className="ui-meta-list__label">Analysis</span>
+                    <span>{item.analysis_id}</span>
+                  </div>
+                  <div className="ui-meta-list__row">
+                    <span className="ui-meta-list__label">KB</span>
+                    <span>{item.kb_reference}</span>
+                  </div>
+                  <div className="ui-meta-list__row">
+                    <span className="ui-meta-list__label">Reason</span>
+                    <span>{item.review_reason}</span>
+                  </div>
+                  {item.defer_reason ? (
+                    <div className="ui-meta-list__row">
+                      <span className="ui-meta-list__label">Deferred Because</span>
+                      <span>{item.defer_reason}</span>
+                    </div>
+                  ) : null}
+                  {item.resolution_note ? (
+                    <div className="ui-meta-list__row">
+                      <span className="ui-meta-list__label">Resolution Note</span>
+                      <span>{item.resolution_note}</span>
+                    </div>
+                  ) : null}
                 </div>
-              </article>
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    </AppShell>
   );
 }
