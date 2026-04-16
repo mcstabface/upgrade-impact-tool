@@ -49,6 +49,59 @@ function WhyWeAsk({
   );
 }
 
+function GuidanceBlock({
+  title,
+  body,
+  lines,
+}: {
+  title: string;
+  body: string;
+  lines: string[];
+}) {
+  return (
+    <section
+      style={{
+        border: "1px solid #ccc",
+        padding: "1rem",
+        marginBottom: "1.5rem",
+      }}
+    >
+      <h3 style={{ marginTop: 0 }}>{title}</h3>
+      <p>{body}</p>
+      <ul>
+        {lines.map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+const SAMPLE_PREP_CHECKLIST = [
+  "Customer and environment names match what reviewers already use internally.",
+  "Current and target versions are exact, not approximate.",
+  "Enabled modules are listed in comma-separated form.",
+  "Technical and business contacts are the people who can actually clear unknowns.",
+  "The KB article number, title, date, and source link point to the real vendor change set.",
+];
+
+const SAMPLE_INTAKE_TEMPLATE_LINES = [
+  "Customer Name: Acme Health",
+  "Environment Name: Production Wave 2",
+  "Environment Type: PROD",
+  "Application Name: Accounts Payable",
+  "Product Line: PeopleSoft",
+  "Current Version: 9.2.40",
+  "Target Version: 9.2.42",
+  "Modules Enabled: Invoice Processing, Payment Scheduling, Supplier Management",
+  "Technical Contact: Jane Admin <jane.admin@example.com>",
+  "Business Contact: Bob Business <bob.business@example.com>",
+  "KB Article Number: KB-4000001.1",
+  "KB Title: AP Validation Changes for 9.2.42",
+  "Publication Date: 2026-04-12",
+  "Source Link: https://example.com/kb/4000001-1",
+];
+
 export default function IntakeNewPage() {
   const navigate = useNavigate();
   const currentRole = getCurrentRole();
@@ -77,6 +130,7 @@ export default function IntakeNewPage() {
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
   const [missingFields, setMissingFields] = useState<string[]>([]);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -150,6 +204,15 @@ export default function IntakeNewPage() {
     setSubmitting(false);
   }
 
+  async function handleCopyTemplate() {
+    try {
+      await navigator.clipboard.writeText(SAMPLE_INTAKE_TEMPLATE_LINES.join("\n"));
+      setCopyMessage("Sample intake template copied.");
+    } catch {
+      setCopyMessage("Could not copy the sample intake template.");
+    }
+  }
+
   if (!canManageIntakes(currentRole)) {
     return (
       <ErrorState
@@ -175,6 +238,40 @@ export default function IntakeNewPage() {
           <li>List enabled modules as comma-separated values.</li>
           <li>Use a KB article that actually represents the change set being reviewed.</li>
         </ul>
+      </section>
+
+      <GuidanceBlock
+        title="Sample intake prep checklist"
+        body="Use this quick checklist before you submit the intake. It reduces blocked validation and later unknown findings."
+        lines={SAMPLE_PREP_CHECKLIST}
+      />
+
+      <section
+        style={{
+          border: "1px solid #ccc",
+          padding: "1rem",
+          marginBottom: "2rem",
+        }}
+      >
+        <h3 style={{ marginTop: 0 }}>Sample intake template</h3>
+        <p>
+          This is a simple example of the level of detail the system expects. Use it as prep
+          guidance, not as a replacement for real customer context.
+        </p>
+        <pre
+          style={{
+            whiteSpace: "pre-wrap",
+            border: "1px solid #ccc",
+            padding: "0.75rem",
+            backgroundColor: "#f8f8f8",
+          }}
+        >
+          {SAMPLE_INTAKE_TEMPLATE_LINES.join("\n")}
+        </pre>
+        <button type="button" onClick={handleCopyTemplate}>
+          Copy Sample Template
+        </button>
+        {copyMessage && <p>{copyMessage}</p>}
       </section>
 
       <form onSubmit={handleSubmit}>
