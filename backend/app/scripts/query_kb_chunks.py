@@ -10,7 +10,7 @@ from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from app.scripts.extract_kb_source_manifest import repo_root
 from app.scripts.build_kb_chunk_lexical_index import tokenize
@@ -23,6 +23,7 @@ FILTER_FIELDS = {
     "product",
     "category",
 }
+RankerName = Literal["tfidf", "bm25"]
 
 
 @dataclass(frozen=True)
@@ -121,8 +122,31 @@ def build_filter_clause(filters: dict[str, str], *, table_alias: str | None = No
     return " AND " + " AND ".join(clauses), values
 
 
+def corpus_stats(conn: sqlite3.Connection) -> dict[str, float]:
+    row = conn.execute(
+        """
+        SELECT
+            COUNT(*) AS chunk_count,
+            AVG(token_count) AS average_document_length
+        FROM chunks
+        """
+    ).fetchone()
+    return {
+        "chunk_count": float(row["chunk_count"] or 0),
+        "average_document_length": float(row["average_document_length"] or 0.0),
+    }
+
+
+def bm25_idf(total_chunks: int, document_frequency: int) -> float:
+    return math.log(1.0 + ((total_chunks - document_frequency + 0.5) / (document_frequency + 0.5)))
+
+
+def tfidf_idf(total_chunks: int, document_frequency: int) -> float:
+    return math.log((1 + total_chunks) / (1 + document_frequency)) + 1.0 if total_chunks else 0.0
+
+
 def fetch_term_diagnostics(conn: sqlite3.Connection, terms: list[str], *, limit_candidates: int, filters: dict[str, str]) -> dict[str, Any]:
-    total_chunks = conn.execute("SELECT COUNT(*) AS count FROM chunks").fetchone()["count"] or 0
+    total_chunks = int(conn.execute("SELECT COUNT(*) AS count FROM chunks").fetchone()["count"] or 0)
     filter_clause, filter_values = build_filter_clause(filters, table_alias="c")
     diagnostics: dict[str, Any] = {}
 
@@ -142,11 +166,12 @@ def fetch_term_diagnostics(conn: sqlite3.Connection, terms: list[str], *, limit_
         ).fetchone()
         global_postings = int(global_row["posting_count"] or 0)
         filtered_postings = int(filtered_row["posting_count"] or 0)
-        idf = math.log((1 + total_chunks) / (1 + global_postings)) + 1.0 if total_chunks else 0.0
         diagnostics[term] = {
             "global_posting_count": global_postings,
             "filtered_posting_count": filtered_postings,
-            "idf": round(idf, 6),
+            "idf": round(tfidf_idf(total_chunks, global_postings), 6),
+            "tfidf_idf": round(tfidf_idf(total_chunks, global_postings), 6),
+            "bm25_idf": round(bm25_idf(total_chunks, global_postings), 6) if total_chunks else 0.0,
             "candidate_limit": limit_candidates,
             "candidate_limited": filtered_postings > limit_candidates,
         }
@@ -180,26 +205,30 @@ def fetch_candidate_chunk_ids(
     return candidates
 
 
-def score_candidates(
-    conn: sqlite3.Connection,
+def fetch_chunk_rows(conn: sqlite3.Connection, chunk_ids: list[str]) -> dict[str, sqlite3.Row]:
+    if not chunk_ids:
+        return {}
+    placeholders = ",".join("?" for _ in chunk_ids)
+    rows = conn.execute(
+        f"SELECT * FROM chunks WHERE chunk_id IN ({placeholders})",
+        chunk_ids,
+    ).fetchall()
+    return {row["chunk_id"]: row for row in rows}
+
+
+def score_candidates_tfidf(
+    *,
+    total_chunks: int,
     candidates: dict[str, dict[str, int]],
     query_terms: list[str],
+    document_frequency_by_term: dict[str, int],
 ) -> list[tuple[str, float, dict[str, int], dict[str, float]]]:
-    if not candidates:
-        return []
-
-    total_chunks = conn.execute("SELECT COUNT(*) AS count FROM chunks").fetchone()["count"] or 1
     query_counts = Counter(query_terms)
     scored: list[tuple[str, float, dict[str, int], dict[str, float]]] = []
-
-    doc_freq_cache: dict[str, int] = {}
-    idf_cache: dict[str, float] = {}
-    for term in sorted(set(query_terms)):
-        doc_freq_cache[term] = conn.execute(
-            "SELECT COUNT(*) AS count FROM postings WHERE term = ?",
-            (term,),
-        ).fetchone()["count"]
-        idf_cache[term] = math.log((1 + total_chunks) / (1 + doc_freq_cache[term])) + 1.0
+    idf_cache = {
+        term: tfidf_idf(total_chunks, document_frequency_by_term.get(term, 0))
+        for term in set(query_terms)
+    }
 
     for chunk_id, term_hits in candidates.items():
         score = 0.0
@@ -214,6 +243,104 @@ def score_candidates(
         scored.append((chunk_id, score, term_hits, contributions))
 
     return sorted(scored, key=lambda item: (-item[1], item[0]))
+
+
+def score_candidates_bm25(
+    *,
+    total_chunks: int,
+    average_document_length: float,
+    candidates: dict[str, dict[str, int]],
+    query_terms: list[str],
+    document_frequency_by_term: dict[str, int],
+    chunk_rows: dict[str, sqlite3.Row],
+    k1: float,
+    b: float,
+) -> list[tuple[str, float, dict[str, int], dict[str, float]]]:
+    query_counts = Counter(query_terms)
+    scored: list[tuple[str, float, dict[str, int], dict[str, float]]] = []
+    idf_cache = {
+        term: bm25_idf(total_chunks, document_frequency_by_term.get(term, 0))
+        for term in set(query_terms)
+    }
+
+    safe_avgdl = average_document_length if average_document_length > 0 else 1.0
+    for chunk_id, term_hits in candidates.items():
+        row = chunk_rows.get(chunk_id)
+        if row is None:
+            continue
+        document_length = float(row["token_count"] or 0.0)
+        length_norm = k1 * (1.0 - b + b * (document_length / safe_avgdl))
+        score = 0.0
+        contributions: dict[str, float] = {}
+        for term, query_count in query_counts.items():
+            term_frequency = float(term_hits.get(term, 0))
+            if term_frequency <= 0:
+                continue
+            tf_component = ((term_frequency * (k1 + 1.0)) / (term_frequency + length_norm))
+            contribution = float(query_count) * idf_cache[term] * tf_component
+            contributions[term] = round(contribution, 6)
+            score += contribution
+        scored.append((chunk_id, score, term_hits, contributions))
+
+    return sorted(scored, key=lambda item: (-item[1], item[0]))
+
+
+def score_candidates(
+    conn: sqlite3.Connection,
+    candidates: dict[str, dict[str, int]],
+    query_terms: list[str],
+    *,
+    ranker: RankerName,
+    bm25_k1: float,
+    bm25_b: float,
+) -> tuple[list[tuple[str, float, dict[str, int], dict[str, float]]], dict[str, sqlite3.Row], dict[str, Any]]:
+    if not candidates:
+        return [], {}, {}
+
+    stats = corpus_stats(conn)
+    total_chunks = int(stats["chunk_count"] or 1)
+    document_frequency_by_term = {
+        term: int(
+            conn.execute(
+                "SELECT COUNT(*) AS count FROM postings WHERE term = ?",
+                (term,),
+            ).fetchone()["count"]
+            or 0
+        )
+        for term in sorted(set(query_terms))
+    }
+    chunk_rows = fetch_chunk_rows(conn, list(candidates))
+
+    if ranker == "bm25":
+        scored = score_candidates_bm25(
+            total_chunks=total_chunks,
+            average_document_length=float(stats["average_document_length"] or 0.0),
+            candidates=candidates,
+            query_terms=query_terms,
+            document_frequency_by_term=document_frequency_by_term,
+            chunk_rows=chunk_rows,
+            k1=bm25_k1,
+            b=bm25_b,
+        )
+        ranker_diagnostics = {
+            "ranker": "bm25_v1",
+            "bm25_k1": bm25_k1,
+            "bm25_b": bm25_b,
+            "average_document_length": round(float(stats["average_document_length"] or 0.0), 6),
+            "document_length_field": "chunks.token_count",
+        }
+    else:
+        scored = score_candidates_tfidf(
+            total_chunks=total_chunks,
+            candidates=candidates,
+            query_terms=query_terms,
+            document_frequency_by_term=document_frequency_by_term,
+        )
+        ranker_diagnostics = {
+            "ranker": "tfidf_v1",
+        }
+
+    return scored, chunk_rows, ranker_diagnostics
 
 
 def apply_source_diversity(
@@ -257,17 +384,6 @@ def apply_source_diversity(
     }
 
 
-def fetch_chunk_rows(conn: sqlite3.Connection, chunk_ids: list[str]) -> dict[str, sqlite3.Row]:
-    if not chunk_ids:
-        return {}
-    placeholders = ",".join("?" for _ in chunk_ids)
-    rows = conn.execute(
-        f"SELECT * FROM chunks WHERE chunk_id IN ({placeholders})",
-        chunk_ids,
-    ).fetchall()
-    return {row["chunk_id"]: row for row in rows}
-
-
 def query_index(
     index_path: Path,
     query_text: str,
@@ -277,6 +393,9 @@ def query_index(
     filters: dict[str, str] | None = None,
     max_chunks_per_child_pdf: int | None = None,
     max_chunks_per_bug_patch: int | None = None,
+    ranker: RankerName = "tfidf",
+    bm25_k1: float = 1.2,
+    bm25_b: float = 0.75,
 ) -> KBChunkQueryContext:
     query_terms = tokenize(query_text)
     query_id = stable_query_id(query_text)
@@ -297,8 +416,14 @@ def query_index(
             limit_candidates=limit_candidates,
             filters=active_filters,
         )
-        scored = score_candidates(conn, candidates, query_terms)
-        scored_chunk_rows = fetch_chunk_rows(conn, [chunk_id for chunk_id, _, _, _ in scored])
+        scored, scored_chunk_rows, ranker_diagnostics = score_candidates(
+            conn,
+            candidates,
+            query_terms,
+            ranker=ranker,
+            bm25_k1=bm25_k1,
+            bm25_b=bm25_b,
+        )
         diverse_scored, diversity_diagnostics = apply_source_diversity(
             scored,
             scored_chunk_rows,
@@ -351,6 +476,9 @@ def query_index(
             "filters": active_filters,
             "max_chunks_per_child_pdf": max_chunks_per_child_pdf,
             "max_chunks_per_bug_patch": max_chunks_per_bug_patch,
+            "ranker": ranker,
+            "bm25_k1": bm25_k1,
+            "bm25_b": bm25_b,
         },
         index={
             "index_path": str(index_path),
@@ -364,7 +492,8 @@ def query_index(
             "scored_count": len(scored),
             "post_diversity_scored_count": len(diverse_scored),
             "returned_count": len(results),
-            "ranker": "term_frequency_idf_v1",
+            "ranker": ranker_diagnostics["ranker"],
+            "ranker_diagnostics": ranker_diagnostics,
             "sort": "score desc, chunk_id asc",
             "source_diversity": diversity_diagnostics,
         },
@@ -393,6 +522,7 @@ def write_query_context(context: KBChunkQueryContext, output_path: Path) -> None
 
 def print_results(context: KBChunkQueryContext) -> None:
     print(f"Query ID: {context.query['query_id']}")
+    print(f"Ranker: {context.diagnostics['ranker']}")
     print(f"Query terms: {', '.join(context.query['query_terms'])}")
     if context.query.get("filters"):
         print(f"Filters: {context.query['filters']}")
@@ -403,7 +533,8 @@ def print_results(context: KBChunkQueryContext) -> None:
     for term, details in context.diagnostics.get("term_diagnostics", {}).items():
         print(
             f"   {term}: global_postings={details['global_posting_count']} "
-            f"filtered_postings={details['filtered_posting_count']} idf={details['idf']}"
+            f"filtered_postings={details['filtered_posting_count']} "
+            f"tfidf_idf={details['tfidf_idf']} bm25_idf={details['bm25_idf']}"
         )
     for result in context.results:
         print("")
@@ -420,7 +551,7 @@ def print_results(context: KBChunkQueryContext) -> None:
 
 def parse_args() -> argparse.Namespace:
     root = repo_root()
-    parser = argparse.ArgumentParser(description="Query the Gate 3/4 KB chunk lexical index.")
+    parser = argparse.ArgumentParser(description="Query the Gate 3/4/5 KB chunk lexical index.")
     parser.add_argument("query", help="Query text to search for.")
     parser.add_argument(
         "--index-path",
@@ -436,6 +567,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--top-k", type=int, default=10, help="Maximum ranked chunks to return.")
     parser.add_argument("--limit-candidates", type=int, default=5000, help="Maximum postings to read per query term.")
+    parser.add_argument("--ranker", choices=["tfidf", "bm25"], default="tfidf", help="Deterministic ranking model.")
+    parser.add_argument("--bm25-k1", type=float, default=1.2, help="BM25 k1 saturation parameter.")
+    parser.add_argument("--bm25-b", type=float, default=0.75, help="BM25 length normalization parameter.")
     parser.add_argument("--kb-document-id", help="Filter results to a KB document ID.")
     parser.add_argument("--maintenance-pack", help="Filter results to a maintenance pack label.")
     parser.add_argument("--bug-patch-number", help="Filter results to a bug / patch number.")
@@ -466,6 +600,9 @@ def main() -> None:
         filters=filters,
         max_chunks_per_child_pdf=args.max_chunks_per_child_pdf,
         max_chunks_per_bug_patch=args.max_chunks_per_bug_patch,
+        ranker=args.ranker,
+        bm25_k1=args.bm25_k1,
+        bm25_b=args.bm25_b,
     )
     print_results(context)
 
