@@ -1,2 +1,12 @@
 */__pycache__/
 *.pyc
+
+# Local Python environments
+.venv/
+backend/.venv/
+
+# Generated KB extraction outputs
+kbs/extracted/
+
+# Keep generated manifests reviewable only when intentionally added.
+# Do not ignore kbs/manifests/ by default.
