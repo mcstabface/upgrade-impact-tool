@@ -75,8 +75,18 @@ def build_steps(query: str, filtered_product: str) -> list[PipelineStep]:
             args=[],
         ),
         PipelineStep(
+            label="Validate KB BM25 evaluation contexts",
+            module="app.scripts.validate_gate5_kb_bm25_eval",
+            args=[],
+        ),
+        PipelineStep(
             label="Write KB retrieval summary report",
             module="app.scripts.write_kb_retrieval_summary",
+            args=[],
+        ),
+        PipelineStep(
+            label="Write KB BM25 comparison summary report",
+            module="app.scripts.write_kb_bm25_comparison_summary",
             args=[],
         ),
     ]
@@ -86,6 +96,7 @@ EXPECTED_OUTPUTS = [
     "kbs/indexes/kb_chunk_lexical_index.sqlite",
     "kbs/manifests/kb_chunk_lexical_index_manifest.json",
     "kbs/manifests/kb_retrieval_summary.md",
+    "kbs/manifests/kb_bm25_comparison_summary.md",
 ]
 
 
