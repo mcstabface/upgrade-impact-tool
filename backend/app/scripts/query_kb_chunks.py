@@ -71,6 +71,21 @@ def stable_query_id(query_text: str) -> str:
     return hashlib.sha256(query_text.encode("utf-8")).hexdigest()[:16]
 
 
+def stable_query_context_id(context: KBChunkQueryContext) -> str:
+    identity = {
+        "query_text": context.query.get("query_text"),
+        "filters": context.query.get("filters") or {},
+        "top_k": context.query.get("top_k"),
+        "limit_candidates": context.query.get("limit_candidates"),
+        "max_chunks_per_child_pdf": context.query.get("max_chunks_per_child_pdf"),
+        "max_chunks_per_bug_patch": context.query.get("max_chunks_per_bug_patch"),
+        "ranker": context.diagnostics.get("ranker"),
+        "schema_version": context.schema_version,
+    }
+    payload = json.dumps(identity, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
 def connect(index_path: Path) -> sqlite3.Connection:
     if not index_path.exists():
         raise FileNotFoundError(f"Lexical index not found: {index_path}")
@@ -363,6 +378,14 @@ def output_path_for_query(output_root: Path, query_text: str) -> Path:
     return output_root / f"{slug}__{query_id}.query_context.json"
 
 
+def output_path_for_context(output_root: Path, context: KBChunkQueryContext) -> Path:
+    query_text = str(context.query.get("query_text") or "query")
+    query_id = context.query.get("query_id") or stable_query_id(query_text)
+    context_id = stable_query_context_id(context)
+    slug = safe_slug(query_text)
+    return output_root / f"{slug}__{query_id}__{context_id}.query_context.json"
+
+
 def write_query_context(context: KBChunkQueryContext, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(asdict(context), indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -447,7 +470,7 @@ def main() -> None:
     print_results(context)
 
     if not args.no_write:
-        output_path = output_path_for_query(args.output_root, args.query)
+        output_path = output_path_for_context(args.output_root, context)
         write_query_context(context, output_path)
         print("")
         print(f"Wrote KB query context artifact: {output_path}")
