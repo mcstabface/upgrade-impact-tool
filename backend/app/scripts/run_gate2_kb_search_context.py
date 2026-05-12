@@ -20,10 +20,15 @@ PIPELINE_STEPS = [
         label="Extract KB matched PFDS search context artifacts",
         module="app.scripts.extract_kb_search_context",
     ),
+    PipelineStep(
+        label="Chunk KB search context artifacts",
+        module="app.scripts.chunk_kb_search_context",
+    ),
 ]
 
 EXPECTED_OUTPUTS = [
     "kbs/manifests/kb_search_context_manifest.json",
+    "kbs/manifests/kb_search_context_chunks_manifest.json",
 ]
 
 
