@@ -92,7 +92,7 @@
           "mapping_warnings": [],
           "placeholder_attachment_count": 1,
           "placeholder_attachment_paths": [
-            "kbs/extracted/CCS_26.4_MP1.2.0_PFDs_Portfolio/0_No_PFDS_Provided_5.pdf"
+            "kbs/extracted/CCS_26.4_MP1.2.0_PFDs_Portfolio/0_No_PFDS_Provided_6.pdf"
           ],
           "product": null,
           "severity": "LOW",
@@ -560,7 +560,7 @@
   ],
   "evidence_map_manifest_path": "kbs/manifests/kb_evidence_map.json",
   "exception_count": 23,
-  "generated_utc": "2026-05-12T13:02:41.965727+00:00",
+  "generated_utc": "2026-05-12T13:17:10.915657+00:00",
   "manifest_type": "kb_evidence_exceptions.v1",
   "severity_counts": {
     "HIGH": 10,
