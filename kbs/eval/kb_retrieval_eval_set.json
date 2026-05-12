@@ -1,6 +1,6 @@
 {
   "fixture_type": "kb_retrieval_eval_set.v1",
-  "description": "Initial deterministic retrieval evaluation set for Gate 5. Assertions intentionally validate lineage/category/product behavior, not business impact conclusions.",
+  "description": "Initial deterministic retrieval evaluation set for Gate 5. Assertions intentionally validate lineage/category/product behavior, not business impact conclusions. Cases are aligned to observed indexed evidence and should fail only when retrieval behavior regresses.",
   "cases": [
     {
       "case_id": "usage_rates_unfiltered_bm25",
@@ -32,21 +32,21 @@
       }
     },
     {
-      "case_id": "rates_filtered_ccb_bm25",
+      "case_id": "rates_filtered_smdf_usage_bm25",
       "query": "rates",
       "ranker": "bm25",
       "top_k": 5,
       "filters": {
-        "product": "Oracle Utilities Customer Care and Billing",
-        "category": "Rates"
+        "product": "Oracle Utilities Service and Measurement Data Foundation",
+        "category": "Usage"
       },
       "max_chunks_per_child_pdf": 1,
       "expect_all": {
-        "product": "Oracle Utilities Customer Care and Billing",
-        "category": "Rates"
+        "product": "Oracle Utilities Service and Measurement Data Foundation",
+        "category": "Usage"
       },
       "expect_any": {
-        "bug_patch_number": ["38558279", "39020780", "39003305", "38742668"]
+        "bug_patch_number": ["39002995", "39007114", "39127058", "38794940", "38966530"]
       }
     }
   ]
