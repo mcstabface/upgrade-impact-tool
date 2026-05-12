@@ -2,10 +2,10 @@
   "artifact_type": "kb_retrieval_evaluation",
   "case_count": 3,
   "eval_set_path": "kbs/eval/kb_retrieval_eval_set.json",
-  "failed_count": 1,
-  "generated_utc": "2026-05-12T14:34:18.658991+00:00",
+  "failed_count": 0,
+  "generated_utc": "2026-05-12T14:35:38.784225+00:00",
   "index_path": "kbs/indexes/kb_chunk_lexical_index.sqlite",
-  "passed_count": 2,
+  "passed_count": 3,
   "results": [
     {
       "case_id": "usage_rates_unfiltered_bm25",
@@ -160,16 +160,74 @@
       ]
     },
     {
-      "case_id": "rates_filtered_ccb_bm25",
-      "failures": [
-        "query returned no results",
-        "expect_any failed for bug_patch_number: expected one of ['38558279', '38742668', '39003305', '39020780']; no returned result matched."
-      ],
+      "case_id": "rates_filtered_smdf_usage_bm25",
+      "failures": [],
       "query": "rates",
       "ranker": "bm25_v1",
-      "returned_count": 0,
-      "status": "FAIL",
-      "top_results": []
+      "returned_count": 5,
+      "status": "PASS",
+      "top_results": [
+        {
+          "bug_patch_number": "38794940",
+          "category": "Usage",
+          "chunk_id": "KB875759::38794940::5778c1098db572c3169b864f63675e17c5f1d68142e224502e279d4484e0203d::0004",
+          "kb_document_id": "KB875759",
+          "matched_terms": [
+            "rates"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 1,
+          "score": 4.639323
+        },
+        {
+          "bug_patch_number": "39127058",
+          "category": "Usage",
+          "chunk_id": "KB881135::39127058::f5959386c0f4d87ca9473dc8ab104739e42a3ed3b3b05d60127d78f3d81a6674::0004",
+          "kb_document_id": "KB881135",
+          "matched_terms": [
+            "rates"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 2,
+          "score": 4.450069
+        },
+        {
+          "bug_patch_number": "39002995",
+          "category": "Usage",
+          "chunk_id": "KB875759::39002995::782dd1bd928ad04b242485cc9d6bb0a305bb199e62bd42a09aaa0c70880ec68b::0006",
+          "kb_document_id": "KB875759",
+          "matched_terms": [
+            "rates"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 3,
+          "score": 4.411156
+        },
+        {
+          "bug_patch_number": "39007114",
+          "category": "Usage",
+          "chunk_id": "KB881136::39007114::c7e0e1085aae05331b447fe98e78216a48f3909404c93d02d0ea56d7ea5e99ee::0006",
+          "kb_document_id": "KB881136",
+          "matched_terms": [
+            "rates"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 4,
+          "score": 4.411156
+        },
+        {
+          "bug_patch_number": "38966530",
+          "category": "Usage",
+          "chunk_id": "KB881136::38966530::49006a8f0a51e0da7b55fb68fe1de172597f0ec356b7cfcf0d5dc8da1522337e::0005",
+          "kb_document_id": "KB881136",
+          "matched_terms": [
+            "rates"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 5,
+          "score": 3.489463
+        }
+      ]
     }
   ],
   "schema_version": "kb_retrieval_evaluation.v1"
