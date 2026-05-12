@@ -28,11 +28,16 @@ PIPELINE_STEPS = [
         label="Validate KB search context manifests",
         module="app.scripts.validate_gate2_kb_search_context",
     ),
+    PipelineStep(
+        label="Write KB search context summary report",
+        module="app.scripts.write_kb_search_context_summary",
+    ),
 ]
 
 EXPECTED_OUTPUTS = [
     "kbs/manifests/kb_search_context_manifest.json",
     "kbs/manifests/kb_search_context_chunks_manifest.json",
+    "kbs/manifests/kb_search_context_summary.md",
 ]
 
 
