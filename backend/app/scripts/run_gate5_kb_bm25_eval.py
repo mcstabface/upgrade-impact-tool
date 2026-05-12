@@ -89,6 +89,11 @@ def build_steps(query: str, filtered_product: str) -> list[PipelineStep]:
             module="app.scripts.write_kb_bm25_comparison_summary",
             args=[],
         ),
+        PipelineStep(
+            label="Run KB retrieval evaluation fixture",
+            module="app.scripts.evaluate_kb_retrieval",
+            args=[],
+        ),
     ]
 
 
@@ -97,6 +102,8 @@ EXPECTED_OUTPUTS = [
     "kbs/manifests/kb_chunk_lexical_index_manifest.json",
     "kbs/manifests/kb_retrieval_summary.md",
     "kbs/manifests/kb_bm25_comparison_summary.md",
+    "kbs/manifests/kb_retrieval_eval_results.json",
+    "kbs/manifests/kb_retrieval_eval_summary.md",
 ]
 
 
@@ -120,7 +127,7 @@ def verify_outputs(repository_root: Path) -> list[str]:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run Gate 5 deterministic BM25 ranking comparison checks.")
+    parser = argparse.ArgumentParser(description="Run Gate 5 deterministic BM25 ranking and retrieval evaluation checks.")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without running them.")
     parser.add_argument("--query", default=DEFAULT_QUERY, help="Query used for TF-IDF/BM25 comparison.")
     parser.add_argument("--filtered-product", default=DEFAULT_FILTERED_PRODUCT, help="Product filter for filtered comparison query.")
