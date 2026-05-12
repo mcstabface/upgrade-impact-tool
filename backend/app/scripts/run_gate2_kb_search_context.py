@@ -24,6 +24,10 @@ PIPELINE_STEPS = [
         label="Chunk KB search context artifacts",
         module="app.scripts.chunk_kb_search_context",
     ),
+    PipelineStep(
+        label="Validate KB search context manifests",
+        module="app.scripts.validate_gate2_kb_search_context",
+    ),
 ]
 
 EXPECTED_OUTPUTS = [
