@@ -1,6 +1,6 @@
 # KB PFDS Retrieval Summary
 
-Generated UTC: `2026-05-12T14:03:26.320864+00:00`
+Generated UTC: `2026-05-12T14:08:42.330714+00:00`
 
 ## Overview
 
@@ -117,15 +117,15 @@ Gate 3 builds deterministic lexical retrieval over Gate 2 PFDS chunks. The index
 - Query artifact: `/home/stabby/Documents/upgrade-impact-tool/kbs/query_context/rates_billing_usage__9ada4c1a54049658.query_context.json`
 - Query text: `rates billing usage`
 - Query terms: `rates, billing, usage`
-- Candidate chunks: 504
-- Scored chunks: 504
+- Candidate chunks: 373
+- Scored chunks: 373
 - Returned chunks: 5
 - Ranker: `term_frequency_idf_v1`
 
 | Rank | Score | KB | Bug / Patch | Product | Category | Matched Terms |
 |---:|---:|---|---|---|---|---|
-| 1 | 68.70211 | KB881135 | 39109281 | Oracle Utilities Service and Measurement Data Foundation | Usage Rules | usage |
-| 2 | 65.954026 | KB875759 | 38884483 | Oracle Utilities Service and Measurement Data Foundation | Usage Rules | usage |
-| 3 | 65.954026 | KB881135 | 39187679 | Oracle Utilities Service and Measurement Data Foundation | Usage | usage |
-| 4 | 63.205941 | KB875759 | 38884483 | Oracle Utilities Service and Measurement Data Foundation | Usage Rules | usage |
-| 5 | 61.145076 | KB875759 | 39002995 | Oracle Utilities Service and Measurement Data Foundation | Usage | rates, usage |
+| 1 | 42.116361 | KB881135 | 39064768 | Oracle Utilities Customer Care and Billing | Conversion | billing, usage |
+| 2 | 31.124023 | KB881135 | 39234264 | Oracle Utilities Customer Care and Billing | Billing | billing, usage |
+| 3 | 29.271033 | KB869018 | 38848234 | Oracle Utilities Customer Care and Billing | Billing | billing, usage |
+| 4 | 22.87977 | KB881135 | 38959224 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage |
+| 5 | 21.05818 | KB881136 | 38959233 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage |
