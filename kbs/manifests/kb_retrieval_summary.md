@@ -1,6 +1,6 @@
 # KB PFDS Retrieval Summary
 
-Generated UTC: `2026-05-12T14:08:42.330714+00:00`
+Generated UTC: `2026-05-12T14:20:48.156094+00:00`
 
 ## Overview
 
@@ -16,7 +16,7 @@ Generated UTC: `2026-05-12T14:08:42.330714+00:00`
 
 ## Interpretation
 
-Gate 3 builds deterministic lexical retrieval over Gate 2 PFDS chunks. The index is a retrieval substrate only; it does not generate upgrade impact analysis or infer business truth. Every returned chunk remains tied to KB, portfolio, child PDF, and bug/patch lineage.
+Gate 4 extends deterministic lexical retrieval with explainability and controls. The retrieval layer can now show why each term contributed, constrain candidates by lineage fields, and limit repeated chunks from the same source. It still does not generate upgrade impact analysis.
 
 ## Per-KB Index Breakdown
 
@@ -114,18 +114,50 @@ Gate 3 builds deterministic lexical retrieval over Gate 2 PFDS chunks. The index
 
 ## Latest Smoke Query
 
-- Query artifact: `/home/stabby/Documents/upgrade-impact-tool/kbs/query_context/rates_billing_usage__9ada4c1a54049658.query_context.json`
+- Query artifact: `/home/stabby/Documents/upgrade-impact-tool/kbs/query_context/rates_billing_usage__9ada4c1a54049658__e2c0da700deed94f.query_context.json`
+- Query context schema: `kb_chunk_query_context.v2`
 - Query text: `rates billing usage`
 - Query terms: `rates, billing, usage`
+- Active filters: `{"product": "Oracle Utilities Customer Care and Billing"}`
 - Candidate chunks: 373
 - Scored chunks: 373
+- Post-diversity scored chunks: 53
 - Returned chunks: 5
 - Ranker: `term_frequency_idf_v1`
 
-| Rank | Score | KB | Bug / Patch | Product | Category | Matched Terms |
-|---:|---:|---|---|---|---|---|
-| 1 | 42.116361 | KB881135 | 39064768 | Oracle Utilities Customer Care and Billing | Conversion | billing, usage |
-| 2 | 31.124023 | KB881135 | 39234264 | Oracle Utilities Customer Care and Billing | Billing | billing, usage |
-| 3 | 29.271033 | KB869018 | 38848234 | Oracle Utilities Customer Care and Billing | Billing | billing, usage |
-| 4 | 22.87977 | KB881135 | 38959224 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage |
-| 5 | 21.05818 | KB881136 | 38959233 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage |
+### Term Diagnostics
+
+| Term | Global Postings | Filtered Postings | IDF | Candidate Limited |
+|---|---:|---:|---:|---|
+| billing | 393 | 371 | 1.82159 | False |
+| rates | 27 | 0 | 4.465736 | False |
+| usage | 155 | 31 | 2.748084 | False |
+
+### Source Diversity Controls
+
+- Enabled: True
+- Max chunks per child PDF: 1
+- Max chunks per bug / patch: None
+
+| Exclusion Reason | Count |
+|---|---:|
+| max_chunks_per_child_pdf | 320 |
+
+### Ranked Results
+
+| Rank | Score | KB | Bug / Patch | Product | Category | Matched Terms | Score Contributions |
+|---:|---:|---|---|---|---|---|---|
+| 1 | 42.116361 | KB881135 | 39064768 | Oracle Utilities Customer Care and Billing | Conversion | billing, usage | billing:3.643179, usage:38.473182 |
+| 2 | 31.124023 | KB881135 | 39234264 | Oracle Utilities Customer Care and Billing | Billing | billing, usage | billing:3.643179, usage:27.480844 |
+| 3 | 29.271033 | KB869018 | 38848234 | Oracle Utilities Customer Care and Billing | Billing | billing, usage | billing:7.286358, usage:21.984675 |
+| 4 | 22.87977 | KB881135 | 38959224 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage | billing:3.643179, usage:19.236591 |
+| 5 | 21.05818 | KB881136 | 38959233 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage | billing:1.82159, usage:19.236591 |
+
+## Recent Query Context Artifacts
+
+| Artifact | Schema | Query | Filters | Returned | Diversity Enabled |
+|---|---|---|---|---:|---|
+| `rates_billing_usage__9ada4c1a54049658__e2c0da700deed94f.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{"product": "Oracle Utilities Customer Care and Billing"}` | 5 | True |
+| `rates_billing_usage__9ada4c1a54049658__9253a81d8c710522.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{}` | 5 | True |
+| `rates_billing_usage__9ada4c1a54049658.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{"product": "Oracle Utilities Customer Care and Billing"}` | 5 | True |
+| `market_transaction_message_error__230d1540fdb3fc90.query_context.json` | kb_chunk_query_context.v1 | market transaction message error | `{}` | 5 | False |
