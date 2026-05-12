@@ -34,6 +34,15 @@ class ExtractedAttachmentRecord:
 
 
 @dataclass(frozen=True)
+class UnmappedAttachmentRecord:
+    parent_portfolio_file: str
+    child_original_filename: str
+    child_output_filename: str
+    child_output_path: str
+    reason: str
+
+
+@dataclass(frozen=True)
 class PortfolioExtractionRecord:
     parent_portfolio_file: str
     parent_portfolio_path: str
@@ -43,9 +52,11 @@ class PortfolioExtractionRecord:
     embedded_file_count: int
     extracted_file_count: int
     candidate_fix_identifier_count: int
+    unmapped_attachment_count: int
     extraction_status: str
     extraction_error: str | None
     extracted_attachments: list[ExtractedAttachmentRecord] = field(default_factory=list)
+    unmapped_attachments: list[UnmappedAttachmentRecord] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -57,8 +68,10 @@ class PortfolioExtractionManifest:
     portfolio_count: int
     extracted_attachment_count: int
     candidate_fix_identifier_count: int
+    unmapped_attachment_count: int
     failed_portfolio_count: int
     portfolios: list[PortfolioExtractionRecord]
+    unmapped_attachments: list[UnmappedAttachmentRecord]
     warnings: list[str]
 
 
@@ -149,6 +162,21 @@ def read_embedded_files(reader: PdfReader) -> list[tuple[str, bytes, str | None]
     return attachments
 
 
+def build_unmapped_record(attachment: ExtractedAttachmentRecord) -> UnmappedAttachmentRecord | None:
+    if attachment.extraction_status != "EXTRACTED":
+        return None
+    if attachment.candidate_fix_identifier is not None:
+        return None
+
+    return UnmappedAttachmentRecord(
+        parent_portfolio_file=attachment.parent_portfolio_file,
+        child_original_filename=attachment.child_original_filename,
+        child_output_filename=attachment.child_output_filename,
+        child_output_path=attachment.child_output_path,
+        reason="NO_BUG_OR_ENHANCEMENT_IDENTIFIER_IN_FILENAME",
+    )
+
+
 def extract_portfolio(
     portfolio_path: Path,
     *,
@@ -173,9 +201,11 @@ def extract_portfolio(
             embedded_file_count=0,
             extracted_file_count=0,
             candidate_fix_identifier_count=0,
+            unmapped_attachment_count=0,
             extraction_status="FAILED",
             extraction_error=str(exc),
             extracted_attachments=[],
+            unmapped_attachments=[],
         )
 
     extracted: list[ExtractedAttachmentRecord] = []
@@ -217,6 +247,7 @@ def extract_portfolio(
 
     successful_count = sum(1 for item in extracted if item.extraction_status == "EXTRACTED")
     candidate_fix_count = sum(1 for item in extracted if item.candidate_fix_identifier is not None)
+    unmapped = [record for item in extracted if (record := build_unmapped_record(item)) is not None]
     if not embedded_files:
         status = "NO_EMBEDDED_FILES"
     elif successful_count == len(embedded_files):
@@ -235,9 +266,11 @@ def extract_portfolio(
         embedded_file_count=len(embedded_files),
         extracted_file_count=successful_count,
         candidate_fix_identifier_count=candidate_fix_count,
+        unmapped_attachment_count=len(unmapped),
         extraction_status=status,
         extraction_error=None,
         extracted_attachments=extracted,
+        unmapped_attachments=unmapped,
     )
 
 
@@ -258,6 +291,7 @@ def build_manifest(source_inventory_path: Path, extraction_root: Path) -> Portfo
         )
         for portfolio_path in portfolio_paths
     ]
+    unmapped = [item for record in records for item in record.unmapped_attachments]
 
     return PortfolioExtractionManifest(
         manifest_type="pdf_portfolio_extraction.v1",
@@ -267,8 +301,10 @@ def build_manifest(source_inventory_path: Path, extraction_root: Path) -> Portfo
         portfolio_count=len(records),
         extracted_attachment_count=sum(record.extracted_file_count for record in records),
         candidate_fix_identifier_count=sum(record.candidate_fix_identifier_count for record in records),
+        unmapped_attachment_count=len(unmapped),
         failed_portfolio_count=sum(1 for record in records if record.extraction_status == "FAILED"),
         portfolios=records,
+        unmapped_attachments=unmapped,
         warnings=warnings,
     )
 
@@ -317,6 +353,7 @@ def main() -> None:
     print(f"Portfolio files processed: {manifest.portfolio_count}")
     print(f"Extracted attachments: {manifest.extracted_attachment_count}")
     print(f"Candidate fix identifiers: {manifest.candidate_fix_identifier_count}")
+    print(f"Unmapped attachments: {manifest.unmapped_attachment_count}")
     print(f"Failed portfolios: {manifest.failed_portfolio_count}")
 
 
