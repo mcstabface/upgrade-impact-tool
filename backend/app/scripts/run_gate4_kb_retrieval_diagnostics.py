@@ -60,6 +60,11 @@ def build_steps(smoke_query: str, filtered_query: str, filtered_product: str) ->
             args=[],
         ),
         PipelineStep(
+            label="Validate KB retrieval diagnostics",
+            module="app.scripts.validate_gate4_kb_retrieval_diagnostics",
+            args=[],
+        ),
+        PipelineStep(
             label="Write KB retrieval summary report",
             module="app.scripts.write_kb_retrieval_summary",
             args=[],
