@@ -14,6 +14,7 @@ from pypdf import PdfReader
 PORTFOLIO_FILENAME_RE = re.compile(r"[A-Za-z0-9_.-]+_PFDs_Portfolio\.pdf", re.IGNORECASE)
 SAFE_FILENAME_RE = re.compile(r"[^A-Za-z0-9._-]+")
 FIX_IDENTIFIER_RE = re.compile(r"(?:^|[_\s-])(?P<kind>Bug|Enh)[_\s-]+(?P<number>\d{5,})(?:$|[_\s.-])", re.IGNORECASE)
+NO_PFDS_PROVIDED_RE = re.compile(r"(?:^|[_\s-])No[_\s-]*PFDS[_\s-]*Provided(?:$|[_\s.-])", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,7 @@ class ExtractedAttachmentRecord:
     candidate_fix_type: str | None
     candidate_fix_number: str | None
     candidate_fix_identifier: str | None
+    attachment_classification: str
     extraction_status: str
     extraction_error: str | None = None
 
@@ -43,6 +45,15 @@ class UnmappedAttachmentRecord:
 
 
 @dataclass(frozen=True)
+class PlaceholderAttachmentRecord:
+    parent_portfolio_file: str
+    child_original_filename: str
+    child_output_filename: str
+    child_output_path: str
+    classification: str
+
+
+@dataclass(frozen=True)
 class PortfolioExtractionRecord:
     parent_portfolio_file: str
     parent_portfolio_path: str
@@ -52,10 +63,12 @@ class PortfolioExtractionRecord:
     embedded_file_count: int
     extracted_file_count: int
     candidate_fix_identifier_count: int
+    placeholder_attachment_count: int
     unmapped_attachment_count: int
     extraction_status: str
     extraction_error: str | None
     extracted_attachments: list[ExtractedAttachmentRecord] = field(default_factory=list)
+    placeholder_attachments: list[PlaceholderAttachmentRecord] = field(default_factory=list)
     unmapped_attachments: list[UnmappedAttachmentRecord] = field(default_factory=list)
 
 
@@ -68,9 +81,11 @@ class PortfolioExtractionManifest:
     portfolio_count: int
     extracted_attachment_count: int
     candidate_fix_identifier_count: int
+    placeholder_attachment_count: int
     unmapped_attachment_count: int
     failed_portfolio_count: int
     portfolios: list[PortfolioExtractionRecord]
+    placeholder_attachments: list[PlaceholderAttachmentRecord]
     unmapped_attachments: list[UnmappedAttachmentRecord]
     warnings: list[str]
 
@@ -99,6 +114,12 @@ def safe_filename(filename: str, fallback: str) -> str:
     base = Path(filename).name.strip() or fallback
     safe = SAFE_FILENAME_RE.sub("_", base).strip("._")
     return safe or fallback
+
+
+def classify_attachment(filename: str) -> str:
+    if NO_PFDS_PROVIDED_RE.search(filename):
+        return "NO_PFDS_PROVIDED_PLACEHOLDER"
+    return "SOURCE_ATTACHMENT"
 
 
 def extract_candidate_fix_identifier(filename: str) -> tuple[str | None, str | None, str | None]:
@@ -162,10 +183,27 @@ def read_embedded_files(reader: PdfReader) -> list[tuple[str, bytes, str | None]
     return attachments
 
 
+def build_placeholder_record(attachment: ExtractedAttachmentRecord) -> PlaceholderAttachmentRecord | None:
+    if attachment.extraction_status != "EXTRACTED":
+        return None
+    if attachment.attachment_classification != "NO_PFDS_PROVIDED_PLACEHOLDER":
+        return None
+
+    return PlaceholderAttachmentRecord(
+        parent_portfolio_file=attachment.parent_portfolio_file,
+        child_original_filename=attachment.child_original_filename,
+        child_output_filename=attachment.child_output_filename,
+        child_output_path=attachment.child_output_path,
+        classification=attachment.attachment_classification,
+    )
+
+
 def build_unmapped_record(attachment: ExtractedAttachmentRecord) -> UnmappedAttachmentRecord | None:
     if attachment.extraction_status != "EXTRACTED":
         return None
     if attachment.candidate_fix_identifier is not None:
+        return None
+    if attachment.attachment_classification == "NO_PFDS_PROVIDED_PLACEHOLDER":
         return None
 
     return UnmappedAttachmentRecord(
@@ -201,10 +239,12 @@ def extract_portfolio(
             embedded_file_count=0,
             extracted_file_count=0,
             candidate_fix_identifier_count=0,
+            placeholder_attachment_count=0,
             unmapped_attachment_count=0,
             extraction_status="FAILED",
             extraction_error=str(exc),
             extracted_attachments=[],
+            placeholder_attachments=[],
             unmapped_attachments=[],
         )
 
@@ -214,6 +254,7 @@ def extract_portfolio(
         output_name = safe_filename(original_filename, fallback=fallback_name)
         output_path = unique_output_path(output_dir, output_name)
         fix_type, fix_number, fix_identifier = extract_candidate_fix_identifier(output_name)
+        attachment_classification = classify_attachment(output_name)
 
         try:
             output_path.write_bytes(payload)
@@ -240,6 +281,7 @@ def extract_portfolio(
                 candidate_fix_type=fix_type,
                 candidate_fix_number=fix_number,
                 candidate_fix_identifier=fix_identifier,
+                attachment_classification=attachment_classification,
                 extraction_status=status,
                 extraction_error=error,
             )
@@ -247,6 +289,7 @@ def extract_portfolio(
 
     successful_count = sum(1 for item in extracted if item.extraction_status == "EXTRACTED")
     candidate_fix_count = sum(1 for item in extracted if item.candidate_fix_identifier is not None)
+    placeholders = [record for item in extracted if (record := build_placeholder_record(item)) is not None]
     unmapped = [record for item in extracted if (record := build_unmapped_record(item)) is not None]
     if not embedded_files:
         status = "NO_EMBEDDED_FILES"
@@ -266,10 +309,12 @@ def extract_portfolio(
         embedded_file_count=len(embedded_files),
         extracted_file_count=successful_count,
         candidate_fix_identifier_count=candidate_fix_count,
+        placeholder_attachment_count=len(placeholders),
         unmapped_attachment_count=len(unmapped),
         extraction_status=status,
         extraction_error=None,
         extracted_attachments=extracted,
+        placeholder_attachments=placeholders,
         unmapped_attachments=unmapped,
     )
 
@@ -291,6 +336,7 @@ def build_manifest(source_inventory_path: Path, extraction_root: Path) -> Portfo
         )
         for portfolio_path in portfolio_paths
     ]
+    placeholders = [item for record in records for item in record.placeholder_attachments]
     unmapped = [item for record in records for item in record.unmapped_attachments]
 
     return PortfolioExtractionManifest(
@@ -301,9 +347,11 @@ def build_manifest(source_inventory_path: Path, extraction_root: Path) -> Portfo
         portfolio_count=len(records),
         extracted_attachment_count=sum(record.extracted_file_count for record in records),
         candidate_fix_identifier_count=sum(record.candidate_fix_identifier_count for record in records),
+        placeholder_attachment_count=len(placeholders),
         unmapped_attachment_count=len(unmapped),
         failed_portfolio_count=sum(1 for record in records if record.extraction_status == "FAILED"),
         portfolios=records,
+        placeholder_attachments=placeholders,
         unmapped_attachments=unmapped,
         warnings=warnings,
     )
@@ -353,6 +401,7 @@ def main() -> None:
     print(f"Portfolio files processed: {manifest.portfolio_count}")
     print(f"Extracted attachments: {manifest.extracted_attachment_count}")
     print(f"Candidate fix identifiers: {manifest.candidate_fix_identifier_count}")
+    print(f"Placeholder attachments: {manifest.placeholder_attachment_count}")
     print(f"Unmapped attachments: {manifest.unmapped_attachment_count}")
     print(f"Failed portfolios: {manifest.failed_portfolio_count}")
 
