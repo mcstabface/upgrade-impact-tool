@@ -145,6 +145,26 @@ def tfidf_idf(total_chunks: int, document_frequency: int) -> float:
     return math.log((1 + total_chunks) / (1 + document_frequency)) + 1.0 if total_chunks else 0.0
 
 
+def ranker_diagnostics_for(
+    ranker: RankerName,
+    *,
+    average_document_length: float = 0.0,
+    bm25_k1: float,
+    bm25_b: float,
+) -> dict[str, Any]:
+    if ranker == "bm25":
+        return {
+            "ranker": "bm25_v1",
+            "bm25_k1": bm25_k1,
+            "bm25_b": bm25_b,
+            "average_document_length": round(float(average_document_length or 0.0), 6),
+            "document_length_field": "chunks.token_count",
+        }
+    return {
+        "ranker": "tfidf_v1",
+    }
+
+
 def fetch_term_diagnostics(conn: sqlite3.Connection, terms: list[str], *, limit_candidates: int, filters: dict[str, str]) -> dict[str, Any]:
     total_chunks = int(conn.execute("SELECT COUNT(*) AS count FROM chunks").fetchone()["count"] or 0)
     filter_clause, filter_values = build_filter_clause(filters, table_alias="c")
@@ -294,10 +314,16 @@ def score_candidates(
     bm25_k1: float,
     bm25_b: float,
 ) -> tuple[list[tuple[str, float, dict[str, int], dict[str, float]]], dict[str, sqlite3.Row], dict[str, Any]]:
-    if not candidates:
-        return [], {}, {}
-
     stats = corpus_stats(conn)
+    ranker_diagnostics = ranker_diagnostics_for(
+        ranker,
+        average_document_length=float(stats["average_document_length"] or 0.0),
+        bm25_k1=bm25_k1,
+        bm25_b=bm25_b,
+    )
+    if not candidates:
+        return [], {}, ranker_diagnostics
+
     total_chunks = int(stats["chunk_count"] or 1)
     document_frequency_by_term = {
         term: int(
@@ -322,13 +348,6 @@ def score_candidates(
             k1=bm25_k1,
             b=bm25_b,
         )
-        ranker_diagnostics = {
-            "ranker": "bm25_v1",
-            "bm25_k1": bm25_k1,
-            "bm25_b": bm25_b,
-            "average_document_length": round(float(stats["average_document_length"] or 0.0), 6),
-            "document_length_field": "chunks.token_count",
-        }
     else:
         scored = score_candidates_tfidf(
             total_chunks=total_chunks,
@@ -336,9 +355,6 @@ def score_candidates(
             query_terms=query_terms,
             document_frequency_by_term=document_frequency_by_term,
         )
-        ranker_diagnostics = {
-            "ranker": "tfidf_v1",
-        }
 
     return scored, chunk_rows, ranker_diagnostics
 
