@@ -7,6 +7,8 @@ backend/.venv/
 
 # Generated KB extraction outputs
 kbs/extracted/
+kbs/search_context/
+kbs/search_context_chunks/
 
 # Keep generated manifests reviewable only when intentionally added.
 # Do not ignore kbs/manifests/ by default.
