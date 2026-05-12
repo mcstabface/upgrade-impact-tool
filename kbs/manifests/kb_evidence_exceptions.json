@@ -1,0 +1,586 @@
+{
+  "document_count": 4,
+  "documents": [
+    {
+      "exception_count": 7,
+      "exceptions": [
+        {
+          "about_window_file": "CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf",
+          "bug_patch_number": "39100333",
+          "category": "For SGG specific Functionality",
+          "description": "On Demand Scalar Read is trying to create IMD even for external measuring components (No PFD)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 18, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Implement a new hook to trigger FT table partitioning",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 18, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Java API implementation update posts the data area schema update to get summary of docType from AIA",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 18, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.2.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Fixed the ohelp probe for 26.4 after change in ohelp doc url",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 09, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "PORTFOLIO_PLACEHOLDER_NO_PFDS",
+          "mapping_warnings": [],
+          "placeholder_attachment_count": 1,
+          "placeholder_attachment_paths": [
+            "kbs/extracted/CCS_26.4_MP1.2.0_PFDs_Portfolio/0_No_PFDS_Provided_5.pdf"
+          ],
+          "product": null,
+          "severity": "LOW",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38983801",
+          "category": "Notification Preferences",
+          "description": "Notification-related Issues",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 04, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "39007153",
+          "category": "Customer 360",
+          "description": "Additional changes to display AI-generated summary to Customer Activity History zone",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 04, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Allowlist CM classes",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 04, 2026",
+          "kb_document_id": "KB881136",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 1",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
+        }
+      ],
+      "kb_document_id": "KB881136",
+      "maintenance_pack": "MP 1",
+      "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html",
+      "status_counts": {
+        "NO_EVIDENCE_ATTACHMENT_FOUND": 3,
+        "PORTFOLIO_PLACEHOLDER_NO_PFDS": 1,
+        "ROW_MISSING_FIX_IDENTIFIER": 3
+      }
+    },
+    {
+      "exception_count": 1,
+      "exceptions": [
+        {
+          "about_window_file": "CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38932135",
+          "category": "Market Transaction Messaging",
+          "description": "Database Health Check: Orphan Records - MTM objects and system generated imports on scripts",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "April 04, 2026",
+          "kb_document_id": "KB881135",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 7",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 7.html"
+        }
+      ],
+      "kb_document_id": "KB881135",
+      "maintenance_pack": "MP 7",
+      "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 7.html",
+      "status_counts": {
+        "NO_EVIDENCE_ATTACHMENT_FOUND": 1
+      }
+    },
+    {
+      "exception_count": 8,
+      "exceptions": [
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38889566",
+          "category": "Market Transaction Messaging",
+          "description": "Custom Modification algorithm types cleanup",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38866025",
+          "category": "Market Transaction Messaging",
+          "description": "Incorrect value if Market Participant Type is set to 'AY'",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38765800",
+          "category": "Market Transaction Messaging",
+          "description": "Market Transaction Messages 867_03/810 non-final not RFP for service point with meter removed, 810s are stuck in 'Investigate' / 'Cancel' status",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38711109",
+          "category": "Market Transaction Messaging",
+          "description": "U2BILLGENPRC algorithm needs to be fixed to ignore adjustment only bill",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38803958",
+          "category": "Market Transaction Messaging",
+          "description": "Error upon viewing a service agreement - field name 'ACT_ERROR_MESSAGE' that does not exist",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38803048",
+          "category": "Market Transaction Messaging",
+          "description": "Various MTM transaction and zone errors",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38719400",
+          "category": "Market Transaction Messaging",
+          "description": "Remove 'Error Status' soft parameter from U2VALMM algorithm",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Customer requesting base classes/methods to be added on allowlist - CcbInstallationHelper",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "February 07, 2026",
+          "kb_document_id": "KB869018",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 5",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html"
+        }
+      ],
+      "kb_document_id": "KB869018",
+      "maintenance_pack": "MP 5",
+      "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html",
+      "status_counts": {
+        "NO_EVIDENCE_ATTACHMENT_FOUND": 7,
+        "ROW_MISSING_FIX_IDENTIFIER": 1
+      }
+    },
+    {
+      "exception_count": 7,
+      "exceptions": [
+        {
+          "about_window_file": "CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38877124",
+          "category": "Third Party Software",
+          "description": "Upgrade of Apache Log4j Library (No PFD)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 21, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Framework",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "BlueGreen: Table or view does not exist on grantPrivsForReadLogon.sql (No PFD)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 21, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Added allowlist CM classes (No PFD)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 21, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Add new property (related to bug 38874152)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 12, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38761631",
+          "category": "Market Transaction Messaging",
+          "description": "Remove unused Market Transaction Messaging scripts ( No PFD provided for this fix)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 07, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": "38969914",
+          "category": "Market Transaction Messaging",
+          "description": "Inbound Market-related payments with $0.00 amounts creating To Do for Overpayment and staying in Processing status, other Market Transaction Messaging bills and user interface issues (No PFD provided for this fix)",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 07, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
+          "mapping_warnings": [
+            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": "Oracle Utilities Customer to Meter",
+          "severity": "HIGH",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf",
+          "bug_patch_number": null,
+          "category": null,
+          "description": "Jaeger traces missing, add the missing port in network policies",
+          "evidence_attachment_count": 0,
+          "evidence_attachment_paths": [],
+          "hot_fix_release_label": "March 07, 2026",
+          "kb_document_id": "KB875759",
+          "kb_extraction_warnings": [
+            "Missing bug / patch number.",
+            "Missing product.",
+            "Missing category."
+          ],
+          "maintenance_pack": "MP 6",
+          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
+          "mapping_warnings": [
+            "KB row has no bug / patch identifier to join against extracted source attachments."
+          ],
+          "placeholder_attachment_count": 0,
+          "placeholder_attachment_paths": [],
+          "product": null,
+          "severity": "MEDIUM",
+          "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
+        }
+      ],
+      "kb_document_id": "KB875759",
+      "maintenance_pack": "MP 6",
+      "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html",
+      "status_counts": {
+        "NO_EVIDENCE_ATTACHMENT_FOUND": 3,
+        "ROW_MISSING_FIX_IDENTIFIER": 4
+      }
+    }
+  ],
+  "evidence_map_manifest_path": "kbs/manifests/kb_evidence_map.json",
+  "exception_count": 23,
+  "generated_utc": "2026-05-12T12:59:57.540854+00:00",
+  "manifest_type": "kb_evidence_exceptions.v1",
+  "severity_counts": {
+    "HIGH": 14,
+    "LOW": 1,
+    "MEDIUM": 8
+  },
+  "status_counts": {
+    "NO_EVIDENCE_ATTACHMENT_FOUND": 14,
+    "PORTFOLIO_PLACEHOLDER_NO_PFDS": 1,
+    "ROW_MISSING_FIX_IDENTIFIER": 8
+  }
+}
