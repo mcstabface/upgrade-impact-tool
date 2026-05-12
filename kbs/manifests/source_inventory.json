@@ -1,0 +1,354 @@
+{
+  "generated_utc": "2026-05-12T01:41:13.892951+00:00",
+  "html_source_count": 4,
+  "kb_documents": [
+    {
+      "extraction_warnings": [],
+      "hot_fix_sections": [
+        {
+          "about_window_file": "CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 23, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 18, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.2.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 09, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_26.4_MP1.2.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 04, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf"
+        }
+      ],
+      "kb_document_id": "KB881136",
+      "maintenance_pack": "MP 1",
+      "referenced_portfolios": [
+        {
+          "filename": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+          "release_version": "26.4",
+          "sha256": "f39895cfcc3395408e069e235cc68ecbcfe77ecfcd34c1e84879566056f8eb14",
+          "size_bytes": 3950226
+        },
+        {
+          "filename": "CCS_26.4_MP1.2.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_26.4_MP1.2.0_PFDs_Portfolio.pdf",
+          "release_version": "26.4",
+          "sha256": "9566487852696d927d2866c0a95c09ee4b2a39b56d38cdde102a41430f66f35b",
+          "size_bytes": 56971
+        },
+        {
+          "filename": "CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf",
+          "release_version": "26.4",
+          "sha256": "60690f6bc74f9ccab29686fac7476f95cb12dc4f0319574b5cc31121d137416a",
+          "size_bytes": 4713176
+        },
+        {
+          "filename": "CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf",
+          "release_version": "26.4",
+          "sha256": "f5504e74e2f7f28a9da32625d4f1ce571eb1fc55e365aa8d4b2ee4d48463c376",
+          "size_bytes": 924651
+        }
+      ],
+      "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html",
+      "source_html_sha256": "6c8b97d12c9522b4ea837fe235cdc754dc2e41e6cc7f02d82dccfb8235d7e06d",
+      "source_html_size_bytes": 853903
+    },
+    {
+      "extraction_warnings": [],
+      "hot_fix_sections": [
+        {
+          "about_window_file": "CCS_25.10_MP7.5.3_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "May 09, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.5.3_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "May 01, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP7.5.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 30, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.5.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 23, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 18, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 09, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "April 04, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf"
+        }
+      ],
+      "kb_document_id": "KB881135",
+      "maintenance_pack": "MP 7",
+      "referenced_portfolios": [
+        {
+          "filename": "CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "fed04d69a567481b4f95ee97f82449eddd82d54a206f9eb38aed179d897dd91e",
+          "size_bytes": 3466950
+        },
+        {
+          "filename": "CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "47f38930ec8c8e3aed30704032020510b583b7514c770ac8b41b109edeb9a4da",
+          "size_bytes": 2231934
+        },
+        {
+          "filename": "CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "3af43667c285eb7882d815f250d70bd732d9a9d32886f5ef4379bd1b989171b2",
+          "size_bytes": 285224
+        },
+        {
+          "filename": "CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "a607e6508b37007d5aec0896cce31f2ae63064c4b5d62d218bc4c1d7ad14df62",
+          "size_bytes": 1252554
+        },
+        {
+          "filename": "CCS_25.10_MP7.5.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.5.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "a19e56097b85e4a3afddf4530c7d5aa6974dc66b6475ab6dc61209a522be70f7",
+          "size_bytes": 800395
+        },
+        {
+          "filename": "CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "0bb9212a3bd6199e60eee99dee36f1b9b88a8ca1d90f0e3466cec000f2a5e38f",
+          "size_bytes": 212893
+        },
+        {
+          "filename": "CCS_25.10_MP7.5.3_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP7.5.3_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "66c3428ae6b7504f8714d740b399f11b5ace867bb772a6ca47afdb1b5ea715a7",
+          "size_bytes": 276596
+        }
+      ],
+      "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 7.html",
+      "source_html_sha256": "e9f5eb420276e3597bcd4cb2064dfa3544003ee02feb8de85d2944bb4a59cfde",
+      "source_html_size_bytes": 843740
+    },
+    {
+      "extraction_warnings": [],
+      "hot_fix_sections": [
+        {
+          "about_window_file": "CCS_25.10_MP5.5.1_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "March 12, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP5.5.1_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "February 26, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "February 21, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.2.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "February 12, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP5.2.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "February 07, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf"
+        }
+      ],
+      "kb_document_id": "KB869018",
+      "maintenance_pack": "MP 5",
+      "referenced_portfolios": [
+        {
+          "filename": "CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "a3faeb6138974fdb8b74cbc61899eedadf96dc8cf0b1b1e54de74ae38bc71871",
+          "size_bytes": 4681078
+        },
+        {
+          "filename": "CCS_25.10_MP5.2.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP5.2.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "1dcf510ee031a9b4393c1909a03f9b1f39c8117220a6f918066cfa7b57d903dd",
+          "size_bytes": 226619
+        },
+        {
+          "filename": "CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "fca40c79b38e0c6c919386ded8a4257febbd6a8523df2cec466d586b84a3b9ea",
+          "size_bytes": 3893567
+        },
+        {
+          "filename": "CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "0409ee757ec87d593e925527b752c0e63d4425579ab336a781d26d2c421623f2",
+          "size_bytes": 304303
+        },
+        {
+          "filename": "CCS_25.10_MP5.5.1_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP5.5.1_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "a9cfd13d3bab48ffbad1bcc577398d2e49d06a8f77ae253e14eff4e66297ceb5",
+          "size_bytes": 114067
+        }
+      ],
+      "source_html": "kbs/raw/February 2026 Maintenance Pack - MP 5 - Starting after MP 5.3.1.html",
+      "source_html_sha256": "48ad806d635a0a811b4392f16840aeace60939b40a2850baab282556603d27b8",
+      "source_html_size_bytes": 846667
+    },
+    {
+      "extraction_warnings": [],
+      "hot_fix_sections": [
+        {
+          "about_window_file": "CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "May 01, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "March 26, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "March 21, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "March 12, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf"
+        },
+        {
+          "about_window_file": "CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf",
+          "hot_fix_release_label": "March 07, 2026",
+          "portfolio_found": true,
+          "portfolio_path": "kbs/raw/portfolios/CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf"
+        }
+      ],
+      "kb_document_id": "KB875759",
+      "maintenance_pack": "MP 6",
+      "referenced_portfolios": [
+        {
+          "filename": "CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "6b49622ee47b220765522baf2cf1788fdd30240eed197d81012aa96501a4fb42",
+          "size_bytes": 9209380
+        },
+        {
+          "filename": "CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "a87f74e188fca9b2bae10412231489d9ae8e2a7f4dda4152131a5f26579bd740",
+          "size_bytes": 1618861
+        },
+        {
+          "filename": "CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "bc893f7bee4643bf37e54e10ebe5f968d5c767a4f309a6c5b7329de1fe66b0dc",
+          "size_bytes": 359533
+        },
+        {
+          "filename": "CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "bba790eb20ff3ccc76b8d24a2ac20e8e22876b755155a2be19b32a35049835e5",
+          "size_bytes": 785203
+        },
+        {
+          "filename": "CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf",
+          "found": true,
+          "path": "kbs/raw/portfolios/CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf",
+          "release_version": "25.10",
+          "sha256": "60d83028a89ccd8bdea8d1933063ba14c93515bd3ee3ba0cb1337b1747570df9",
+          "size_bytes": 212893
+        }
+      ],
+      "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html",
+      "source_html_sha256": "d6203cfb7366e78751c70c345985cf052f6a30646c2aa75dec77b8e33f784ac0",
+      "source_html_size_bytes": 850527
+    }
+  ],
+  "manifest_type": "kb_source_inventory.v1",
+  "missing_portfolios": [],
+  "portfolio_file_count": 21,
+  "source_root": "kbs",
+  "unreferenced_portfolios": [],
+  "warnings": []
+}
