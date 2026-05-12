@@ -13,6 +13,7 @@ from pypdf import PdfReader
 
 PORTFOLIO_FILENAME_RE = re.compile(r"[A-Za-z0-9_.-]+_PFDs_Portfolio\.pdf", re.IGNORECASE)
 SAFE_FILENAME_RE = re.compile(r"[^A-Za-z0-9._-]+")
+FIX_IDENTIFIER_RE = re.compile(r"\b(?P<kind>Bug|Enh)[_\s-]+(?P<number>\d{5,})\b", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,9 @@ class ExtractedAttachmentRecord:
     child_sha256: str
     child_size_bytes: int
     content_type: str | None
+    candidate_fix_type: str | None
+    candidate_fix_number: str | None
+    candidate_fix_identifier: str | None
     extraction_status: str
     extraction_error: str | None = None
 
@@ -38,6 +42,7 @@ class PortfolioExtractionRecord:
     output_directory: str
     embedded_file_count: int
     extracted_file_count: int
+    candidate_fix_identifier_count: int
     extraction_status: str
     extraction_error: str | None
     extracted_attachments: list[ExtractedAttachmentRecord] = field(default_factory=list)
@@ -51,6 +56,7 @@ class PortfolioExtractionManifest:
     extraction_root: str
     portfolio_count: int
     extracted_attachment_count: int
+    candidate_fix_identifier_count: int
     failed_portfolio_count: int
     portfolios: list[PortfolioExtractionRecord]
     warnings: list[str]
@@ -80,6 +86,17 @@ def safe_filename(filename: str, fallback: str) -> str:
     base = Path(filename).name.strip() or fallback
     safe = SAFE_FILENAME_RE.sub("_", base).strip("._")
     return safe or fallback
+
+
+def extract_candidate_fix_identifier(filename: str) -> tuple[str | None, str | None, str | None]:
+    match = FIX_IDENTIFIER_RE.search(filename)
+    if not match:
+        return None, None, None
+
+    raw_kind = match.group("kind").lower()
+    fix_type = "BUG" if raw_kind == "bug" else "ENHANCEMENT"
+    fix_number = match.group("number")
+    return fix_type, fix_number, f"{fix_type}:{fix_number}"
 
 
 def unique_output_path(output_dir: Path, requested_name: str) -> Path:
@@ -155,6 +172,7 @@ def extract_portfolio(
             output_directory=relpath(output_dir, repository_root),
             embedded_file_count=0,
             extracted_file_count=0,
+            candidate_fix_identifier_count=0,
             extraction_status="FAILED",
             extraction_error=str(exc),
             extracted_attachments=[],
@@ -165,6 +183,7 @@ def extract_portfolio(
         fallback_name = f"attachment_{index:03d}.pdf"
         output_name = safe_filename(original_filename, fallback=fallback_name)
         output_path = unique_output_path(output_dir, output_name)
+        fix_type, fix_number, fix_identifier = extract_candidate_fix_identifier(output_name)
 
         try:
             output_path.write_bytes(payload)
@@ -188,12 +207,16 @@ def extract_portfolio(
                 child_sha256=child_hash,
                 child_size_bytes=child_size,
                 content_type=content_type,
+                candidate_fix_type=fix_type,
+                candidate_fix_number=fix_number,
+                candidate_fix_identifier=fix_identifier,
                 extraction_status=status,
                 extraction_error=error,
             )
         )
 
     successful_count = sum(1 for item in extracted if item.extraction_status == "EXTRACTED")
+    candidate_fix_count = sum(1 for item in extracted if item.candidate_fix_identifier is not None)
     if not embedded_files:
         status = "NO_EMBEDDED_FILES"
     elif successful_count == len(embedded_files):
@@ -211,6 +234,7 @@ def extract_portfolio(
         output_directory=relpath(output_dir, repository_root),
         embedded_file_count=len(embedded_files),
         extracted_file_count=successful_count,
+        candidate_fix_identifier_count=candidate_fix_count,
         extraction_status=status,
         extraction_error=None,
         extracted_attachments=extracted,
@@ -242,6 +266,7 @@ def build_manifest(source_inventory_path: Path, extraction_root: Path) -> Portfo
         extraction_root=relpath(extraction_root, repository_root),
         portfolio_count=len(records),
         extracted_attachment_count=sum(record.extracted_file_count for record in records),
+        candidate_fix_identifier_count=sum(record.candidate_fix_identifier_count for record in records),
         failed_portfolio_count=sum(1 for record in records if record.extraction_status == "FAILED"),
         portfolios=records,
         warnings=warnings,
@@ -291,6 +316,7 @@ def main() -> None:
     print(f"Wrote portfolio extraction manifest: {args.output}")
     print(f"Portfolio files processed: {manifest.portfolio_count}")
     print(f"Extracted attachments: {manifest.extracted_attachment_count}")
+    print(f"Candidate fix identifiers: {manifest.candidate_fix_identifier_count}")
     print(f"Failed portfolios: {manifest.failed_portfolio_count}")
 
 
