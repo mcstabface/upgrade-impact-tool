@@ -1,0 +1,1806 @@
+{
+  "chunk_count": 895,
+  "collection_count": 179,
+  "collections": [
+    {
+      "bug_patch_number": "39048140",
+      "category": "Cloud Service Foundation",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Cloud Service Foundation",
+      "token_count": 638
+    },
+    {
+      "bug_patch_number": "39003305",
+      "category": "Rates",
+      "chunk_count": 11,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39003305__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__3e9c41e761b6__chunks.json",
+      "indexed_chunk_count": 11,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 2158
+    },
+    {
+      "bug_patch_number": "38919584",
+      "category": "Usage",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38919584__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__6188820e8050__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 630
+    },
+    {
+      "bug_patch_number": "38375170",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38375170__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__d4b3a7c71f48__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 522
+    },
+    {
+      "bug_patch_number": "38632832",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38632832__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__1527ad246362__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 442
+    },
+    {
+      "bug_patch_number": "38903740",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38903740__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__03db4d7a95d6__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 483
+    },
+    {
+      "bug_patch_number": "39058882",
+      "category": "Cloud Infrastructure",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39058882__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__068b600d3251__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 501
+    },
+    {
+      "bug_patch_number": "39092768",
+      "category": "Cloud Infrastructure",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39092768__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__a1f5aaaeae6e__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 522
+    },
+    {
+      "bug_patch_number": "38894740",
+      "category": "To Do",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38894740__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__50b013d74c36__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 692
+    },
+    {
+      "bug_patch_number": "38959233",
+      "category": "Case Management",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38959233__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__00b123613330__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 816
+    },
+    {
+      "bug_patch_number": "39003293",
+      "category": "Rates",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39003293__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__b5b01e92cd46__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1306
+    },
+    {
+      "bug_patch_number": "39011549",
+      "category": "Billing",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39011549__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__41b277e37067__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1233
+    },
+    {
+      "bug_patch_number": "39020780",
+      "category": "Rates",
+      "chunk_count": 35,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39020780__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__f4a9a9a677a2__chunks.json",
+      "indexed_chunk_count": 35,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 6866
+    },
+    {
+      "bug_patch_number": "39022959",
+      "category": "Credit and Collection",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39022959__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__dea8a5bb7201__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 995
+    },
+    {
+      "bug_patch_number": "39074196",
+      "category": "Start/Stop/Transfer",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39074196__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__ae9307e6761e__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 714
+    },
+    {
+      "bug_patch_number": "39078734",
+      "category": "Web Self Service",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39078734__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__af1dcaa32959__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 526
+    },
+    {
+      "bug_patch_number": "38966530",
+      "category": "Usage",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38966530__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__49006a8f0a51__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1216
+    },
+    {
+      "bug_patch_number": "39011271",
+      "category": "Communications",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39011271__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__c6bfb04f5d5c__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 628
+    },
+    {
+      "bug_patch_number": "39060465",
+      "category": "Communications",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39060465__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__fd51db4ab5ba__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 575
+    },
+    {
+      "bug_patch_number": "39017808",
+      "category": "Meter Data Management",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39017808__CCS_26.4_MP1.3.3_PFDs_Portfolio.pdf__0c919ffa5240__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 515
+    },
+    {
+      "bug_patch_number": "38429491",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38429491__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__37326cf4a2d2__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 484
+    },
+    {
+      "bug_patch_number": "38747591",
+      "category": "Security",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38747591__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__311639e29bc0__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 476
+    },
+    {
+      "bug_patch_number": "38896708",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38896708__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__5791671bb244__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 486
+    },
+    {
+      "bug_patch_number": "38913041",
+      "category": "Third Party Software",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38913041__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__e4373401e6fd__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 344
+    },
+    {
+      "bug_patch_number": "38944640",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38944640__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__95b8ff1629a0__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 425
+    },
+    {
+      "bug_patch_number": "38952117",
+      "category": "Batch",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38952117__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__bc39a1aa57eb__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 446
+    },
+    {
+      "bug_patch_number": "38954971",
+      "category": "Database",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38954971__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__8e379796221d__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 419
+    },
+    {
+      "bug_patch_number": "38957184",
+      "category": "Configuration Tools",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38957184__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__b879d41a2c1b__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 460
+    },
+    {
+      "bug_patch_number": "38963029",
+      "category": "Implementation Tools",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38963029__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__7b72486e5f83__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 466
+    },
+    {
+      "bug_patch_number": "38965137",
+      "category": "Batch",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38965137__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__d62569dfc3af__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 497
+    },
+    {
+      "bug_patch_number": "38969909",
+      "category": "Batch",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38969909__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__34dd390a3605__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 431
+    },
+    {
+      "bug_patch_number": "38975928",
+      "category": "Database",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38975928__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__b212ad7db4da__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 371
+    },
+    {
+      "bug_patch_number": "38982249",
+      "category": "Documentation",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38982249__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__73a5a1ffe5d5__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 389
+    },
+    {
+      "bug_patch_number": "38982370",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38982370__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__9620e210b8f3__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 464
+    },
+    {
+      "bug_patch_number": "38983891",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38983891__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__7a3b2d5c28f6__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 482
+    },
+    {
+      "bug_patch_number": "38996294",
+      "category": "Batch",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38996294__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__d54f136243f5__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 509
+    },
+    {
+      "bug_patch_number": "39012704",
+      "category": "Release, Patches, Env Scripts",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39012704__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__9c9ed8443018__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 433
+    },
+    {
+      "bug_patch_number": "39080275",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39080275__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__344bb20e09bf__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Framework",
+      "token_count": 497
+    },
+    {
+      "bug_patch_number": "38945318",
+      "category": "Rates",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38945318__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__1d220f301504__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1101
+    },
+    {
+      "bug_patch_number": "38991612",
+      "category": "REST APIs",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38991612__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__517879e2ed9c__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 715
+    },
+    {
+      "bug_patch_number": "38996773",
+      "category": "Conversion",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38996773__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__8d58ddaaa477__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1227
+    },
+    {
+      "bug_patch_number": "38833170",
+      "category": "360 Degree Search and View",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38833170__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__af9c3fbb672e__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 732
+    },
+    {
+      "bug_patch_number": "38950799",
+      "category": "Undetermined",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38950799__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__57f89bb7b7f2__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 622
+    },
+    {
+      "bug_patch_number": "38971845",
+      "category": "Measurement",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38971845__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__0c568eb3cb0e__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 560
+    },
+    {
+      "bug_patch_number": "38983122",
+      "category": "Usage",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__38983122__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__5a573a814f55__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1020
+    },
+    {
+      "bug_patch_number": "39007114",
+      "category": "Usage",
+      "chunk_count": 9,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39007114__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__c7e0e1085aae__chunks.json",
+      "indexed_chunk_count": 9,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1822
+    },
+    {
+      "bug_patch_number": "39021337",
+      "category": "For SGG specific Functionality",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39021337__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__0415e7fa2fa1__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 601
+    },
+    {
+      "bug_patch_number": "39030051",
+      "category": "[ORGANIZATION]",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39030051__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__2964b52e1b2e__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 948
+    },
+    {
+      "bug_patch_number": "39040075",
+      "category": "For MDM specific Functionality",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39040075__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__2091e670e195__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 648
+    },
+    {
+      "bug_patch_number": "39045691",
+      "category": "Measurement",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39045691__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__6c00d48a0658__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 408
+    },
+    {
+      "bug_patch_number": "39047227",
+      "category": "For SGG specific Functionality",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39047227__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__fdeecb8ffa36__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 621
+    },
+    {
+      "bug_patch_number": "39088202",
+      "category": "For MDM specific Functionality",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39088202__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__8948ab3163f4__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 378
+    },
+    {
+      "bug_patch_number": "39026126",
+      "category": "System Wide",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39026126__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__8c7789fbfc0f__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 418
+    },
+    {
+      "bug_patch_number": "39045293",
+      "category": "Digital Asset Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881136/KB881136__39045293__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__e1cf9154ab67__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881136",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 1040
+    },
+    {
+      "bug_patch_number": "39234264",
+      "category": "Billing",
+      "chunk_count": 8,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39234264__CCS_25.10_MP7.5.3_PFDs_Portfolio.pdf__c7242dc17a48__chunks.json",
+      "indexed_chunk_count": 8,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1495
+    },
+    {
+      "bug_patch_number": "39259213",
+      "category": "Usage",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39259213__CCS_25.10_MP7.5.3_PFDs_Portfolio.pdf__5bb4e9e236ed__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 928
+    },
+    {
+      "bug_patch_number": "39115188",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39115188__CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf__8b467833a815__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 450
+    },
+    {
+      "bug_patch_number": "38500783",
+      "category": "Cloud Infrastructure",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38500783__CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf__afdcdc433b18__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 363
+    },
+    {
+      "bug_patch_number": "39272513",
+      "category": "User Interface",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39272513__CCS_25.10_MP7.5.1_PFDs_Portfolio.pdf__45f0f9b165fe__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 437
+    },
+    {
+      "bug_patch_number": "39080566",
+      "category": "Database",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39080566__CCS_25.10_MP7.5.0_PFDs_Portfolio.pdf__0f7ba2a2c0bc__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 676
+    },
+    {
+      "bug_patch_number": "39068627",
+      "category": "Sync Request",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39068627__CCS_25.10_MP7.5.0_PFDs_Portfolio.pdf__2a4e263626ca__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 1048
+    },
+    {
+      "bug_patch_number": "39147736",
+      "category": "Conversion",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39147736__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__43dffad01442__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 444
+    },
+    {
+      "bug_patch_number": "39077897",
+      "category": "REST APIs",
+      "chunk_count": 8,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39077897__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__79225b05b0d3__chunks.json",
+      "indexed_chunk_count": 8,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1395
+    },
+    {
+      "bug_patch_number": "39064768",
+      "category": "Conversion",
+      "chunk_count": 10,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39064768__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__426d44e375aa__chunks.json",
+      "indexed_chunk_count": 10,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 2100
+    },
+    {
+      "bug_patch_number": "39004385",
+      "category": "Inbound Web Service",
+      "chunk_count": 8,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39004385__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__6fb6c80e64f5__chunks.json",
+      "indexed_chunk_count": 8,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 1285
+    },
+    {
+      "bug_patch_number": "39197009",
+      "category": "Usage Rules",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39197009__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__1b573e2fc097__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 883
+    },
+    {
+      "bug_patch_number": "37082053",
+      "category": "Usage",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__37082053__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__f652edd8d8ff__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1045
+    },
+    {
+      "bug_patch_number": "39187679",
+      "category": "Usage",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39187679__CCS_25.10_MP7.4.1_PFDs_Portfolio.pdf__646dad6633ea__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1013
+    },
+    {
+      "bug_patch_number": "38718842",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38718842__CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf__23b817782161__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 424
+    },
+    {
+      "bug_patch_number": "38717794",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38717794__CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf__dc161c208cb3__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 442
+    },
+    {
+      "bug_patch_number": "39064976",
+      "category": "User Interface",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39064976__CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf__624dc777704a__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 485
+    },
+    {
+      "bug_patch_number": "39047484",
+      "category": "Cross-Product Maintenance",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39047484__CCS_25.10_MP7.3.0_PFDs_Portfolio.pdf__bf5253c9b79b__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 476
+    },
+    {
+      "bug_patch_number": "38915946",
+      "category": "Payment",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38915946__CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf__a3669d23fa74__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1315
+    },
+    {
+      "bug_patch_number": "39049085",
+      "category": "Usage",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39049085__CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf__d4e7daee1654__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 691
+    },
+    {
+      "bug_patch_number": "39127058",
+      "category": "Usage",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39127058__CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf__f5959386c0f4__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1149
+    },
+    {
+      "bug_patch_number": "39109281",
+      "category": "Usage Rules",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39109281__CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf__c47e693c88ab__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1320
+    },
+    {
+      "bug_patch_number": "39056050",
+      "category": "Cloud Infrastructure",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39056050__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__ceadc8def868__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Framework",
+      "token_count": 502
+    },
+    {
+      "bug_patch_number": "38819181",
+      "category": "Environment",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38819181__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__81472a203f95__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 691
+    },
+    {
+      "bug_patch_number": "38959224",
+      "category": "Case Management",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38959224__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__2dce6ee4ad2c__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 797
+    },
+    {
+      "bug_patch_number": "38972339",
+      "category": "Billing",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38972339__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__2b7371cf4d1c__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1362
+    },
+    {
+      "bug_patch_number": "38988334",
+      "category": "Budgets",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38988334__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__dbe48f0e0980__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 669
+    },
+    {
+      "bug_patch_number": "39011547",
+      "category": "Billing",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39011547__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__b2799c725e55__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1233
+    },
+    {
+      "bug_patch_number": "39022958",
+      "category": "Credit and Collection",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39022958__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__14d984fac266__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1021
+    },
+    {
+      "bug_patch_number": "39078733",
+      "category": "Web Self Service",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__39078733__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__fd2ccaea3f3a__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 526
+    },
+    {
+      "bug_patch_number": "38950205",
+      "category": "Communications",
+      "chunk_count": 9,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38950205__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__674157aa8f96__chunks.json",
+      "indexed_chunk_count": 9,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1547
+    },
+    {
+      "bug_patch_number": "38983121",
+      "category": "Usage",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38983121__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__7dcb4ead1c73__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1021
+    },
+    {
+      "bug_patch_number": "38985547",
+      "category": "For SGG specific Functionality",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38985547__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__9cd12f02dacf__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 549
+    },
+    {
+      "bug_patch_number": "38578093",
+      "category": "Database",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38578093__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__dff9247c0de8__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 684
+    },
+    {
+      "bug_patch_number": "38805166",
+      "category": "Assets",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB881135/KB881135__38805166__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__6cb8118e092a__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB881135",
+      "product": "Oracle Utilities Asset Management Base",
+      "token_count": 700
+    },
+    {
+      "bug_patch_number": "38996468",
+      "category": "Cloud Service Foundation",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38996468__CCS_25.10_MP5.5.1_PFDs_Portfolio.pdf__88738da2e453__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Cloud Service Foundation",
+      "token_count": 615
+    },
+    {
+      "bug_patch_number": "38916455",
+      "category": "Cloud Infrastructure",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38916455__CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf__ae2b78cbb70a__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 481
+    },
+    {
+      "bug_patch_number": "38595967",
+      "category": "Usage",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38595967__CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf__7a79fade5c4b__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 642
+    },
+    {
+      "bug_patch_number": "38370926",
+      "category": "Assets",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38370926__CCS_25.10_MP5.4.2_PFDs_Portfolio.pdf__f3fb76c47b25__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Asset Management Base",
+      "token_count": 606
+    },
+    {
+      "bug_patch_number": "38851751",
+      "category": "Database",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38851751__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__374507072deb__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 379
+    },
+    {
+      "bug_patch_number": "38851941",
+      "category": "Database",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38851941__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__a63c0437a901__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 370
+    },
+    {
+      "bug_patch_number": "38873392",
+      "category": "Implementation Tools",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38873392__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__c97c252a837a__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 467
+    },
+    {
+      "bug_patch_number": "38717020",
+      "category": "Cloud Service Foundation",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38717020__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__fa0746acf680__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Cloud Service Foundation",
+      "token_count": 896
+    },
+    {
+      "bug_patch_number": "38848234",
+      "category": "Billing",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38848234__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__2ac533785e53__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 877
+    },
+    {
+      "bug_patch_number": "38948777",
+      "category": "Usage",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38948777__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__27484b555114__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 831
+    },
+    {
+      "bug_patch_number": "38879050",
+      "category": "Usage",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38879050__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__d862d444400a__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 895
+    },
+    {
+      "bug_patch_number": "38687121",
+      "category": "Usage",
+      "chunk_count": 8,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38687121__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__81894fa0cc79__chunks.json",
+      "indexed_chunk_count": 8,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1780
+    },
+    {
+      "bug_patch_number": "38765121",
+      "category": "Digital Asset",
+      "chunk_count": 9,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38765121__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__659594aad48d__chunks.json",
+      "indexed_chunk_count": 9,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1727
+    },
+    {
+      "bug_patch_number": "38677249",
+      "category": "Digital Asset",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38677249__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__c1d99c893abd__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 641
+    },
+    {
+      "bug_patch_number": "38843606",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38843606__CCS_25.10_MP5.2.0_PFDs_Portfolio.pdf__ace40e89231c__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 508
+    },
+    {
+      "bug_patch_number": "38721796",
+      "category": "To Do Management",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38721796__CCS_25.10_MP5.2.0_PFDs_Portfolio.pdf__b1a213f447c9__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 954
+    },
+    {
+      "bug_patch_number": "38751738",
+      "category": "Unknown / No Component",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38751738__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__f463b7a37a4c__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 443
+    },
+    {
+      "bug_patch_number": "38758539",
+      "category": "Configuration Tools",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38758539__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__fcfd6a76450c__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 420
+    },
+    {
+      "bug_patch_number": "38791679",
+      "category": "General",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38791679__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__1d46f45fa475__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 497
+    },
+    {
+      "bug_patch_number": "38594996",
+      "category": "General",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38594996__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__1f5e8e8a770d__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 344
+    },
+    {
+      "bug_patch_number": "38718299",
+      "category": "Third Party Software",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38718299__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__54e5b37b82f0__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Framework",
+      "token_count": 345
+    },
+    {
+      "bug_patch_number": "38864954",
+      "category": "Customer Information",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38864954__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__d5846899ea3f__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1070
+    },
+    {
+      "bug_patch_number": "38746273",
+      "category": "Accessibility",
+      "chunk_count": 15,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38746273__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__194aa5e05e8c__chunks.json",
+      "indexed_chunk_count": 15,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 3324
+    },
+    {
+      "bug_patch_number": "38762299",
+      "category": "Customer 360",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38762299__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__dae1e6fc0269__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 691
+    },
+    {
+      "bug_patch_number": "38787158",
+      "category": "Start/Stop/Transfer",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38787158__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__8017da0faf97__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 891
+    },
+    {
+      "bug_patch_number": "38799961",
+      "category": "Conversion",
+      "chunk_count": 12,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38799961__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__aca76d2fcc95__chunks.json",
+      "indexed_chunk_count": 12,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 2411
+    },
+    {
+      "bug_patch_number": "38883186",
+      "category": "Customer Information",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38883186__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__5c23fb0fcb3a__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 860
+    },
+    {
+      "bug_patch_number": "38883139",
+      "category": "Payment",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38883139__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__bff38490868e__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1036
+    },
+    {
+      "bug_patch_number": "38765962",
+      "category": "Control Central",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38765962__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__6e47c4f44a5b__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 682
+    },
+    {
+      "bug_patch_number": "38728712",
+      "category": "Adjustments",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38728712__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__3122d985a037__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 887
+    },
+    {
+      "bug_patch_number": "38717927",
+      "category": "Common",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38717927__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__4e6c34179cb6__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 726
+    },
+    {
+      "bug_patch_number": "38605682",
+      "category": "Usage Rules",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38605682__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__400d9f8bd3cc__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 743
+    },
+    {
+      "bug_patch_number": "38596430",
+      "category": "Measurement",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38596430__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__9447adfac321__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 489
+    },
+    {
+      "bug_patch_number": "38604480",
+      "category": "Digital Asset Management",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB869018/KB869018__38604480__CCS_25.10_MP5.1.0_PFDs_Portfolio.pdf__5753cae5bb27__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB869018",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 1143
+    },
+    {
+      "bug_patch_number": "39115188",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__39115188__CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf__8b467833a815__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 450
+    },
+    {
+      "bug_patch_number": "38500783",
+      "category": "Cloud Infrastructure",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38500783__CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf__afdcdc433b18__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 363
+    },
+    {
+      "bug_patch_number": "39272513",
+      "category": "User Interface",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__39272513__CCS_25.10_MP6.5.1_PFDs_Portfolio.pdf__45f0f9b165fe__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 437
+    },
+    {
+      "bug_patch_number": "39027306",
+      "category": "Customer Information",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__39027306__CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf__b4014bc3c677__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 594
+    },
+    {
+      "bug_patch_number": "38775341",
+      "category": "Start/Stop/Transfer",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38775341__CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf__271724249f1e__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 714
+    },
+    {
+      "bug_patch_number": "38858930",
+      "category": "Meter Data Management",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38858930__CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf__820948b0d836__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 567
+    },
+    {
+      "bug_patch_number": "38578093",
+      "category": "Database",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38578093__CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf__37e4456bdc8e__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 684
+    },
+    {
+      "bug_patch_number": "38897108",
+      "category": "Cloud infrastructure",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38897108__CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf__b47193fc4eaa__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 524
+    },
+    {
+      "bug_patch_number": "38632824",
+      "category": "System Wide",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38632824__CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf__925487152a9b__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 444
+    },
+    {
+      "bug_patch_number": "39058952",
+      "category": "Cloud infrastructure",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__39058952__CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf__ee80e4d87e1d__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 420
+    },
+    {
+      "bug_patch_number": "38950791",
+      "category": "VEE",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38950791__CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf__b88015975f28__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 623
+    },
+    {
+      "bug_patch_number": "38833165",
+      "category": "User Interface",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38833165__CCS_25.10_MP6.3.2_PFDs_Portfolio.pdf__20d1ff11e451__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 789
+    },
+    {
+      "bug_patch_number": "38627909",
+      "category": "General",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38627909__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__fe14c8774a6d__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 686
+    },
+    {
+      "bug_patch_number": "38695403",
+      "category": "To Do Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38695403__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__dfcd9decf904__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 680
+    },
+    {
+      "bug_patch_number": "38747589",
+      "category": "Security",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38747589__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__c0b991801f02__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 462
+    },
+    {
+      "bug_patch_number": "38956500",
+      "category": "Third Party Software",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38956500__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__4a701afc51c9__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 344
+    },
+    {
+      "bug_patch_number": "38981944",
+      "category": "Batch",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38981944__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__9240442996b3__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 511
+    },
+    {
+      "bug_patch_number": "38996468",
+      "category": "Cloud Service Foundation",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38996468__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__88738da2e453__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Cloud Service Foundation",
+      "token_count": 615
+    },
+    {
+      "bug_patch_number": "38558279",
+      "category": "Rates",
+      "chunk_count": 37,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38558279__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__cc25ac27bf77__chunks.json",
+      "indexed_chunk_count": 37,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 7086
+    },
+    {
+      "bug_patch_number": "38983121",
+      "category": "Usage",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38983121__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__7dcb4ead1c73__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1021
+    },
+    {
+      "bug_patch_number": "39002995",
+      "category": "Usage",
+      "chunk_count": 9,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__39002995__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__782dd1bd928a__chunks.json",
+      "indexed_chunk_count": 9,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1821
+    },
+    {
+      "bug_patch_number": "38504075",
+      "category": "Meter Data Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38504075__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__8c7a9bdae103__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 639
+    },
+    {
+      "bug_patch_number": "38979441",
+      "category": "Meter Data Management",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38979441__CCS_25.10_MP6.2.2_PFDs_Portfolio.pdf__abf13dd1aff3__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 519
+    },
+    {
+      "bug_patch_number": "38813265",
+      "category": "Cloud infrastructure",
+      "chunk_count": 2,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38813265__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__4035d0d9be84__chunks.json",
+      "indexed_chunk_count": 2,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 379
+    },
+    {
+      "bug_patch_number": "38875171",
+      "category": "Batch",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38875171__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__921f3021b003__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Framework",
+      "token_count": 498
+    },
+    {
+      "bug_patch_number": "38679644",
+      "category": "Rates",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38679644__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__7ea945011724__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1308
+    },
+    {
+      "bug_patch_number": "38925209",
+      "category": "Customer Information",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38925209__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__6fa11f3e4dcb__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 632
+    },
+    {
+      "bug_patch_number": "38742668",
+      "category": "Rates",
+      "chunk_count": 11,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38742668__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__4baace5b900b__chunks.json",
+      "indexed_chunk_count": 11,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 2157
+    },
+    {
+      "bug_patch_number": "38410113",
+      "category": "System Wide",
+      "chunk_count": 9,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38410113__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__d8428b626d30__chunks.json",
+      "indexed_chunk_count": 9,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1723
+    },
+    {
+      "bug_patch_number": "38864910",
+      "category": "System Wide",
+      "chunk_count": 8,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38864910__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__5171a6cacde1__chunks.json",
+      "indexed_chunk_count": 8,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1501
+    },
+    {
+      "bug_patch_number": "38831791",
+      "category": "Accessibility",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38831791__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__14f0b3b4710a__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 976
+    },
+    {
+      "bug_patch_number": "38664105",
+      "category": "Web Self Service",
+      "chunk_count": 17,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38664105__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__f0427d5733f2__chunks.json",
+      "indexed_chunk_count": 17,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 3336
+    },
+    {
+      "bug_patch_number": "38900687",
+      "category": "To Do",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38900687__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__e5eaf633f7bf__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 872
+    },
+    {
+      "bug_patch_number": "38743538",
+      "category": "Credit and Collection",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38743538__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__4a1cc9d334a6__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1312
+    },
+    {
+      "bug_patch_number": "38881207",
+      "category": "BI Extracts",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38881207__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__771ede6a55e6__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 859
+    },
+    {
+      "bug_patch_number": "38871933",
+      "category": "Customer Information",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38871933__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__c9d1b77c8511__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 660
+    },
+    {
+      "bug_patch_number": "38862619",
+      "category": "Security",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38862619__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__96bae528d769__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 640
+    },
+    {
+      "bug_patch_number": "38927776",
+      "category": "Rates",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38927776__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__f72c5e36bb71__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 1159
+    },
+    {
+      "bug_patch_number": "38894739",
+      "category": "To Do",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38894739__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__fe41aaf6c6f8__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 674
+    },
+    {
+      "bug_patch_number": "38897451",
+      "category": "Case Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38897451__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__ebaa08e12302__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 705
+    },
+    {
+      "bug_patch_number": "38858072",
+      "category": "Case Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38858072__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__904a3aa76ec5__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer Care and Billing",
+      "token_count": 674
+    },
+    {
+      "bug_patch_number": "38687121",
+      "category": "Usage Rules",
+      "chunk_count": 8,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38687121__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__81894fa0cc79__chunks.json",
+      "indexed_chunk_count": 8,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1780
+    },
+    {
+      "bug_patch_number": "38963171",
+      "category": "Measurement",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38963171__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__a3567214c6f1__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 561
+    },
+    {
+      "bug_patch_number": "38595967",
+      "category": "Usage",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38595967__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__7a79fade5c4b__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 642
+    },
+    {
+      "bug_patch_number": "38966529",
+      "category": "Usage",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38966529__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__89649276ed4e__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1215
+    },
+    {
+      "bug_patch_number": "38952434",
+      "category": "Sliver Spring Networks",
+      "chunk_count": 6,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38952434__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__52812033d3cf__chunks.json",
+      "indexed_chunk_count": 6,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 946
+    },
+    {
+      "bug_patch_number": "38884483",
+      "category": "Usage Rules",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38884483__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__4bd869477b2f__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1250
+    },
+    {
+      "bug_patch_number": "38794940",
+      "category": "Usage",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38794940__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__5778c1098db5__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1598
+    },
+    {
+      "bug_patch_number": "38834257",
+      "category": "Usage",
+      "chunk_count": 7,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38834257__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__482ae0eb6f74__chunks.json",
+      "indexed_chunk_count": 7,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 1435
+    },
+    {
+      "bug_patch_number": "38111892",
+      "category": "Service Order Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38111892__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__3173d80db1f0__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Service and Measurement Data Foundation",
+      "token_count": 629
+    },
+    {
+      "bug_patch_number": "38758919",
+      "category": "Digital Asset Management",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38758919__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__32a1b9bbefca__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 902
+    },
+    {
+      "bug_patch_number": "38819602",
+      "category": "Digital Asset Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38819602__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__5e7207bcbb09__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 671
+    },
+    {
+      "bug_patch_number": "38836879",
+      "category": "Digital Asset Management",
+      "chunk_count": 3,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38836879__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__9183bb2ace28__chunks.json",
+      "indexed_chunk_count": 3,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 536
+    },
+    {
+      "bug_patch_number": "38711608",
+      "category": "Digital Asset Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38711608__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__b53333b87c53__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 667
+    },
+    {
+      "bug_patch_number": "38776380",
+      "category": "Digital Asset Management",
+      "chunk_count": 5,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38776380__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__0b72dd97b8b3__chunks.json",
+      "indexed_chunk_count": 5,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 838
+    },
+    {
+      "bug_patch_number": "38363997",
+      "category": "Digital Asset Management",
+      "chunk_count": 4,
+      "collection_path": "kbs/search_context_chunks/KB875759/KB875759__38363997__CCS_25.10_MP6.1.0_PFDs_Portfolio.pdf__933b948f34e3__chunks.json",
+      "indexed_chunk_count": 4,
+      "kb_document_id": "KB875759",
+      "product": "Oracle Utilities Customer to Meter",
+      "token_count": 568
+    }
+  ],
+  "failures": [],
+  "generated_utc": "2026-05-12T13:59:29.904129+00:00",
+  "index_path": "kbs/indexes/kb_chunk_lexical_index.sqlite",
+  "indexed_chunk_count": 895,
+  "indexed_collection_count": 179,
+  "manifest_type": "kb_chunk_lexical_index_manifest.v1",
+  "posting_count": 79073,
+  "source_chunk_manifest_path": "kbs/manifests/kb_search_context_chunks_manifest.json",
+  "vocabulary_size": 4857,
+  "warnings": []
+}
