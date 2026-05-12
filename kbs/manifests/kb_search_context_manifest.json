@@ -3228,7 +3228,7 @@
   "evidence_map_path": "kbs/manifests/kb_evidence_map.json",
   "extraction_failed_count": 0,
   "failures": [],
-  "generated_utc": "2026-05-12T13:36:08.376596+00:00",
+  "generated_utc": "2026-05-12T13:43:47.374481+00:00",
   "highlight_bearing_artifact_count": 0,
   "image_bearing_artifact_count": 178,
   "manifest_type": "kb_search_context_manifest.v1",
