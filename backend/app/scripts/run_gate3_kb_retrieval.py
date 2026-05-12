@@ -31,12 +31,23 @@ def build_steps(smoke_query: str) -> list[PipelineStep]:
             module="app.scripts.query_kb_chunks",
             args=[smoke_query, "--top-k", "5"],
         ),
+        PipelineStep(
+            label="Validate KB retrieval artifacts",
+            module="app.scripts.validate_gate3_kb_retrieval",
+            args=[],
+        ),
+        PipelineStep(
+            label="Write KB retrieval summary report",
+            module="app.scripts.write_kb_retrieval_summary",
+            args=[],
+        ),
     ]
 
 
 EXPECTED_OUTPUTS = [
     "kbs/indexes/kb_chunk_lexical_index.sqlite",
     "kbs/manifests/kb_chunk_lexical_index_manifest.json",
+    "kbs/manifests/kb_retrieval_summary.md",
 ]
 
 
