@@ -14,6 +14,7 @@ REVIEW_STATUSES = {
     "MULTIPLE_EVIDENCE_CANDIDATES",
     "NO_EVIDENCE_ATTACHMENT_FOUND",
     "PORTFOLIO_PLACEHOLDER_NO_PFDS",
+    "KB_DECLARED_NO_PFD",
     "ROW_MISSING_FIX_IDENTIFIER",
     "ROW_MISSING_PORTFOLIO_REFERENCE",
 }
@@ -73,7 +74,7 @@ def classify_severity(mapping_status: str) -> str:
         return "MEDIUM"
     if mapping_status in {"ROW_MISSING_FIX_IDENTIFIER", "ROW_MISSING_PORTFOLIO_REFERENCE"}:
         return "MEDIUM"
-    if mapping_status == "PORTFOLIO_PLACEHOLDER_NO_PFDS":
+    if mapping_status in {"PORTFOLIO_PLACEHOLDER_NO_PFDS", "KB_DECLARED_NO_PFD"}:
         return "LOW"
     return "LOW"
 
