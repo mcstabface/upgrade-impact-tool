@@ -86,6 +86,17 @@ class KbFixRowsManifest:
     warnings: list[str]
 
 
+def attr_int(attrs: dict[str, str | None], key: str, default: int = 1) -> int:
+    raw_value = attrs.get(key)
+    if raw_value is None:
+        return default
+    try:
+        value = int(raw_value)
+    except ValueError:
+        return default
+    return max(value, 1)
+
+
 class TableExtractor(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -95,6 +106,9 @@ class TableExtractor(HTMLParser):
         self._current_row: list[str] | None = None
         self._current_cell_parts: list[str] | None = None
         self._capture_cell = False
+        self._current_cell_colspan = 1
+        self._current_cell_rowspan = 1
+        self._pending_rowspans: dict[int, list[str]] = {}
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         normalized = tag.lower()
@@ -102,6 +116,7 @@ class TableExtractor(HTMLParser):
             self._table_depth += 1
             if self._table_depth == 1:
                 self._current_rows = []
+                self._pending_rowspans = {}
             return
 
         if self._table_depth < 1:
@@ -109,8 +124,12 @@ class TableExtractor(HTMLParser):
 
         if normalized == "tr" and self._table_depth == 1:
             self._current_row = []
+            self._append_pending_rowspan_cells()
         elif normalized in {"td", "th"} and self._table_depth == 1:
+            attr_map = {name.lower(): value for name, value in attrs}
             self._current_cell_parts = []
+            self._current_cell_colspan = attr_int(attr_map, "colspan")
+            self._current_cell_rowspan = attr_int(attr_map, "rowspan")
             self._capture_cell = True
         elif normalized == "br" and self._capture_cell and self._current_cell_parts is not None:
             self._current_cell_parts.append(" ")
@@ -122,8 +141,11 @@ class TableExtractor(HTMLParser):
 
         if normalized in {"td", "th"} and self._table_depth == 1:
             if self._current_row is not None and self._current_cell_parts is not None:
-                self._current_row.append(clean_cell_text(" ".join(self._current_cell_parts)))
+                value = clean_cell_text(" ".join(self._current_cell_parts))
+                self._append_cell(value, self._current_cell_colspan, self._current_cell_rowspan)
             self._current_cell_parts = None
+            self._current_cell_colspan = 1
+            self._current_cell_rowspan = 1
             self._capture_cell = False
         elif normalized == "tr" and self._table_depth == 1:
             if self._current_rows is not None and self._current_row:
@@ -133,11 +155,38 @@ class TableExtractor(HTMLParser):
             if self._table_depth == 1 and self._current_rows is not None:
                 self.tables.append(HtmlTable(rows=self._current_rows))
                 self._current_rows = None
+                self._pending_rowspans = {}
             self._table_depth -= 1
 
     def handle_data(self, data: str) -> None:
         if self._capture_cell and self._current_cell_parts is not None:
             self._current_cell_parts.append(data)
+
+    def _append_pending_rowspan_cells(self) -> None:
+        if self._current_row is None:
+            return
+
+        col_index = 0
+        while col_index in self._pending_rowspans:
+            values = self._pending_rowspans[col_index]
+            if values:
+                self._current_row.append(values[0])
+                remaining = values[1:]
+                if remaining:
+                    self._pending_rowspans[col_index] = remaining
+                else:
+                    del self._pending_rowspans[col_index]
+            col_index += 1
+
+    def _append_cell(self, value: str, colspan: int, rowspan: int) -> None:
+        if self._current_row is None:
+            return
+
+        for _ in range(colspan):
+            col_index = len(self._current_row)
+            self._current_row.append(value)
+            if rowspan > 1:
+                self._pending_rowspans[col_index] = [value] * (rowspan - 1)
 
 
 def sha256_file(path: Path) -> str:
