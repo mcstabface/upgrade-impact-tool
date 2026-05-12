@@ -15,14 +15,12 @@
           "kb_document_id": "KB881136",
           "kb_extraction_warnings": [],
           "maintenance_pack": "MP 1",
-          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
-          "mapping_warnings": [
-            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
-          ],
+          "mapping_status": "KB_DECLARED_NO_PFD",
+          "mapping_warnings": [],
           "placeholder_attachment_count": 0,
           "placeholder_attachment_paths": [],
           "product": "Oracle Utilities Service and Measurement Data Foundation",
-          "severity": "HIGH",
+          "severity": "LOW",
           "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html"
         },
         {
@@ -172,7 +170,8 @@
       "maintenance_pack": "MP 1",
       "source_html": "kbs/raw/April 2026 Maintenance Pack - MP 1.html",
       "status_counts": {
-        "NO_EVIDENCE_ATTACHMENT_FOUND": 3,
+        "KB_DECLARED_NO_PFD": 1,
+        "NO_EVIDENCE_ATTACHMENT_FOUND": 2,
         "PORTFOLIO_PLACEHOLDER_NO_PFDS": 1,
         "ROW_MISSING_FIX_IDENTIFIER": 3
       }
@@ -407,14 +406,12 @@
           "kb_document_id": "KB875759",
           "kb_extraction_warnings": [],
           "maintenance_pack": "MP 6",
-          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
-          "mapping_warnings": [
-            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
-          ],
+          "mapping_status": "KB_DECLARED_NO_PFD",
+          "mapping_warnings": [],
           "placeholder_attachment_count": 0,
           "placeholder_attachment_paths": [],
           "product": "Oracle Utilities Framework",
-          "severity": "HIGH",
+          "severity": "LOW",
           "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
         },
         {
@@ -432,14 +429,12 @@
             "Missing category."
           ],
           "maintenance_pack": "MP 6",
-          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
-          "mapping_warnings": [
-            "KB row has no bug / patch identifier to join against extracted source attachments."
-          ],
+          "mapping_status": "KB_DECLARED_NO_PFD",
+          "mapping_warnings": [],
           "placeholder_attachment_count": 0,
           "placeholder_attachment_paths": [],
           "product": null,
-          "severity": "MEDIUM",
+          "severity": "LOW",
           "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
         },
         {
@@ -457,14 +452,12 @@
             "Missing category."
           ],
           "maintenance_pack": "MP 6",
-          "mapping_status": "ROW_MISSING_FIX_IDENTIFIER",
-          "mapping_warnings": [
-            "KB row has no bug / patch identifier to join against extracted source attachments."
-          ],
+          "mapping_status": "KB_DECLARED_NO_PFD",
+          "mapping_warnings": [],
           "placeholder_attachment_count": 0,
           "placeholder_attachment_paths": [],
           "product": null,
-          "severity": "MEDIUM",
+          "severity": "LOW",
           "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
         },
         {
@@ -503,14 +496,12 @@
           "kb_document_id": "KB875759",
           "kb_extraction_warnings": [],
           "maintenance_pack": "MP 6",
-          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
-          "mapping_warnings": [
-            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
-          ],
+          "mapping_status": "KB_DECLARED_NO_PFD",
+          "mapping_warnings": [],
           "placeholder_attachment_count": 0,
           "placeholder_attachment_paths": [],
           "product": "Oracle Utilities Customer to Meter",
-          "severity": "HIGH",
+          "severity": "LOW",
           "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
         },
         {
@@ -524,14 +515,12 @@
           "kb_document_id": "KB875759",
           "kb_extraction_warnings": [],
           "maintenance_pack": "MP 6",
-          "mapping_status": "NO_EVIDENCE_ATTACHMENT_FOUND",
-          "mapping_warnings": [
-            "No extracted attachment matched the KB row bug / patch number within the referenced portfolio."
-          ],
+          "mapping_status": "KB_DECLARED_NO_PFD",
+          "mapping_warnings": [],
           "placeholder_attachment_count": 0,
           "placeholder_attachment_paths": [],
           "product": "Oracle Utilities Customer to Meter",
-          "severity": "HIGH",
+          "severity": "LOW",
           "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html"
         },
         {
@@ -564,23 +553,24 @@
       "maintenance_pack": "MP 6",
       "source_html": "kbs/raw/March 2026 Maintenance Pack - MP 6.html",
       "status_counts": {
-        "NO_EVIDENCE_ATTACHMENT_FOUND": 3,
-        "ROW_MISSING_FIX_IDENTIFIER": 4
+        "KB_DECLARED_NO_PFD": 5,
+        "ROW_MISSING_FIX_IDENTIFIER": 2
       }
     }
   ],
   "evidence_map_manifest_path": "kbs/manifests/kb_evidence_map.json",
   "exception_count": 23,
-  "generated_utc": "2026-05-12T12:59:57.540854+00:00",
+  "generated_utc": "2026-05-12T13:02:41.965727+00:00",
   "manifest_type": "kb_evidence_exceptions.v1",
   "severity_counts": {
-    "HIGH": 14,
-    "LOW": 1,
-    "MEDIUM": 8
+    "HIGH": 10,
+    "LOW": 7,
+    "MEDIUM": 6
   },
   "status_counts": {
-    "NO_EVIDENCE_ATTACHMENT_FOUND": 14,
+    "KB_DECLARED_NO_PFD": 6,
+    "NO_EVIDENCE_ATTACHMENT_FOUND": 10,
     "PORTFOLIO_PLACEHOLDER_NO_PFDS": 1,
-    "ROW_MISSING_FIX_IDENTIFIER": 8
+    "ROW_MISSING_FIX_IDENTIFIER": 6
   }
 }
