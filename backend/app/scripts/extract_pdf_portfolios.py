@@ -13,7 +13,7 @@ from pypdf import PdfReader
 
 PORTFOLIO_FILENAME_RE = re.compile(r"[A-Za-z0-9_.-]+_PFDs_Portfolio\.pdf", re.IGNORECASE)
 SAFE_FILENAME_RE = re.compile(r"[^A-Za-z0-9._-]+")
-FIX_IDENTIFIER_RE = re.compile(r"\b(?P<kind>Bug|Enh)[_\s-]+(?P<number>\d{5,})\b", re.IGNORECASE)
+FIX_IDENTIFIER_RE = re.compile(r"(?:^|[_\s-])(?P<kind>Bug|Enh)[_\s-]+(?P<number>\d{5,})(?:$|[_\s.-])", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
