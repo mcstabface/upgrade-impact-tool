@@ -1,0 +1,53 @@
+{
+  "fixture_type": "kb_retrieval_eval_set.v1",
+  "description": "Initial deterministic retrieval evaluation set for Gate 5. Assertions intentionally validate lineage/category/product behavior, not business impact conclusions.",
+  "cases": [
+    {
+      "case_id": "usage_rates_unfiltered_bm25",
+      "query": "rates billing usage",
+      "ranker": "bm25",
+      "top_k": 5,
+      "filters": {},
+      "max_chunks_per_child_pdf": 1,
+      "max_chunks_per_bug_patch": 1,
+      "expect_any": {
+        "product": ["Oracle Utilities Service and Measurement Data Foundation"],
+        "category": ["Usage"]
+      }
+    },
+    {
+      "case_id": "billing_usage_filtered_ccb_bm25",
+      "query": "rates billing usage",
+      "ranker": "bm25",
+      "top_k": 5,
+      "filters": {
+        "product": "Oracle Utilities Customer Care and Billing"
+      },
+      "max_chunks_per_child_pdf": 1,
+      "expect_all": {
+        "product": "Oracle Utilities Customer Care and Billing"
+      },
+      "expect_any": {
+        "category": ["Billing", "Conversion", "Case Management"]
+      }
+    },
+    {
+      "case_id": "rates_filtered_ccb_bm25",
+      "query": "rates",
+      "ranker": "bm25",
+      "top_k": 5,
+      "filters": {
+        "product": "Oracle Utilities Customer Care and Billing",
+        "category": "Rates"
+      },
+      "max_chunks_per_child_pdf": 1,
+      "expect_all": {
+        "product": "Oracle Utilities Customer Care and Billing",
+        "category": "Rates"
+      },
+      "expect_any": {
+        "bug_patch_number": ["38558279", "39020780", "39003305", "38742668"]
+      }
+    }
+  ]
+}
