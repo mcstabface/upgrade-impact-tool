@@ -1,6 +1,6 @@
 # KB PFDS Retrieval Summary
 
-Generated UTC: `2026-05-12T14:20:48.156094+00:00`
+Generated UTC: `2026-05-12T14:26:31.880820+00:00`
 
 ## Overview
 
@@ -114,7 +114,7 @@ Gate 4 extends deterministic lexical retrieval with explainability and controls.
 
 ## Latest Smoke Query
 
-- Query artifact: `/home/stabby/Documents/upgrade-impact-tool/kbs/query_context/rates_billing_usage__9ada4c1a54049658__e2c0da700deed94f.query_context.json`
+- Query artifact: `/home/stabby/Documents/upgrade-impact-tool/kbs/query_context/rates_billing_usage__9ada4c1a54049658__cae3de743c71ae19.query_context.json`
 - Query context schema: `kb_chunk_query_context.v2`
 - Query text: `rates billing usage`
 - Query terms: `rates, billing, usage`
@@ -123,7 +123,7 @@ Gate 4 extends deterministic lexical retrieval with explainability and controls.
 - Scored chunks: 373
 - Post-diversity scored chunks: 53
 - Returned chunks: 5
-- Ranker: `term_frequency_idf_v1`
+- Ranker: `bm25_v1`
 
 ### Term Diagnostics
 
@@ -147,17 +147,18 @@ Gate 4 extends deterministic lexical retrieval with explainability and controls.
 
 | Rank | Score | KB | Bug / Patch | Product | Category | Matched Terms | Score Contributions |
 |---:|---:|---|---|---|---|---|---|
-| 1 | 42.116361 | KB881135 | 39064768 | Oracle Utilities Customer Care and Billing | Conversion | billing, usage | billing:3.643179, usage:38.473182 |
-| 2 | 31.124023 | KB881135 | 39234264 | Oracle Utilities Customer Care and Billing | Billing | billing, usage | billing:3.643179, usage:27.480844 |
-| 3 | 29.271033 | KB869018 | 38848234 | Oracle Utilities Customer Care and Billing | Billing | billing, usage | billing:7.286358, usage:21.984675 |
-| 4 | 22.87977 | KB881135 | 38959224 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage | billing:3.643179, usage:19.236591 |
-| 5 | 21.05818 | KB881136 | 38959233 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage | billing:1.82159, usage:19.236591 |
+| 1 | 4.557985 | KB869018 | 38848234 | Oracle Utilities Customer Care and Billing | Billing | billing, usage | billing:1.3153, usage:3.242684 |
+| 2 | 4.498597 | KB881135 | 39234264 | Oracle Utilities Customer Care and Billing | Billing | billing, usage | billing:1.092879, usage:3.405718 |
+| 3 | 4.477924 | KB881135 | 39064768 | Oracle Utilities Customer Care and Billing | Conversion | billing, usage | billing:1.013837, usage:3.464087 |
+| 4 | 4.324562 | KB881135 | 38959224 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage | billing:1.382398, usage:2.942163 |
+| 5 | 4.324562 | KB881136 | 38959233 | Oracle Utilities Customer Care and Billing | Case Management | billing, usage | billing:1.382398, usage:2.942163 |
 
 ## Recent Query Context Artifacts
 
 | Artifact | Schema | Query | Filters | Returned | Diversity Enabled |
 |---|---|---|---|---:|---|
+| `rates_billing_usage__9ada4c1a54049658__cae3de743c71ae19.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{"product": "Oracle Utilities Customer Care and Billing"}` | 5 | True |
+| `rates_billing_usage__9ada4c1a54049658__401a4827ce310816.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{"product": "Oracle Utilities Customer Care and Billing"}` | 5 | True |
+| `rates_billing_usage__9ada4c1a54049658__e07eeade1c9e0a16.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{}` | 5 | True |
+| `rates_billing_usage__9ada4c1a54049658__87ccc0ff65e71b1e.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{}` | 5 | True |
 | `rates_billing_usage__9ada4c1a54049658__e2c0da700deed94f.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{"product": "Oracle Utilities Customer Care and Billing"}` | 5 | True |
-| `rates_billing_usage__9ada4c1a54049658__9253a81d8c710522.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{}` | 5 | True |
-| `rates_billing_usage__9ada4c1a54049658.query_context.json` | kb_chunk_query_context.v2 | rates billing usage | `{"product": "Oracle Utilities Customer Care and Billing"}` | 5 | True |
-| `market_transaction_message_error__230d1540fdb3fc90.query_context.json` | kb_chunk_query_context.v1 | market transaction message error | `{}` | 5 | False |
