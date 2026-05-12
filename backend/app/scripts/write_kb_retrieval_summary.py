@@ -37,6 +37,16 @@ def latest_query_context(query_context_root: Path) -> tuple[Path | None, dict[st
     return latest, read_json(latest)
 
 
+def query_context_files(query_context_root: Path, *, limit: int = 5) -> list[tuple[Path, dict[str, Any]]]:
+    if not query_context_root.exists():
+        return []
+    artifacts = sorted(query_context_root.glob("*.query_context.json"), key=lambda path: path.stat().st_mtime, reverse=True)
+    contexts: list[tuple[Path, dict[str, Any]]] = []
+    for artifact in artifacts[:limit]:
+        contexts.append((artifact, read_json(artifact)))
+    return contexts
+
+
 def per_kb_counts(collections: list[dict[str, Any]]) -> list[tuple[str, int, int, int]]:
     collection_count: Counter[str] = Counter()
     chunk_count: Counter[str] = Counter()
@@ -91,6 +101,51 @@ def top_token_heavy_collections(collections: list[dict[str, Any]], *, limit: int
     )[:limit]
 
 
+def render_term_diagnostics(diagnostics: dict[str, Any]) -> list[str]:
+    lines: list[str] = []
+    term_diagnostics = diagnostics.get("term_diagnostics", {})
+    if not term_diagnostics:
+        return lines
+
+    lines.append("### Term Diagnostics")
+    lines.append("")
+    lines.append("| Term | Global Postings | Filtered Postings | IDF | Candidate Limited |")
+    lines.append("|---|---:|---:|---:|---|")
+    for term, details in sorted(term_diagnostics.items()):
+        lines.append(
+            "| "
+            f"{markdown_escape(term)} | "
+            f"{details.get('global_posting_count', 0)} | "
+            f"{details.get('filtered_posting_count', 0)} | "
+            f"{details.get('idf', 0)} | "
+            f"{details.get('candidate_limited', False)} |"
+        )
+    lines.append("")
+    return lines
+
+
+def render_source_diversity(diagnostics: dict[str, Any]) -> list[str]:
+    lines: list[str] = []
+    source_diversity = diagnostics.get("source_diversity", {})
+    if not source_diversity:
+        return lines
+
+    lines.append("### Source Diversity Controls")
+    lines.append("")
+    lines.append(f"- Enabled: {source_diversity.get('enabled', False)}")
+    lines.append(f"- Max chunks per child PDF: {source_diversity.get('max_chunks_per_child_pdf')}")
+    lines.append(f"- Max chunks per bug / patch: {source_diversity.get('max_chunks_per_bug_patch')}")
+    exclusions = source_diversity.get("excluded_by_reason", {}) or {}
+    if exclusions:
+        lines.append("")
+        lines.append("| Exclusion Reason | Count |")
+        lines.append("|---|---:|")
+        for reason, count in sorted(exclusions.items()):
+            lines.append(f"| {markdown_escape(reason)} | {count} |")
+    lines.append("")
+    return lines
+
+
 def render_query_section(query_context_path: Path | None, query_context: dict[str, Any] | None) -> list[str]:
     lines: list[str] = []
     lines.append("## Latest Smoke Query")
@@ -102,20 +157,31 @@ def render_query_section(query_context_path: Path | None, query_context: dict[st
 
     query = query_context.get("query", {})
     diagnostics = query_context.get("diagnostics", {})
+    filters = query.get("filters") or {}
     lines.append(f"- Query artifact: `{query_context_path.as_posix()}`")
+    lines.append(f"- Query context schema: `{query_context.get('schema_version', 'UNKNOWN')}`")
     lines.append(f"- Query text: `{query.get('query_text', '')}`")
     lines.append(f"- Query terms: `{', '.join(query.get('query_terms', []))}`")
+    lines.append(f"- Active filters: `{json.dumps(filters, sort_keys=True)}`")
     lines.append(f"- Candidate chunks: {diagnostics.get('candidate_count', 0)}")
     lines.append(f"- Scored chunks: {diagnostics.get('scored_count', 0)}")
+    lines.append(f"- Post-diversity scored chunks: {diagnostics.get('post_diversity_scored_count', diagnostics.get('scored_count', 0))}")
     lines.append(f"- Returned chunks: {diagnostics.get('returned_count', 0)}")
     lines.append(f"- Ranker: `{diagnostics.get('ranker', 'UNKNOWN')}`")
     lines.append("")
 
+    lines.extend(render_term_diagnostics(diagnostics))
+    lines.extend(render_source_diversity(diagnostics))
+
     results = query_context.get("results", [])
     if results:
-        lines.append("| Rank | Score | KB | Bug / Patch | Product | Category | Matched Terms |")
-        lines.append("|---:|---:|---|---|---|---|---|")
+        lines.append("### Ranked Results")
+        lines.append("")
+        lines.append("| Rank | Score | KB | Bug / Patch | Product | Category | Matched Terms | Score Contributions |")
+        lines.append("|---:|---:|---|---|---|---|---|---|")
         for result in results[:10]:
+            contributions = result.get("term_score_contributions", {}) or {}
+            contribution_text = ", ".join(f"{term}:{score}" for term, score in sorted(contributions.items()))
             lines.append(
                 "| "
                 f"{result.get('rank', '')} | "
@@ -124,9 +190,37 @@ def render_query_section(query_context_path: Path | None, query_context: dict[st
                 f"{markdown_escape(result.get('bug_patch_number'))} | "
                 f"{markdown_escape(result.get('product'))} | "
                 f"{markdown_escape(result.get('category'))} | "
-                f"{markdown_escape(', '.join(result.get('matched_terms', [])))} |"
+                f"{markdown_escape(', '.join(result.get('matched_terms', [])))} | "
+                f"{markdown_escape(contribution_text)} |"
             )
         lines.append("")
+    return lines
+
+
+def render_recent_query_contexts(query_context_root: Path) -> list[str]:
+    lines: list[str] = []
+    contexts = query_context_files(query_context_root, limit=5)
+    if not contexts:
+        return lines
+
+    lines.append("## Recent Query Context Artifacts")
+    lines.append("")
+    lines.append("| Artifact | Schema | Query | Filters | Returned | Diversity Enabled |")
+    lines.append("|---|---|---|---|---:|---|")
+    for path, context in contexts:
+        query = context.get("query", {})
+        diagnostics = context.get("diagnostics", {})
+        source_diversity = diagnostics.get("source_diversity", {}) if isinstance(diagnostics.get("source_diversity"), dict) else {}
+        lines.append(
+            "| "
+            f"`{markdown_escape(path.name)}` | "
+            f"{markdown_escape(context.get('schema_version'))} | "
+            f"{markdown_escape(query.get('query_text'))} | "
+            f"`{markdown_escape(json.dumps(query.get('filters') or {}, sort_keys=True))}` | "
+            f"{diagnostics.get('returned_count', 0)} | "
+            f"{source_diversity.get('enabled', False)} |"
+        )
+    lines.append("")
     return lines
 
 
@@ -155,9 +249,9 @@ def render_summary(index_manifest: dict[str, Any], query_context_root: Path) -> 
     lines.append("## Interpretation")
     lines.append("")
     lines.append(
-        "Gate 3 builds deterministic lexical retrieval over Gate 2 PFDS chunks. "
-        "The index is a retrieval substrate only; it does not generate upgrade impact analysis or infer business truth. "
-        "Every returned chunk remains tied to KB, portfolio, child PDF, and bug/patch lineage."
+        "Gate 4 extends deterministic lexical retrieval with explainability and controls. "
+        "The retrieval layer can now show why each term contributed, constrain candidates by lineage fields, "
+        "and limit repeated chunks from the same source. It still does not generate upgrade impact analysis."
     )
     lines.append("")
 
@@ -203,6 +297,7 @@ def render_summary(index_manifest: dict[str, Any], query_context_root: Path) -> 
     lines.append("")
 
     lines.extend(render_query_section(latest_path, latest_context))
+    lines.extend(render_recent_query_contexts(query_context_root))
 
     warnings = index_manifest.get("warnings") or []
     if warnings:
@@ -217,7 +312,7 @@ def render_summary(index_manifest: dict[str, Any], query_context_root: Path) -> 
 
 def parse_args() -> argparse.Namespace:
     root = repo_root()
-    parser = argparse.ArgumentParser(description="Write a reviewer-facing Gate 3 KB retrieval Markdown summary.")
+    parser = argparse.ArgumentParser(description="Write a reviewer-facing KB retrieval Markdown summary.")
     parser.add_argument(
         "--index-manifest",
         type=Path,
