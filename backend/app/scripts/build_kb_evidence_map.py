@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from app.scripts.extract_kb_source_manifest import relpath, repo_root
+
+KB_DECLARED_NO_PFD_RE = re.compile(r"\bNo\s+PFDS?\b|\bNo\s+PFD\s+provided\b", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -51,8 +54,10 @@ class EvidenceMapDocument:
     fix_row_count: int
     matched_row_count: int
     placeholder_row_count: int
+    kb_declared_no_pfd_row_count: int
     missing_evidence_row_count: int
     non_joinable_row_count: int
+    duplicate_evidence_row_count: int
     rows: list[EvidenceMapRow]
 
 
@@ -66,6 +71,7 @@ class EvidenceMapManifest:
     fix_row_count: int
     matched_row_count: int
     placeholder_row_count: int
+    kb_declared_no_pfd_row_count: int
     missing_evidence_row_count: int
     non_joinable_row_count: int
     duplicate_evidence_row_count: int
@@ -75,6 +81,12 @@ class EvidenceMapManifest:
 
 def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def kb_declares_no_pfd(description: str | None) -> bool:
+    if not description:
+        return False
+    return KB_DECLARED_NO_PFD_RE.search(description) is not None
 
 
 def attachment_from_raw(raw: dict[str, Any]) -> EvidenceAttachment:
@@ -137,6 +149,8 @@ def map_row(
 ) -> EvidenceMapRow:
     about_window_file = raw_row.get("about_window_file")
     bug_patch_number = raw_row.get("bug_patch_number")
+    description = raw_row.get("description")
+    declared_no_pfd = kb_declares_no_pfd(description)
     warnings: list[str] = []
 
     if not about_window_file:
@@ -148,6 +162,8 @@ def map_row(
         placeholders = placeholders_by_portfolio.get(about_window_file, [])
         if placeholders:
             status = "PORTFOLIO_PLACEHOLDER_NO_PFDS"
+        elif declared_no_pfd:
+            status = "KB_DECLARED_NO_PFD"
         else:
             status = "ROW_MISSING_FIX_IDENTIFIER"
             warnings.append("KB row has no bug / patch identifier to join against extracted source attachments.")
@@ -163,6 +179,8 @@ def map_row(
         elif placeholders:
             status = "PORTFOLIO_PLACEHOLDER_NO_PFDS"
             warnings.append("Portfolio contains a no-PFDS placeholder and no matching attachment for this KB row.")
+        elif declared_no_pfd:
+            status = "KB_DECLARED_NO_PFD"
         else:
             status = "NO_EVIDENCE_ATTACHMENT_FOUND"
             warnings.append("No extracted attachment matched the KB row bug / patch number within the referenced portfolio.")
@@ -176,7 +194,7 @@ def map_row(
         bug_patch_number=bug_patch_number,
         product=raw_row.get("product"),
         category=raw_row.get("category"),
-        description=raw_row.get("description"),
+        description=description,
         kb_extraction_status=raw_row.get("extraction_status"),
         kb_extraction_warnings=raw_row.get("extraction_warnings", []),
         mapping_status=status,
@@ -190,6 +208,7 @@ def document_counts(rows: list[EvidenceMapRow]) -> dict[str, int]:
     return {
         "matched_row_count": sum(1 for row in rows if row.mapping_status == "MATCHED"),
         "placeholder_row_count": sum(1 for row in rows if row.mapping_status == "PORTFOLIO_PLACEHOLDER_NO_PFDS"),
+        "kb_declared_no_pfd_row_count": sum(1 for row in rows if row.mapping_status == "KB_DECLARED_NO_PFD"),
         "missing_evidence_row_count": sum(1 for row in rows if row.mapping_status == "NO_EVIDENCE_ATTACHMENT_FOUND"),
         "non_joinable_row_count": sum(
             1
@@ -225,8 +244,10 @@ def build_manifest(kb_fix_rows_path: Path, portfolio_extraction_path: Path) -> E
                 fix_row_count=len(rows),
                 matched_row_count=counts["matched_row_count"],
                 placeholder_row_count=counts["placeholder_row_count"],
+                kb_declared_no_pfd_row_count=counts["kb_declared_no_pfd_row_count"],
                 missing_evidence_row_count=counts["missing_evidence_row_count"],
                 non_joinable_row_count=counts["non_joinable_row_count"],
+                duplicate_evidence_row_count=counts["duplicate_evidence_row_count"],
                 rows=rows,
             )
         )
@@ -248,6 +269,7 @@ def build_manifest(kb_fix_rows_path: Path, portfolio_extraction_path: Path) -> E
         fix_row_count=len(all_rows),
         matched_row_count=all_counts["matched_row_count"],
         placeholder_row_count=all_counts["placeholder_row_count"],
+        kb_declared_no_pfd_row_count=all_counts["kb_declared_no_pfd_row_count"],
         missing_evidence_row_count=all_counts["missing_evidence_row_count"],
         non_joinable_row_count=all_counts["non_joinable_row_count"],
         duplicate_evidence_row_count=all_counts["duplicate_evidence_row_count"],
@@ -300,6 +322,7 @@ def main() -> None:
     print(f"Fix rows: {manifest.fix_row_count}")
     print(f"Matched rows: {manifest.matched_row_count}")
     print(f"Placeholder rows: {manifest.placeholder_row_count}")
+    print(f"KB-declared no-PFD rows: {manifest.kb_declared_no_pfd_row_count}")
     print(f"Missing evidence rows: {manifest.missing_evidence_row_count}")
     print(f"Non-joinable rows: {manifest.non_joinable_row_count}")
     print(f"Duplicate evidence rows: {manifest.duplicate_evidence_row_count}")
