@@ -1,0 +1,176 @@
+{
+  "artifact_type": "kb_retrieval_evaluation",
+  "case_count": 3,
+  "eval_set_path": "kbs/eval/kb_retrieval_eval_set.json",
+  "failed_count": 1,
+  "generated_utc": "2026-05-12T14:34:18.658991+00:00",
+  "index_path": "kbs/indexes/kb_chunk_lexical_index.sqlite",
+  "passed_count": 2,
+  "results": [
+    {
+      "case_id": "usage_rates_unfiltered_bm25",
+      "failures": [],
+      "query": "rates billing usage",
+      "ranker": "bm25_v1",
+      "returned_count": 5,
+      "status": "PASS",
+      "top_results": [
+        {
+          "bug_patch_number": "39002995",
+          "category": "Usage",
+          "chunk_id": "KB875759::39002995::782dd1bd928ad04b242485cc9d6bb0a305bb199e62bd42a09aaa0c70880ec68b::0002",
+          "kb_document_id": "KB875759",
+          "matched_terms": [
+            "billing",
+            "rates",
+            "usage"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 1,
+          "score": 8.97746
+        },
+        {
+          "bug_patch_number": "39007114",
+          "category": "Usage",
+          "chunk_id": "KB881136::39007114::c7e0e1085aae05331b447fe98e78216a48f3909404c93d02d0ea56d7ea5e99ee::0002",
+          "kb_document_id": "KB881136",
+          "matched_terms": [
+            "billing",
+            "rates",
+            "usage"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 2,
+          "score": 8.97746
+        },
+        {
+          "bug_patch_number": "39127058",
+          "category": "Usage",
+          "chunk_id": "KB881135::39127058::f5959386c0f4d87ca9473dc8ab104739e42a3ed3b3b05d60127d78f3d81a6674::0004",
+          "kb_document_id": "KB881135",
+          "matched_terms": [
+            "rates",
+            "usage"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 3,
+          "score": 8.016685
+        },
+        {
+          "bug_patch_number": "38794940",
+          "category": "Usage",
+          "chunk_id": "KB875759::38794940::5778c1098db572c3169b864f63675e17c5f1d68142e224502e279d4484e0203d::0004",
+          "kb_document_id": "KB875759",
+          "matched_terms": [
+            "rates",
+            "usage"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 4,
+          "score": 7.735204
+        },
+        {
+          "bug_patch_number": "38966530",
+          "category": "Usage",
+          "chunk_id": "KB881136::38966530::49006a8f0a51e0da7b55fb68fe1de172597f0ec356b7cfcf0d5dc8da1522337e::0005",
+          "kb_document_id": "KB881136",
+          "matched_terms": [
+            "rates",
+            "usage"
+          ],
+          "product": "Oracle Utilities Service and Measurement Data Foundation",
+          "rank": 5,
+          "score": 6.779924
+        }
+      ]
+    },
+    {
+      "case_id": "billing_usage_filtered_ccb_bm25",
+      "failures": [],
+      "query": "rates billing usage",
+      "ranker": "bm25_v1",
+      "returned_count": 5,
+      "status": "PASS",
+      "top_results": [
+        {
+          "bug_patch_number": "38848234",
+          "category": "Billing",
+          "chunk_id": "KB869018::38848234::2ac533785e535054e032320967db5c36f6991d48021825a88a4d5bce8d9f89a0::0003",
+          "kb_document_id": "KB869018",
+          "matched_terms": [
+            "billing",
+            "usage"
+          ],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "rank": 1,
+          "score": 4.557985
+        },
+        {
+          "bug_patch_number": "39234264",
+          "category": "Billing",
+          "chunk_id": "KB881135::39234264::c7242dc17a486aa18fde33a4e1906022748240eb19dde9d0a5b3b04b0b5e0f84::0005",
+          "kb_document_id": "KB881135",
+          "matched_terms": [
+            "billing",
+            "usage"
+          ],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "rank": 2,
+          "score": 4.498597
+        },
+        {
+          "bug_patch_number": "39064768",
+          "category": "Conversion",
+          "chunk_id": "KB881135::39064768::426d44e375aa6c02d137e52c665b4006f4bd0348738635ec7963e6243ef1ad4e::0003",
+          "kb_document_id": "KB881135",
+          "matched_terms": [
+            "billing",
+            "usage"
+          ],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "rank": 3,
+          "score": 4.477924
+        },
+        {
+          "bug_patch_number": "38959224",
+          "category": "Case Management",
+          "chunk_id": "KB881135::38959224::2dce6ee4ad2c1ced52097cb2a8929a80d58209de565d79977b489c8732167ca1::0001",
+          "kb_document_id": "KB881135",
+          "matched_terms": [
+            "billing",
+            "usage"
+          ],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "rank": 4,
+          "score": 4.324562
+        },
+        {
+          "bug_patch_number": "38959233",
+          "category": "Case Management",
+          "chunk_id": "KB881136::38959233::00b123613330844ef1a316a48af09673243150d999b26b2f613665a156ecb479::0001",
+          "kb_document_id": "KB881136",
+          "matched_terms": [
+            "billing",
+            "usage"
+          ],
+          "product": "Oracle Utilities Customer Care and Billing",
+          "rank": 5,
+          "score": 4.324562
+        }
+      ]
+    },
+    {
+      "case_id": "rates_filtered_ccb_bm25",
+      "failures": [
+        "query returned no results",
+        "expect_any failed for bug_patch_number: expected one of ['38558279', '38742668', '39003305', '39020780']; no returned result matched."
+      ],
+      "query": "rates",
+      "ranker": "bm25_v1",
+      "returned_count": 0,
+      "status": "FAIL",
+      "top_results": []
+    }
+  ],
+  "schema_version": "kb_retrieval_evaluation.v1"
+}
