@@ -1,6 +1,6 @@
 # KB Draft Review Export
 
-Generated UTC: `2026-05-13T13:35:32.554026+00:00`
+Generated UTC: `2026-05-13T13:37:48.340377+00:00`
 
 ## Overview
 
@@ -51,7 +51,10 @@ This draft is based on the assembled KB/PFDS evidence packet containing 15 evide
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_001` — Evidence Groups
 
@@ -60,7 +63,10 @@ Evidence group KB875759::39002995::Oracle Utilities Service and Measurement Data
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_002` — Evidence Groups
 
@@ -69,7 +75,10 @@ Evidence group KB881136::39007114::Oracle Utilities Service and Measurement Data
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_003` — Evidence Groups
 
@@ -78,7 +87,10 @@ Evidence group KB881135::39127058::Oracle Utilities Service and Measurement Data
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_004` — Evidence Groups
 
@@ -87,7 +99,10 @@ Evidence group KB875759::38794940::Oracle Utilities Service and Measurement Data
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_005` — Evidence Groups
 
@@ -96,7 +111,10 @@ Evidence group KB881136::38966530::Oracle Utilities Service and Measurement Data
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_006` — Evidence Groups
 
@@ -104,8 +122,12 @@ Evidence group KB869018::38848234::Oracle Utilities Customer Care and Billing::B
 
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
-Reviewer decision: `UNSET`  
-Reviewer notes:  
+Reviewer decision: `ACCEPT`  
+Review status: `REVIEWED`  
+Visual acknowledgement: `ACKNOWLEDGED`  
+Reviewer: `GATE12_SMOKE`  
+Reviewer notes: Bridge smoke-test acceptance with visual acknowledgement.  
+Updated UTC: `2026-05-13T13:37:48.611242+00:00`  
 
 ### `evidence_group_007` — Evidence Groups
 
@@ -114,7 +136,10 @@ Evidence group KB881135::39234264::Oracle Utilities Customer Care and Billing::B
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_008` — Evidence Groups
 
@@ -123,7 +148,10 @@ Evidence group KB881135::39064768::Oracle Utilities Customer Care and Billing::C
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_009` — Evidence Groups
 
@@ -132,7 +160,10 @@ Evidence group KB881135::38959224::Oracle Utilities Customer Care and Billing::C
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `evidence_group_010` — Evidence Groups
 
@@ -141,7 +172,10 @@ Evidence group KB881136::38959233::Oracle Utilities Customer Care and Billing::C
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `impacted_product_area_01_001` — Impacted Product Area: Oracle Utilities Customer Care and Billing
 
@@ -150,7 +184,10 @@ Retrieved evidence for Oracle Utilities Customer Care and Billing is concentrate
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `impacted_product_area_02_001` — Impacted Product Area: Oracle Utilities Service and Measurement Data Foundation
 
@@ -159,7 +196,10 @@ Retrieved evidence for Oracle Utilities Service and Measurement Data Foundation 
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `unresolved_evidence_gaps_001` — Unresolved Evidence Gaps
 
@@ -168,7 +208,10 @@ There are 10 high-severity missing-PFDS evidence exceptions. These gaps are list
 - Caveat: No impact claim is made from missing evidence alone.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ### `draft_status_001` — Draft Status
 
@@ -177,7 +220,10 @@ This artifact is a citation-bound draft generated from retrieved evidence. It is
 - Caveat: Reviewer validation is required before any impact statement can be finalized.
 
 Reviewer decision: `UNSET`  
-Reviewer notes:  
+Review status: `PENDING_REVIEW`  
+Visual acknowledgement: `UNSET`  
+Reviewer: ``  
+Reviewer notes:   
 
 ## Unresolved Gap Acknowledgement Tasks
 
@@ -193,6 +239,106 @@ Reviewer notes:
 | `gap_008` | PENDING_ACKNOWLEDGEMENT | UNSET | Missing PFDS evidence remains unresolved for KB869018 bug/patch 38803958 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Error upon viewing a service agreement - field name 'ACT_ERROR_MESSAGE' that does not exist |
 | `gap_009` | PENDING_ACKNOWLEDGEMENT | UNSET | Missing PFDS evidence remains unresolved for KB869018 bug/patch 38803048 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Various MTM transaction and zone errors |
 | `gap_010` | PENDING_ACKNOWLEDGEMENT | UNSET | Missing PFDS evidence remains unresolved for KB869018 bug/patch 38719400 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Remove 'Error Status' soft parameter from U2VALMM algorithm |
+
+## Gap Details for Review
+
+### `gap_001`
+
+Missing PFDS evidence remains unresolved for KB881136 bug/patch 38983801 (Oracle Utilities Customer Care and Billing / Notification Preferences): Notification-related Issues
+
+Acknowledgement: `ACKNOWLEDGED`  
+Review status: `ACKNOWLEDGED`  
+Reviewer: `GATE12_SMOKE`  
+Reviewer notes: Bridge smoke-test unresolved gap acknowledgement.  
+Updated UTC: `2026-05-13T13:37:48.858941+00:00`  
+
+### `gap_002`
+
+Missing PFDS evidence remains unresolved for KB881136 bug/patch 39007153 (Oracle Utilities Customer Care and Billing / Customer 360): Additional changes to display AI-generated summary to Customer Activity History zone
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_003`
+
+Missing PFDS evidence remains unresolved for KB881135 bug/patch 38932135 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Database Health Check: Orphan Records - MTM objects and system generated imports on scripts
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_004`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38889566 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Custom Modification algorithm types cleanup
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_005`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38866025 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Incorrect value if Market Participant Type is set to 'AY'
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_006`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38765800 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Market Transaction Messages 867_03/810 non-final not RFP for service point with meter removed, 810s are stuck in 'Investigate' / 'Cancel' status
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_007`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38711109 (Oracle Utilities Customer to Meter / Market Transaction Messaging): U2BILLGENPRC algorithm needs to be fixed to ignore adjustment only bill
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_008`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38803958 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Error upon viewing a service agreement - field name 'ACT_ERROR_MESSAGE' that does not exist
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_009`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38803048 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Various MTM transaction and zone errors
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+### `gap_010`
+
+Missing PFDS evidence remains unresolved for KB869018 bug/patch 38719400 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Remove 'Error Status' soft parameter from U2VALMM algorithm
+
+Acknowledgement: `UNSET`  
+Review status: `PENDING_ACKNOWLEDGEMENT`  
+Reviewer: ``  
+Reviewer notes:   
+
+## Review Audit Events
+
+| Event | Timestamp UTC | Action | Target | Reviewer |
+|---|---|---|---|---|
+| `review_event_0001` | 2026-05-13T13:37:48.611272+00:00 | CLAIM_DECISION_UPDATE | evidence_group_006 | GATE12_SMOKE |
+| `review_event_0002` | 2026-05-13T13:37:48.858993+00:00 | GAP_ACKNOWLEDGEMENT_UPDATE | gap_001 | GATE12_SMOKE |
 
 ## Source Inputs
 
