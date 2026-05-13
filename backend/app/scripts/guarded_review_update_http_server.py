@@ -16,6 +16,9 @@ from app.scripts.review_update_service import request_from_json
 from app.scripts.security_denial_audit import append_security_denial_event
 
 
+ALLOWED_BROWSER_ORIGINS = {"null", "http://127.0.0.1:8766", "http://localhost:8766"}
+
+
 def append_endpoint_denial(
     *,
     audit_path: Path,
@@ -52,11 +55,27 @@ class AuditedPermissionError(PermissionError):
 class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
     server_version = "KBGuardedReviewUpdateHTTP/1.1"
 
+    def _send_browser_scaffold_headers(self) -> None:
+        """Allow the local Gate 17 browser scaffold to call the guarded endpoint.
+
+        This is intentionally narrow and does not use credentials. A static file opened
+        directly in a browser sends Origin: null, so that origin is allowed for local
+        smoke/demo use only.
+        """
+        origin = self.headers.get("Origin", "")
+        if origin in ALLOWED_BROWSER_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Request-Id, X-Review-Source")
+        self.send_header("Access-Control-Max-Age", "600")
+
     def _json_response(self, status: HTTPStatus, payload: dict[str, Any]) -> None:
         body = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8") + b"\n"
         self.send_response(status.value)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
+        self._send_browser_scaffold_headers()
         self.end_headers()
         self.wfile.write(body)
 
@@ -69,6 +88,15 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
             raise ValueError("JSON request body must be an object.")
         return payload
 
+    def do_OPTIONS(self) -> None:  # noqa: N802 - stdlib handler API
+        route = urlparse(self.path).path
+        if route not in {"/health", "/review/update"}:
+            self._json_response(HTTPStatus.NOT_FOUND, {"status": "ERROR", "error": f"Unknown route: {route}"})
+            return
+        self.send_response(HTTPStatus.NO_CONTENT.value)
+        self._send_browser_scaffold_headers()
+        self.end_headers()
+
     def do_GET(self) -> None:  # noqa: N802 - stdlib handler API
         route = urlparse(self.path).path
         if route == "/health":
@@ -80,6 +108,7 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
                     "authorization_required": True,
                     "provenance_required": True,
                     "security_denial_audit_enabled": True,
+                    "browser_action_scaffold_allowed": True,
                     "finalization_allowed": False,
                     "mutation_contract": "Gate 13 ReviewUpdateRequest + Gate 16B auth adapter",
                 },
