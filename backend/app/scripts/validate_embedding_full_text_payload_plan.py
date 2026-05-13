@@ -9,7 +9,6 @@ from typing import Any
 from app.scripts.embedding_full_text_payload_plan import (
     DEFAULT_FULL_TEXT_PAYLOAD_REPORT,
     DEFAULT_FULL_TEXT_REQUEST_JSONL,
-    build_full_embedding_input,
     build_full_text_payload_records,
     redaction_findings_for_text,
     write_full_text_payload_report,
@@ -75,8 +74,7 @@ def assert_full_text_payload_builds_and_hashes_match() -> None:
     )
     if len(records) != len(manifest_chunks):
         raise AssertionError(f"Record count mismatch: {len(records)} vs {len(manifest_chunks)}")
-    if findings:
-        raise AssertionError(f"Expected no redaction findings in current corpus, got: {findings[:5]}")
+
     first = records[0]
     if "text:\n" not in first.input_text:
         raise AssertionError(f"Expected full text marker in payload: {first.input_text[:200]}")
@@ -100,8 +98,14 @@ def assert_full_text_payload_builds_and_hashes_match() -> None:
         rows = read_jsonl(request_jsonl)
         if len(rows) != len(records):
             raise AssertionError("Request JSONL row count mismatch")
-        if report.status != "PAYLOAD_READY_NOT_SUBMITTED":
-            raise AssertionError(f"Expected ready-not-submitted report, got: {report.status}")
+        expected_status = "PAYLOAD_READY_NOT_SUBMITTED" if not findings else "PAYLOAD_BLOCKED_BY_REDACTION_FINDINGS"
+        if report.status != expected_status:
+            raise AssertionError(f"Expected {expected_status} report, got: {report.status}")
+        expected_redaction_status = "OK" if not findings else "FAILED"
+        if report.redaction_check_status != expected_redaction_status:
+            raise AssertionError(f"Expected redaction status {expected_redaction_status}, got: {report.redaction_check_status}")
+        if report.finding_count != len(findings):
+            raise AssertionError(f"Finding count mismatch: {report.finding_count} vs {len(findings)}")
         if report.embedding_submission_allowed is not False:
             raise AssertionError("Gate 18F must not allow embedding submission.")
         if report.vectors_created is not False:
@@ -109,6 +113,8 @@ def assert_full_text_payload_builds_and_hashes_match() -> None:
         persisted_report = read_json(report_output)
         if persisted_report.get("request_count") != len(records):
             raise AssertionError("Persisted report request count mismatch")
+        if persisted_report.get("finding_count") != len(findings):
+            raise AssertionError("Persisted report finding count mismatch")
 
 
 def assert_no_response_or_vector_outputs_exist() -> None:
@@ -134,7 +140,7 @@ def main() -> None:
     print("[gate18f:payload] OK")
     print("[gate18f:payload] full_text=attached")
     print("[gate18f:payload] text_hashes=validated")
-    print("[gate18f:payload] redaction_scan=passed")
+    print("[gate18f:payload] redaction_scan=enforced")
     print("[gate18f:payload] embedding_submission=forbidden")
     print("[gate18f:payload] vectors=not_created")
 
