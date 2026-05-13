@@ -21,6 +21,7 @@ def read_text(path: Path) -> str:
 
 def validate_design_spec(path: Path) -> list[ValidationFailure]:
     text = read_text(path)
+    text_lower = text.lower()
     failures: list[ValidationFailure] = []
 
     required_fragments = [
@@ -63,16 +64,27 @@ def validate_design_spec(path: Path) -> list[ValidationFailure]:
         if section not in text:
             failures.append(ValidationFailure("required_section", f"Missing required section: {section!r}"))
 
-    forbidden_fragments = [
-        "replace BM25",
-        "run implicitly during review mutation",
-        "run implicitly during draft generation",
+    required_negative_claims = [
+        "does not call an embedding model",
+        "does not create vectors",
+        "does not replace bm25 retrieval",
+        "embedding generation must be a separate explicit command",
+        "must not run implicitly during review mutation",
+        "must not run implicitly during review mutation or draft generation",
+    ]
+    for fragment in required_negative_claims:
+        if fragment not in text_lower:
+            failures.append(ValidationFailure("required_negative_claim", f"Missing required negative claim: {fragment!r}"))
+
+    forbidden_positive_claims = [
+        "embeddings replace bm25",
+        "vector retrieval replaces bm25",
+        "embedding generation runs implicitly",
         "finalization_allowed = true",
     ]
-    text_lower = text.lower()
-    for fragment in forbidden_fragments:
-        if fragment.lower() in text_lower:
-            failures.append(ValidationFailure("forbidden_fragment", f"Forbidden design claim found: {fragment!r}"))
+    for fragment in forbidden_positive_claims:
+        if fragment in text_lower:
+            failures.append(ValidationFailure("forbidden_positive_claim", f"Forbidden design claim found: {fragment!r}"))
 
     return failures
 
