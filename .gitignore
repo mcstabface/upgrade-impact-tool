@@ -13,6 +13,7 @@ kbs/indexes/
 kbs/query_context/
 kbs/impact_context/
 kbs/review/
+kbs/audit/
 
 # Keep generated manifests reviewable only when intentionally added.
 # Do not ignore kbs/manifests/ by default.
