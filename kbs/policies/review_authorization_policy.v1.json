@@ -1,0 +1,32 @@
+{
+  "artifact_type": "review_authorization_policy",
+  "schema_version": "review_authorization_policy.v1",
+  "policy_status": "LOCAL_DEVELOPMENT_ONLY",
+  "finalization_allowed": false,
+  "roles": {
+    "reviewer": {
+      "allowed_actions": ["claim", "gap"],
+      "can_finalize": false,
+      "requires_request_provenance": true
+    },
+    "observer": {
+      "allowed_actions": [],
+      "can_finalize": false,
+      "requires_request_provenance": true
+    }
+  },
+  "reviewers": [
+    {
+      "reviewer_id": "GATE15_AUTH_SMOKE",
+      "display_name": "Gate 15 Auth Smoke Reviewer",
+      "role": "reviewer",
+      "status": "ACTIVE"
+    },
+    {
+      "reviewer_id": "GATE15_OBSERVER_SMOKE",
+      "display_name": "Gate 15 Observer Smoke User",
+      "role": "observer",
+      "status": "ACTIVE"
+    }
+  ]
+}
