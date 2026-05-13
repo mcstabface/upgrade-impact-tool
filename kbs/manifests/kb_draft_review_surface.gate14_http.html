@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KB Draft Review Surface</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f172a; color: #e5e7eb; }
+    body { margin: 0; padding: 2rem; }
+    main { max-width: 1280px; margin: 0 auto; }
+    h1, h2, h3 { color: #f8fafc; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0 2rem; }
+    .metric, .claim-card, .gap-card, .policy { background: #111827; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .metric span { display: block; color: #94a3b8; font-size: 0.85rem; }
+    .metric strong { display: block; font-size: 1.5rem; margin-top: 0.25rem; }
+    .claim-card, .gap-card { margin: 1rem 0; }
+    .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0; }
+    .badge { border-radius: 999px; padding: 0.2rem 0.6rem; font-size: 0.8rem; background: #1e293b; color: #cbd5e1; border: 1px solid #475569; }
+    .badge-warning { background: #422006; border-color: #92400e; color: #fde68a; }
+    .badge-danger { background: #450a0a; border-color: #991b1b; color: #fecaca; }
+    .section-label, .evidence-ref { color: #94a3b8; }
+    code { color: #93c5fd; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
+    th, td { border: 1px solid #334155; padding: 0.45rem; text-align: left; vertical-align: top; }
+    th { background: #1e293b; }
+    input, textarea { width: 100%; box-sizing: border-box; margin-top: 0.25rem; background: #020617; color: #e5e7eb; border: 1px solid #475569; border-radius: 0.4rem; padding: 0.45rem; }
+    footer { display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-top: 1rem; }
+    .notice { border-left: 4px solid #60a5fa; padding: 1rem; background: #0b1220; color: #bfdbfe; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>KB Draft Review Surface</h1>
+  <p class="notice">Read-only Gate 11 surface. Review mutation must use Gate 10 update commands and validation; this page does not write state.</p>
+  <section class="summary-grid">
+    <div class="metric"><span>Review status</span><strong>IN_REVIEW</strong></div>
+    <div class="metric"><span>Claim tasks</span><strong>15</strong></div>
+    <div class="metric"><span>Evidence review tasks</span><strong>13</strong></div>
+    <div class="metric"><span>Visual review tasks</span><strong>13</strong></div>
+    <div class="metric"><span>Unresolved gap tasks</span><strong>10</strong></div>
+    <div class="metric"><span>Finalization allowed</span><strong>False</strong></div>
+  </section>
+  <section class="policy">
+    <h2>Review Policy</h2>
+    <ul><li><strong>accepted_claims_require_evidence_ids</strong>: <code>True</code></li><li><strong>claims_default_to_pending</strong>: <code>True</code></li><li><strong>finalization_allowed</strong>: <code>False</code></li><li><strong>image_bearing_claims_require_visual_acknowledgement</strong>: <code>True</code></li><li><strong>reviewer_decisions_allowed</strong>: <code>[&#x27;UNSET&#x27;, &#x27;ACCEPT&#x27;, &#x27;REJECT&#x27;, &#x27;NEEDS_MORE_EVIDENCE&#x27;]</code></li><li><strong>unresolved_gaps_require_acknowledgement</strong>: <code>True</code></li></ul>
+  </section>
+  <section>
+    <h2>Claim Review Tasks</h2>
+    
+    <article class="claim-card" id="scope_and_inputs_001">
+      <header>
+        <h3><code>scope_and_inputs_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">source_scope</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Scope and Inputs</p>
+      <p>This draft is based on the assembled KB/PFDS evidence packet containing 15 evidence items grouped into 10 evidence groups. [evidence: 0bda9695e88f746c, 1ca0f8c396010bcd, 1cc8cb7c3db849f3, 4f36e7a253467768, 4f4cbbe012c6c61a, 603547a634443bcb, 71db8e4fa7f2b8e5, 7660d8480f7219d5, 970bbd743c307ff2, 9b0ce46be6dfb22c, ba55538e4b6a1e3b, c8146663783b1ce0, d5ebe5a7d15fc41d, e1e70f018e26be2d, fbd5fab7e7286d4e]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">0bda9695e88f746c (KB881136 / bug 39007114 / Oracle Utilities Service and Measurement Data Foundation / Usage); 1ca0f8c396010bcd (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage); 1cc8cb7c3db849f3 (KB881135 / bug 39064768 / Oracle Utilities Customer Care and Billing / Conversion); 4f36e7a253467768 (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage); 4f4cbbe012c6c61a (KB875759 / bug 39002995 / Oracle Utilities Service and Measurement Data Foundation / Usage); 603547a634443bcb (KB869018 / bug 38848234 / Oracle Utilities Customer Care and Billing / Billing); 71db8e4fa7f2b8e5 (KB881135 / bug 38959224 / Oracle Utilities Customer Care and Billing / Case Management); 7660d8480f7219d5 (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage); 970bbd743c307ff2 (KB881135 / bug 39234264 / Oracle Utilities Customer Care and Billing / Billing); 9b0ce46be6dfb22c (KB881136 / bug 39007114 / Oracle Utilities Service and Measurement Data Foundation / Usage); ba55538e4b6a1e3b (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage); c8146663783b1ce0 (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage); d5ebe5a7d15fc41d (KB875759 / bug 39002995 / Oracle Utilities Service and Measurement Data Foundation / Usage); e1e70f018e26be2d (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage); fbd5fab7e7286d4e (KB881136 / bug 38959233 / Oracle Utilities Customer Care and Billing / Case Management)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>0bda9695e88f746c</code></td><td>KB881136</td><td>39007114</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39007114_Product_Fix_Design_6.pdf</td></tr><tr><td><code>1ca0f8c396010bcd</code></td><td>KB881135</td><td>39127058</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_39127058_Product_Fix_Design_6.pdf</td></tr><tr><td><code>1cc8cb7c3db849f3</code></td><td>KB881135</td><td>39064768</td><td>Oracle Utilities Customer Care and Billing</td><td>Conversion</td><td>True</td><td>42</td><td>kbs/extracted/CCS_25.10_MP7.4.1_PFDs_Portfolio/0_Bug_39064768_Product_Fix_Design_6.pdf</td></tr><tr><td><code>4f36e7a253467768</code></td><td>KB881135</td><td>39127058</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_39127058_Product_Fix_Design_6.pdf</td></tr><tr><td><code>4f4cbbe012c6c61a</code></td><td>KB875759</td><td>39002995</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_25.10_MP6.2.2_PFDs_Portfolio/0_Bug_39002995_Product_Fix_Design_6.pdf</td></tr><tr><td><code>603547a634443bcb</code></td><td>KB869018</td><td>38848234</td><td>Oracle Utilities Customer Care and Billing</td><td>Billing</td><td>True</td><td>234</td><td>kbs/extracted/CCS_25.10_MP5.3.1_PFDs_Portfolio/0_Bug_38848234_Product_Fix_Design_6.pdf</td></tr><tr><td><code>71db8e4fa7f2b8e5</code></td><td>KB881135</td><td>38959224</td><td>Oracle Utilities Customer Care and Billing</td><td>Case Management</td><td>True</td><td>81</td><td>kbs/extracted/CCS_25.10_MP7.1.0_PFDs_Portfolio/0_Bug_38959224_Product_Fix_Design_6.pdf</td></tr><tr><td><code>7660d8480f7219d5</code></td><td>KB881136</td><td>38966530</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38966530_Product_Fix_Design_6.pdf</td></tr><tr><td><code>970bbd743c307ff2</code></td><td>KB881135</td><td>39234264</td><td>Oracle Utilities Customer Care and Billing</td><td>Billing</td><td>True</td><td>20</td><td>kbs/extracted/CCS_25.10_MP7.5.3_PFDs_Portfolio/0_Bug_39234264_Product_Fix_Design_6.pdf</td></tr><tr><td><code>9b0ce46be6dfb22c</code></td><td>KB881136</td><td>39007114</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39007114_Product_Fix_Design_6.pdf</td></tr><tr><td><code>ba55538e4b6a1e3b</code></td><td>KB875759</td><td>38794940</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>9</td><td>kbs/extracted/CCS_25.10_MP6.1.0_PFDs_Portfolio/0_Bug_38794940_Product_Fix_Design_6.pdf</td></tr><tr><td><code>c8146663783b1ce0</code></td><td>KB875759</td><td>38794940</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>9</td><td>kbs/extracted/CCS_25.10_MP6.1.0_PFDs_Portfolio/0_Bug_38794940_Product_Fix_Design_6.pdf</td></tr><tr><td><code>d5ebe5a7d15fc41d</code></td><td>KB875759</td><td>39002995</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_25.10_MP6.2.2_PFDs_Portfolio/0_Bug_39002995_Product_Fix_Design_6.pdf</td></tr><tr><td><code>e1e70f018e26be2d</code></td><td>KB881136</td><td>38966530</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38966530_Product_Fix_Design_6.pdf</td></tr><tr><td><code>fbd5fab7e7286d4e</code></td><td>KB881136</td><td>38959233</td><td>Oracle Utilities Customer Care and Billing</td><td>Case Management</td><td>True</td><td>90</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38959233_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_001">
+      <header>
+        <h3><code>evidence_group_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB875759::39002995::Oracle Utilities Service and Measurement Data Foundation::Usage contains 2 cited item(s) for Oracle Utilities Service and Measurement Data Foundation / Usage under bug/patch 39002995. [evidence: 4f4cbbe012c6c61a, d5ebe5a7d15fc41d]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">4f4cbbe012c6c61a (KB875759 / bug 39002995 / Oracle Utilities Service and Measurement Data Foundation / Usage); d5ebe5a7d15fc41d (KB875759 / bug 39002995 / Oracle Utilities Service and Measurement Data Foundation / Usage)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>4f4cbbe012c6c61a</code></td><td>KB875759</td><td>39002995</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_25.10_MP6.2.2_PFDs_Portfolio/0_Bug_39002995_Product_Fix_Design_6.pdf</td></tr><tr><td><code>d5ebe5a7d15fc41d</code></td><td>KB875759</td><td>39002995</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_25.10_MP6.2.2_PFDs_Portfolio/0_Bug_39002995_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_002">
+      <header>
+        <h3><code>evidence_group_002</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881136::39007114::Oracle Utilities Service and Measurement Data Foundation::Usage contains 2 cited item(s) for Oracle Utilities Service and Measurement Data Foundation / Usage under bug/patch 39007114. [evidence: 0bda9695e88f746c, 9b0ce46be6dfb22c]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">0bda9695e88f746c (KB881136 / bug 39007114 / Oracle Utilities Service and Measurement Data Foundation / Usage); 9b0ce46be6dfb22c (KB881136 / bug 39007114 / Oracle Utilities Service and Measurement Data Foundation / Usage)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>0bda9695e88f746c</code></td><td>KB881136</td><td>39007114</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39007114_Product_Fix_Design_6.pdf</td></tr><tr><td><code>9b0ce46be6dfb22c</code></td><td>KB881136</td><td>39007114</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39007114_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_003">
+      <header>
+        <h3><code>evidence_group_003</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881135::39127058::Oracle Utilities Service and Measurement Data Foundation::Usage contains 2 cited item(s) for Oracle Utilities Service and Measurement Data Foundation / Usage under bug/patch 39127058. [evidence: 1ca0f8c396010bcd, 4f36e7a253467768]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">1ca0f8c396010bcd (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage); 4f36e7a253467768 (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>1ca0f8c396010bcd</code></td><td>KB881135</td><td>39127058</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_39127058_Product_Fix_Design_6.pdf</td></tr><tr><td><code>4f36e7a253467768</code></td><td>KB881135</td><td>39127058</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_39127058_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_004">
+      <header>
+        <h3><code>evidence_group_004</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB875759::38794940::Oracle Utilities Service and Measurement Data Foundation::Usage contains 2 cited item(s) for Oracle Utilities Service and Measurement Data Foundation / Usage under bug/patch 38794940. [evidence: ba55538e4b6a1e3b, c8146663783b1ce0]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">ba55538e4b6a1e3b (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage); c8146663783b1ce0 (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>ba55538e4b6a1e3b</code></td><td>KB875759</td><td>38794940</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>9</td><td>kbs/extracted/CCS_25.10_MP6.1.0_PFDs_Portfolio/0_Bug_38794940_Product_Fix_Design_6.pdf</td></tr><tr><td><code>c8146663783b1ce0</code></td><td>KB875759</td><td>38794940</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>9</td><td>kbs/extracted/CCS_25.10_MP6.1.0_PFDs_Portfolio/0_Bug_38794940_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_005">
+      <header>
+        <h3><code>evidence_group_005</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881136::38966530::Oracle Utilities Service and Measurement Data Foundation::Usage contains 2 cited item(s) for Oracle Utilities Service and Measurement Data Foundation / Usage under bug/patch 38966530. [evidence: 7660d8480f7219d5, e1e70f018e26be2d]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">7660d8480f7219d5 (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage); e1e70f018e26be2d (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>7660d8480f7219d5</code></td><td>KB881136</td><td>38966530</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38966530_Product_Fix_Design_6.pdf</td></tr><tr><td><code>e1e70f018e26be2d</code></td><td>KB881136</td><td>38966530</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38966530_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_006">
+      <header>
+        <h3><code>evidence_group_006</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">REVIEWED</span>
+          <span class="badge badge-warning">decision: ACCEPT</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB869018::38848234::Oracle Utilities Customer Care and Billing::Billing contains 1 cited item(s) for Oracle Utilities Customer Care and Billing / Billing under bug/patch 38848234. [evidence: 603547a634443bcb]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">603547a634443bcb (KB869018 / bug 38848234 / Oracle Utilities Customer Care and Billing / Billing)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>603547a634443bcb</code></td><td>KB869018</td><td>38848234</td><td>Oracle Utilities Customer Care and Billing</td><td>Billing</td><td>True</td><td>234</td><td>kbs/extracted/CCS_25.10_MP5.3.1_PFDs_Portfolio/0_Bug_38848234_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="ACCEPT" /></label>
+        <label>Reviewer notes <textarea readonly>HTTP smoke-test acceptance with visual acknowledgement.</textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_007">
+      <header>
+        <h3><code>evidence_group_007</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881135::39234264::Oracle Utilities Customer Care and Billing::Billing contains 1 cited item(s) for Oracle Utilities Customer Care and Billing / Billing under bug/patch 39234264. [evidence: 970bbd743c307ff2]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">970bbd743c307ff2 (KB881135 / bug 39234264 / Oracle Utilities Customer Care and Billing / Billing)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>970bbd743c307ff2</code></td><td>KB881135</td><td>39234264</td><td>Oracle Utilities Customer Care and Billing</td><td>Billing</td><td>True</td><td>20</td><td>kbs/extracted/CCS_25.10_MP7.5.3_PFDs_Portfolio/0_Bug_39234264_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_008">
+      <header>
+        <h3><code>evidence_group_008</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881135::39064768::Oracle Utilities Customer Care and Billing::Conversion contains 1 cited item(s) for Oracle Utilities Customer Care and Billing / Conversion under bug/patch 39064768. [evidence: 1cc8cb7c3db849f3]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">1cc8cb7c3db849f3 (KB881135 / bug 39064768 / Oracle Utilities Customer Care and Billing / Conversion)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>1cc8cb7c3db849f3</code></td><td>KB881135</td><td>39064768</td><td>Oracle Utilities Customer Care and Billing</td><td>Conversion</td><td>True</td><td>42</td><td>kbs/extracted/CCS_25.10_MP7.4.1_PFDs_Portfolio/0_Bug_39064768_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_009">
+      <header>
+        <h3><code>evidence_group_009</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881135::38959224::Oracle Utilities Customer Care and Billing::Case Management contains 1 cited item(s) for Oracle Utilities Customer Care and Billing / Case Management under bug/patch 38959224. [evidence: 71db8e4fa7f2b8e5]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">71db8e4fa7f2b8e5 (KB881135 / bug 38959224 / Oracle Utilities Customer Care and Billing / Case Management)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>71db8e4fa7f2b8e5</code></td><td>KB881135</td><td>38959224</td><td>Oracle Utilities Customer Care and Billing</td><td>Case Management</td><td>True</td><td>81</td><td>kbs/extracted/CCS_25.10_MP7.1.0_PFDs_Portfolio/0_Bug_38959224_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="evidence_group_010">
+      <header>
+        <h3><code>evidence_group_010</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">evidence_group_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Evidence Groups</p>
+      <p>Evidence group KB881136::38959233::Oracle Utilities Customer Care and Billing::Case Management contains 1 cited item(s) for Oracle Utilities Customer Care and Billing / Case Management under bug/patch 38959233. [evidence: fbd5fab7e7286d4e]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">fbd5fab7e7286d4e (KB881136 / bug 38959233 / Oracle Utilities Customer Care and Billing / Case Management)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>fbd5fab7e7286d4e</code></td><td>KB881136</td><td>38959233</td><td>Oracle Utilities Customer Care and Billing</td><td>Case Management</td><td>True</td><td>90</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38959233_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="impacted_product_area_01_001">
+      <header>
+        <h3><code>impacted_product_area_01_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">retrieved_evidence_product_area</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Impacted Product Area: Oracle Utilities Customer Care and Billing</p>
+      <p>Retrieved evidence for Oracle Utilities Customer Care and Billing is concentrated in these category areas: Billing (2), Case Management (2), Conversion (1). The cited bug/patch references are 38848234, 38959224, 38959233, 39064768, 39234264. [evidence: 1cc8cb7c3db849f3, 603547a634443bcb, 71db8e4fa7f2b8e5, 970bbd743c307ff2, fbd5fab7e7286d4e]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">1cc8cb7c3db849f3 (KB881135 / bug 39064768 / Oracle Utilities Customer Care and Billing / Conversion); 603547a634443bcb (KB869018 / bug 38848234 / Oracle Utilities Customer Care and Billing / Billing); 71db8e4fa7f2b8e5 (KB881135 / bug 38959224 / Oracle Utilities Customer Care and Billing / Case Management); 970bbd743c307ff2 (KB881135 / bug 39234264 / Oracle Utilities Customer Care and Billing / Billing); fbd5fab7e7286d4e (KB881136 / bug 38959233 / Oracle Utilities Customer Care and Billing / Case Management)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>1cc8cb7c3db849f3</code></td><td>KB881135</td><td>39064768</td><td>Oracle Utilities Customer Care and Billing</td><td>Conversion</td><td>True</td><td>42</td><td>kbs/extracted/CCS_25.10_MP7.4.1_PFDs_Portfolio/0_Bug_39064768_Product_Fix_Design_6.pdf</td></tr><tr><td><code>603547a634443bcb</code></td><td>KB869018</td><td>38848234</td><td>Oracle Utilities Customer Care and Billing</td><td>Billing</td><td>True</td><td>234</td><td>kbs/extracted/CCS_25.10_MP5.3.1_PFDs_Portfolio/0_Bug_38848234_Product_Fix_Design_6.pdf</td></tr><tr><td><code>71db8e4fa7f2b8e5</code></td><td>KB881135</td><td>38959224</td><td>Oracle Utilities Customer Care and Billing</td><td>Case Management</td><td>True</td><td>81</td><td>kbs/extracted/CCS_25.10_MP7.1.0_PFDs_Portfolio/0_Bug_38959224_Product_Fix_Design_6.pdf</td></tr><tr><td><code>970bbd743c307ff2</code></td><td>KB881135</td><td>39234264</td><td>Oracle Utilities Customer Care and Billing</td><td>Billing</td><td>True</td><td>20</td><td>kbs/extracted/CCS_25.10_MP7.5.3_PFDs_Portfolio/0_Bug_39234264_Product_Fix_Design_6.pdf</td></tr><tr><td><code>fbd5fab7e7286d4e</code></td><td>KB881136</td><td>38959233</td><td>Oracle Utilities Customer Care and Billing</td><td>Case Management</td><td>True</td><td>90</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38959233_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="impacted_product_area_02_001">
+      <header>
+        <h3><code>impacted_product_area_02_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">retrieved_evidence_product_area</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">evidence review</span>
+          <span class="badge badge-danger">visual review required</span>
+        </div>
+      </header>
+      <p class="section-label">Impacted Product Area: Oracle Utilities Service and Measurement Data Foundation</p>
+      <p>Retrieved evidence for Oracle Utilities Service and Measurement Data Foundation is concentrated in these category areas: Usage (10). The cited bug/patch references are 38794940, 38966530, 39002995, 39007114, 39127058. [evidence: 0bda9695e88f746c, 1ca0f8c396010bcd, 4f36e7a253467768, 4f4cbbe012c6c61a, 7660d8480f7219d5, 9b0ce46be6dfb22c, ba55538e4b6a1e3b, c8146663783b1ce0, d5ebe5a7d15fc41d, e1e70f018e26be2d]</p>
+      <ul class="caveats"><li>One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.</li></ul>
+      <p class="evidence-ref">0bda9695e88f746c (KB881136 / bug 39007114 / Oracle Utilities Service and Measurement Data Foundation / Usage); 1ca0f8c396010bcd (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage); 4f36e7a253467768 (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage); 4f4cbbe012c6c61a (KB875759 / bug 39002995 / Oracle Utilities Service and Measurement Data Foundation / Usage); 7660d8480f7219d5 (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage); 9b0ce46be6dfb22c (KB881136 / bug 39007114 / Oracle Utilities Service and Measurement Data Foundation / Usage); ba55538e4b6a1e3b (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage); c8146663783b1ce0 (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage); d5ebe5a7d15fc41d (KB875759 / bug 39002995 / Oracle Utilities Service and Measurement Data Foundation / Usage); e1e70f018e26be2d (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage)</p>
+      <details><summary>Evidence lineage</summary><table><thead><tr><th>Evidence ID</th><th>KB</th><th>Bug / Patch</th><th>Product</th><th>Category</th><th>Has Images</th><th>Image Count</th><th>Child PDF</th></tr></thead><tbody><tr><td><code>0bda9695e88f746c</code></td><td>KB881136</td><td>39007114</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39007114_Product_Fix_Design_6.pdf</td></tr><tr><td><code>1ca0f8c396010bcd</code></td><td>KB881135</td><td>39127058</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_39127058_Product_Fix_Design_6.pdf</td></tr><tr><td><code>4f36e7a253467768</code></td><td>KB881135</td><td>39127058</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_39127058_Product_Fix_Design_6.pdf</td></tr><tr><td><code>4f4cbbe012c6c61a</code></td><td>KB875759</td><td>39002995</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_25.10_MP6.2.2_PFDs_Portfolio/0_Bug_39002995_Product_Fix_Design_6.pdf</td></tr><tr><td><code>7660d8480f7219d5</code></td><td>KB881136</td><td>38966530</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38966530_Product_Fix_Design_6.pdf</td></tr><tr><td><code>9b0ce46be6dfb22c</code></td><td>KB881136</td><td>39007114</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39007114_Product_Fix_Design_6.pdf</td></tr><tr><td><code>ba55538e4b6a1e3b</code></td><td>KB875759</td><td>38794940</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>9</td><td>kbs/extracted/CCS_25.10_MP6.1.0_PFDs_Portfolio/0_Bug_38794940_Product_Fix_Design_6.pdf</td></tr><tr><td><code>c8146663783b1ce0</code></td><td>KB875759</td><td>38794940</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>9</td><td>kbs/extracted/CCS_25.10_MP6.1.0_PFDs_Portfolio/0_Bug_38794940_Product_Fix_Design_6.pdf</td></tr><tr><td><code>d5ebe5a7d15fc41d</code></td><td>KB875759</td><td>39002995</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>10</td><td>kbs/extracted/CCS_25.10_MP6.2.2_PFDs_Portfolio/0_Bug_39002995_Product_Fix_Design_6.pdf</td></tr><tr><td><code>e1e70f018e26be2d</code></td><td>KB881136</td><td>38966530</td><td>Oracle Utilities Service and Measurement Data Foundation</td><td>Usage</td><td>True</td><td>8</td><td>kbs/extracted/CCS_26.4_MP1.3.3_PFDs_Portfolio/0_Bug_38966530_Product_Fix_Design_6.pdf</td></tr></tbody></table></details>
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="unresolved_evidence_gaps_001">
+      <header>
+        <h3><code>unresolved_evidence_gaps_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">missing_evidence_inventory</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">no evidence review</span>
+          <span class="badge badge-neutral">no visual review</span>
+        </div>
+      </header>
+      <p class="section-label">Unresolved Evidence Gaps</p>
+      <p>There are 10 high-severity missing-PFDS evidence exceptions. These gaps are listed for reviewer follow-up and are not used as standalone impact conclusions.</p>
+      <ul class="caveats"><li>No impact claim is made from missing evidence alone.</li></ul>
+      <p class="evidence-ref"></p>
+      
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="claim-card" id="draft_status_001">
+      <header>
+        <h3><code>draft_status_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-neutral">draft_status</span>
+          <span class="badge badge-warning">PENDING_REVIEW</span>
+          <span class="badge badge-warning">decision: UNSET</span>
+          <span class="badge badge-neutral">no evidence review</span>
+          <span class="badge badge-neutral">no visual review</span>
+        </div>
+      </header>
+      <p class="section-label">Draft Status</p>
+      <p>This artifact is a citation-bound draft generated from retrieved evidence. It is not reviewed, not final, and not a finalized business finding.</p>
+      <ul class="caveats"><li>Reviewer validation is required before any impact statement can be finalized.</li></ul>
+      <p class="evidence-ref"></p>
+      
+      <footer>
+        <label>Reviewer decision <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+  </section>
+  <section>
+    <h2>Unresolved Gap Acknowledgement Tasks</h2>
+    
+    <article class="gap-card" id="gap_001">
+      <header>
+        <h3><code>gap_001</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">ACKNOWLEDGED</span>
+          <span class="badge badge-warning">ack: ACKNOWLEDGED</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB881136 bug/patch 38983801 (Oracle Utilities Customer Care and Billing / Notification Preferences): Notification-related Issues</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="ACKNOWLEDGED" /></label>
+        <label>Reviewer notes <textarea readonly>HTTP smoke-test unresolved gap acknowledgement.</textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_002">
+      <header>
+        <h3><code>gap_002</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB881136 bug/patch 39007153 (Oracle Utilities Customer Care and Billing / Customer 360): Additional changes to display AI-generated summary to Customer Activity History zone</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_003">
+      <header>
+        <h3><code>gap_003</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB881135 bug/patch 38932135 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Database Health Check: Orphan Records - MTM objects and system generated imports on scripts</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_004">
+      <header>
+        <h3><code>gap_004</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38889566 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Custom Modification algorithm types cleanup</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_005">
+      <header>
+        <h3><code>gap_005</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38866025 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Incorrect value if Market Participant Type is set to &#x27;AY&#x27;</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_006">
+      <header>
+        <h3><code>gap_006</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38765800 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Market Transaction Messages 867_03/810 non-final not RFP for service point with meter removed, 810s are stuck in &#x27;Investigate&#x27; / &#x27;Cancel&#x27; status</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_007">
+      <header>
+        <h3><code>gap_007</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38711109 (Oracle Utilities Customer to Meter / Market Transaction Messaging): U2BILLGENPRC algorithm needs to be fixed to ignore adjustment only bill</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_008">
+      <header>
+        <h3><code>gap_008</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38803958 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Error upon viewing a service agreement - field name &#x27;ACT_ERROR_MESSAGE&#x27; that does not exist</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_009">
+      <header>
+        <h3><code>gap_009</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38803048 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Various MTM transaction and zone errors</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+
+    <article class="gap-card" id="gap_010">
+      <header>
+        <h3><code>gap_010</code></h3>
+        <div class="badges">
+          <span class="badge badge-warning">PENDING_ACKNOWLEDGEMENT</span>
+          <span class="badge badge-warning">ack: UNSET</span>
+        </div>
+      </header>
+      <p>Missing PFDS evidence remains unresolved for KB869018 bug/patch 38719400 (Oracle Utilities Customer to Meter / Market Transaction Messaging): Remove &#x27;Error Status&#x27; soft parameter from U2VALMM algorithm</p>
+      <footer>
+        <label>Acknowledgement <input readonly value="UNSET" /></label>
+        <label>Reviewer notes <textarea readonly></textarea></label>
+      </footer>
+    </article>
+    
+  </section>
+</main>
+</body>
+</html>
