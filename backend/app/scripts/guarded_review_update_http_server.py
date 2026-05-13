@@ -8,6 +8,10 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from app.scripts.endpoint_adapter_selection_config import (
+    load_endpoint_adapter_selection_config,
+    validate_endpoint_adapter_selection_config,
+)
 from app.scripts.extract_kb_source_manifest import repo_root
 from app.scripts.guarded_review_update_service import apply_guarded_review_update_request, guarded_response_to_dict
 from app.scripts.local_policy_auth_adapter import LocalPolicyAuthAdapter
@@ -17,6 +21,26 @@ from app.scripts.security_denial_audit import append_security_denial_event
 
 
 ALLOWED_BROWSER_ORIGINS = {"null", "http://127.0.0.1:8766", "http://localhost:8766"}
+
+
+def adapter_config_health_payload(adapter_config_path: Path | None) -> dict[str, Any]:
+    """Return read-only adapter config diagnostics for endpoint health.
+
+    Gate 17L intentionally reports this status only. It does not use adapter
+    config to change the guarded endpoint mutation path.
+    """
+    config = load_endpoint_adapter_selection_config(adapter_config_path)
+    diagnostic = validate_endpoint_adapter_selection_config(config)
+    return {
+        "configured_adapter": config.review_update_auth_adapter,
+        "allow_oidc_adapter": config.allow_oidc_adapter,
+        "config_source": config.config_source,
+        "status": diagnostic.status,
+        "errors": diagnostic.errors,
+        "endpoint_integration_allowed": diagnostic.endpoint_integration_allowed,
+        "live_adapter": "local_policy",
+        "read_only_health_surface": True,
+    }
 
 
 def append_endpoint_denial(
@@ -109,6 +133,8 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
                     "provenance_required": True,
                     "security_denial_audit_enabled": True,
                     "browser_action_scaffold_allowed": True,
+                    "adapter_config": adapter_config_health_payload(self.server.adapter_config_path),  # type: ignore[attr-defined]
+                    "adapter_config_health_only": True,
                     "finalization_allowed": False,
                     "mutation_contract": "Gate 13 ReviewUpdateRequest + Gate 16B auth adapter",
                 },
@@ -248,6 +274,7 @@ def build_server(
     export_output: Path,
     surface_output: Path,
     security_audit_output: Path,
+    adapter_config_path: Path | None = None,
 ) -> ThreadingHTTPServer:
     server = ThreadingHTTPServer((host, port), GuardedReviewUpdateHTTPHandler)
     server.policy_path = policy_path  # type: ignore[attr-defined]
@@ -255,6 +282,7 @@ def build_server(
     server.export_output = export_output  # type: ignore[attr-defined]
     server.surface_output = surface_output  # type: ignore[attr-defined]
     server.security_audit_output = security_audit_output  # type: ignore[attr-defined]
+    server.adapter_config_path = adapter_config_path  # type: ignore[attr-defined]
     return server
 
 
@@ -268,6 +296,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--export-output", type=Path, default=root / "kbs" / "manifests" / "kb_draft_review_export.md")
     parser.add_argument("--surface-output", type=Path, default=root / "kbs" / "manifests" / "kb_draft_review_surface.html")
     parser.add_argument("--security-audit-output", type=Path, default=root / "kbs" / "audit" / "security_denials.jsonl")
+    parser.add_argument("--adapter-config", type=Path, default=None)
     return parser.parse_args()
 
 
@@ -281,12 +310,14 @@ def main() -> None:
         export_output=args.export_output,
         surface_output=args.surface_output,
         security_audit_output=args.security_audit_output,
+        adapter_config_path=args.adapter_config,
     )
     print(f"[gate16c:http] Serving guarded KB review update endpoint on http://{args.host}:{args.port}")
     print("[gate16c:http] Routes: GET /health, POST /review/update")
     print(f"[gate16c:http] Policy: {args.policy}")
     print(f"[gate16c:http] Manifest: {args.manifest}")
     print(f"[gate16c:http] Security audit: {args.security_audit_output}")
+    print(f"[gate16c:http] Adapter config health surface: {adapter_config_health_payload(args.adapter_config)}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
