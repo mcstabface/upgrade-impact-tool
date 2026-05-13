@@ -58,9 +58,11 @@ Expected output:
 [gate18f:payload] OK
 [gate18f:payload] full_text=attached
 [gate18f:payload] text_hashes=validated
-[gate18f:payload] redaction_scan=passed
+[gate18f:payload] redaction_scan=enforced
 [gate18f:payload] embedding_submission=forbidden
 [gate18f:payload] vectors=not_created
 ```
+
+A conservative redaction finding does not fail this gate. It blocks submission and keeps `embedding_submission=forbidden`.
 
 Recommended next gate: **Gate 18G — Dry-Run Embedding Submission Contract**.
