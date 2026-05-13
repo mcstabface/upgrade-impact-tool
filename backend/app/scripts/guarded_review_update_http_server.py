@@ -10,12 +10,43 @@ from urllib.parse import urlparse
 
 from app.scripts.extract_kb_source_manifest import repo_root
 from app.scripts.guarded_review_update_service import apply_guarded_review_update_request, guarded_response_to_dict
+from app.scripts.local_policy_auth_adapter import LocalPolicyAuthAdapter
 from app.scripts.review_authorization import provenance_from_headers
 from app.scripts.review_update_service import request_from_json
+from app.scripts.security_denial_audit import append_security_denial_event
+
+
+def append_endpoint_denial(
+    *,
+    audit_path: Path,
+    request_id: str,
+    route: str,
+    action: str,
+    target_id: str,
+    reviewer_id: str,
+    principal_subject: str,
+    principal_issuer: str,
+    denial_reason: str,
+    source: str,
+    user_agent: str,
+) -> None:
+    append_security_denial_event(
+        audit_path=audit_path,
+        request_id=request_id or "MISSING_REQUEST_ID",
+        route=route,
+        action=action or "UNKNOWN_ACTION",
+        target_id=target_id or "UNKNOWN_TARGET",
+        reviewer_id=reviewer_id or "UNKNOWN_REVIEWER",
+        principal_subject=principal_subject or reviewer_id or "UNKNOWN_PRINCIPAL",
+        principal_issuer=principal_issuer or "local-policy",
+        denial_reason=denial_reason,
+        source=source or "UNKNOWN_SOURCE",
+        user_agent=user_agent or "UNKNOWN_USER_AGENT",
+    )
 
 
 class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
-    server_version = "KBGuardedReviewUpdateHTTP/1.0"
+    server_version = "KBGuardedReviewUpdateHTTP/1.1"
 
     def _json_response(self, status: HTTPStatus, payload: dict[str, Any]) -> None:
         body = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8") + b"\n"
@@ -44,8 +75,9 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
                     "service": "kb_guarded_review_update",
                     "authorization_required": True,
                     "provenance_required": True,
+                    "security_denial_audit_enabled": True,
                     "finalization_allowed": False,
-                    "mutation_contract": "Gate 13 ReviewUpdateRequest + Gate 15 reviewer authorization",
+                    "mutation_contract": "Gate 13 ReviewUpdateRequest + Gate 16B auth adapter",
                 },
             )
             return
@@ -56,17 +88,69 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
         if route != "/review/update":
             self._json_response(HTTPStatus.NOT_FOUND, {"status": "ERROR", "error": f"Unknown route: {route}"})
             return
+
+        payload: dict[str, Any] = {}
+        request_id = self.headers.get("X-Request-Id", "")
+        source = self.headers.get("X-Review-Source", "HTTP")
+        user_agent = self.headers.get("User-Agent", "")
+        reviewer_id = ""
+        action = ""
+        target_id = ""
+        principal_subject = ""
+        principal_issuer = "local-policy"
+
         try:
             payload = self._read_json_body()
             request = request_from_json(payload)
-            request_id = self.headers.get("X-Request-Id", "")
-            provenance = provenance_from_headers(
-                request_id=request_id,
-                route=route,
-                source=self.headers.get("X-Review-Source", "HTTP"),
-                user_agent=self.headers.get("User-Agent", ""),
-                remote_addr=self.client_address[0] if self.client_address else "UNKNOWN_REMOTE_ADDR",
-            )
+            reviewer_id = request.reviewer
+            action = request.action
+            target_id = request.target_id
+
+            adapter = LocalPolicyAuthAdapter(self.server.policy_path)  # type: ignore[attr-defined]
+            decision = adapter.authorize_request_context({"reviewer_id": reviewer_id}, action=action)
+            if decision.reviewer_identity is not None:
+                principal_subject = decision.reviewer_identity.principal_subject
+                principal_issuer = decision.reviewer_identity.principal_issuer
+            if not decision.allowed:
+                append_endpoint_denial(
+                    audit_path=self.server.security_audit_output,  # type: ignore[attr-defined]
+                    request_id=request_id,
+                    route=route,
+                    action=action,
+                    target_id=target_id,
+                    reviewer_id=reviewer_id,
+                    principal_subject=principal_subject,
+                    principal_issuer=principal_issuer,
+                    denial_reason=decision.reason,
+                    source=source,
+                    user_agent=user_agent,
+                )
+                raise PermissionError(decision.reason)
+
+            try:
+                provenance = provenance_from_headers(
+                    request_id=request_id,
+                    route=route,
+                    source=source,
+                    user_agent=user_agent,
+                    remote_addr=self.client_address[0] if self.client_address else "UNKNOWN_REMOTE_ADDR",
+                )
+            except Exception as exc:
+                append_endpoint_denial(
+                    audit_path=self.server.security_audit_output,  # type: ignore[attr-defined]
+                    request_id=request_id,
+                    route=route,
+                    action=action,
+                    target_id=target_id,
+                    reviewer_id=reviewer_id,
+                    principal_subject=principal_subject,
+                    principal_issuer=principal_issuer,
+                    denial_reason=str(exc),
+                    source=source,
+                    user_agent=user_agent,
+                )
+                raise
+
             response = apply_guarded_review_update_request(
                 request,
                 provenance=provenance,
@@ -78,6 +162,23 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
             )
             self._json_response(HTTPStatus.OK, guarded_response_to_dict(response))
         except PermissionError as exc:
+            if reviewer_id and action and target_id:
+                # If authorization raised before a structured decision was available, record it here.
+                # Duplicate audit is avoided for decision-based denials by checking the error string is not already emitted.
+                if "not allowed" not in str(exc) and "No reviewer role allows" not in str(exc):
+                    append_endpoint_denial(
+                        audit_path=self.server.security_audit_output,  # type: ignore[attr-defined]
+                        request_id=request_id,
+                        route=route,
+                        action=action,
+                        target_id=target_id,
+                        reviewer_id=reviewer_id,
+                        principal_subject=principal_subject,
+                        principal_issuer=principal_issuer,
+                        denial_reason=str(exc),
+                        source=source,
+                        user_agent=user_agent,
+                    )
             self._json_response(
                 HTTPStatus.FORBIDDEN,
                 {
@@ -85,6 +186,7 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
                     "authorization_status": "DENIED",
                     "error_type": type(exc).__name__,
                     "error": str(exc),
+                    "security_denial_audit_enabled": True,
                     "finalization_allowed": False,
                 },
             )
@@ -96,12 +198,13 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
                     "authorization_status": "ERROR",
                     "error_type": type(exc).__name__,
                     "error": str(exc),
+                    "security_denial_audit_enabled": True,
                     "finalization_allowed": False,
                 },
             )
 
     def log_message(self, format: str, *args: Any) -> None:
-        print(f"[gate15:http] {self.address_string()} - {format % args}")
+        print(f"[gate16c:http] {self.address_string()} - {format % args}")
 
 
 def build_server(
@@ -112,24 +215,27 @@ def build_server(
     manifest_path: Path,
     export_output: Path,
     surface_output: Path,
+    security_audit_output: Path,
 ) -> ThreadingHTTPServer:
     server = ThreadingHTTPServer((host, port), GuardedReviewUpdateHTTPHandler)
     server.policy_path = policy_path  # type: ignore[attr-defined]
     server.manifest_path = manifest_path  # type: ignore[attr-defined]
     server.export_output = export_output  # type: ignore[attr-defined]
     server.surface_output = surface_output  # type: ignore[attr-defined]
+    server.security_audit_output = security_audit_output  # type: ignore[attr-defined]
     return server
 
 
 def parse_args() -> argparse.Namespace:
     root = repo_root()
-    parser = argparse.ArgumentParser(description="Run a local Gate 15 guarded KB review update HTTP endpoint.")
+    parser = argparse.ArgumentParser(description="Run a local Gate 16C guarded KB review update HTTP endpoint.")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8766)
     parser.add_argument("--policy", type=Path, default=root / "kbs" / "policies" / "review_authorization_policy.v1.json")
     parser.add_argument("--manifest", type=Path, default=root / "kbs" / "review" / "kb_draft_review_manifest.v1.json")
     parser.add_argument("--export-output", type=Path, default=root / "kbs" / "manifests" / "kb_draft_review_export.md")
     parser.add_argument("--surface-output", type=Path, default=root / "kbs" / "manifests" / "kb_draft_review_surface.html")
+    parser.add_argument("--security-audit-output", type=Path, default=root / "kbs" / "audit" / "security_denials.jsonl")
     return parser.parse_args()
 
 
@@ -142,15 +248,17 @@ def main() -> None:
         manifest_path=args.manifest,
         export_output=args.export_output,
         surface_output=args.surface_output,
+        security_audit_output=args.security_audit_output,
     )
-    print(f"[gate15:http] Serving guarded KB review update endpoint on http://{args.host}:{args.port}")
-    print("[gate15:http] Routes: GET /health, POST /review/update")
-    print(f"[gate15:http] Policy: {args.policy}")
-    print(f"[gate15:http] Manifest: {args.manifest}")
+    print(f"[gate16c:http] Serving guarded KB review update endpoint on http://{args.host}:{args.port}")
+    print("[gate16c:http] Routes: GET /health, POST /review/update")
+    print(f"[gate16c:http] Policy: {args.policy}")
+    print(f"[gate16c:http] Manifest: {args.manifest}")
+    print(f"[gate16c:http] Security audit: {args.security_audit_output}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("[gate15:http] Shutting down")
+        print("[gate16c:http] Shutting down")
     finally:
         server.server_close()
 
