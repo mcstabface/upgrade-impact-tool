@@ -10,7 +10,6 @@ from typing import Any
 from app.scripts.build_embedding_manifest_from_chunks import DEFAULT_SOURCE_CHUNK_MANIFEST, load_chunks_from_gate2_manifest
 from app.scripts.embedding_batch_request_plan import (
     DEFAULT_EMBEDDING_MANIFEST,
-    DEFAULT_REQUEST_JSONL,
     build_request_id,
     read_json,
     sha256_text,
@@ -61,8 +60,13 @@ class FullTextPayloadReport:
     vectors_created: bool = False
 
 
-def build_full_embedding_input(*, source_id: str, chunk_id: str, source_artifact_path: str, chunk_text: str) -> str:
-    return f"source_id: {source_id}\nchunk_id: {chunk_id}\nsource_artifact_path: {source_artifact_path}\ntext:\n{chunk_text}"
+def build_full_embedding_input(*, source_id: str, chunk_id: str, chunk_text: str) -> str:
+    """Return the canonical Gate 18B embedding input string.
+
+    Source/citation metadata stays on the request record, but it is not inserted
+    into the hashed embedding input unless the input policy changes in a later gate.
+    """
+    return f"source_id: {source_id}\nchunk_id: {chunk_id}\ntext:\n{chunk_text}"
 
 
 def redaction_findings_for_text(*, chunk_id: str, text: str) -> list[PayloadRedactionFinding]:
@@ -126,11 +130,9 @@ def build_full_text_payload_records(
         citation_payload = manifest_chunk.get("citation_payload") or {}
         if not isinstance(citation_payload, dict):
             raise ValueError(f"citation_payload must be object for chunk: {chunk_id}")
-        source_artifact_path = str(citation_payload.get("source_artifact_path") or source_chunk.get("source_path") or "")
         input_text = build_full_embedding_input(
             source_id=str(manifest_chunk.get("source_id") or ""),
             chunk_id=chunk_id,
-            source_artifact_path=source_artifact_path,
             chunk_text=chunk_text,
         )
         actual_input_sha = sha256_text(input_text)
