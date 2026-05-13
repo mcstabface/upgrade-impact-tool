@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gate 17 Browser Action Scaffold</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f172a; color: #e5e7eb; }
+    body { margin: 0; padding: 2rem; }
+    main { max-width: 1120px; margin: 0 auto; }
+    h1, h2, h3 { color: #f8fafc; }
+    .notice { border-left: 4px solid #60a5fa; padding: 1rem; background: #0b1220; color: #bfdbfe; margin: 1rem 0; }
+    .danger { border-left-color: #f87171; color: #fecaca; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0 2rem; }
+    .metric, .panel { background: #111827; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .metric span { display: block; color: #94a3b8; font-size: 0.85rem; }
+    .metric strong { display: block; font-size: 1.5rem; margin-top: 0.25rem; }
+    label { display: block; margin: 0.9rem 0; color: #cbd5e1; }
+    input, textarea, select, button { width: 100%; box-sizing: border-box; margin-top: 0.25rem; background: #020617; color: #e5e7eb; border: 1px solid #475569; border-radius: 0.4rem; padding: 0.55rem; }
+    textarea { min-height: 6rem; }
+    button { cursor: pointer; background: #1d4ed8; border-color: #2563eb; font-weight: 700; }
+    button:disabled { cursor: not-allowed; background: #1e293b; color: #64748b; border-color: #334155; }
+    code, pre { color: #93c5fd; }
+    pre { background: #020617; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; overflow: auto; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .checkbox-line { display: flex; align-items: center; gap: 0.6rem; }
+    .checkbox-line input { width: auto; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Gate 17 Browser Action Scaffold</h1>
+  <p class="notice">This page is a local browser scaffold. It does not directly edit JSON. It sends a Gate 13 review update request to the guarded <code>POST /review/update</code> endpoint.</p>
+  <p class="notice danger">Finalization remains disabled. This scaffold is not production auth. Authorization, provenance, mutation audit, security-denial audit, and artifact regeneration still happen server-side.</p>
+
+  <section class="summary-grid">
+    <div class="metric"><span>Review status</span><strong>PENDING_REVIEW</strong></div>
+    <div class="metric"><span>Claim tasks</span><strong>15</strong></div>
+    <div class="metric"><span>Visual review tasks</span><strong>13</strong></div>
+    <div class="metric"><span>Unresolved gaps</span><strong>10</strong></div>
+    <div class="metric"><span>Finalization allowed</span><strong>False</strong></div>
+  </section>
+
+  <section class="panel">
+    <h2>Guarded update request</h2>
+    <form id="review-action-form">
+      <div class="row">
+        <label>Endpoint URL
+          <input id="endpoint-url" value="http://127.0.0.1:8766/review/update" />
+        </label>
+        <label>Reviewer ID
+          <input id="reviewer" placeholder="GATE15_AUTH_SMOKE" />
+        </label>
+      </div>
+      <div class="row">
+        <label>Request ID
+          <input id="request-id" placeholder="gate17-browser-0001" />
+        </label>
+        <label>Action
+          <select id="action">
+            <option value="claim">claim</option>
+            <option value="gap">gap</option>
+          </select>
+        </label>
+      </div>
+      <label id="claim-target-label">Claim target
+        <select id="claim-target"><option value="scope_and_inputs_001">scope_and_inputs_001 · source_scope · PENDING_REVIEW · visual</option>
+<option value="evidence_group_001">evidence_group_001 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_002">evidence_group_002 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_003">evidence_group_003 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_004">evidence_group_004 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_005">evidence_group_005 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_006">evidence_group_006 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_007">evidence_group_007 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_008">evidence_group_008 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_009">evidence_group_009 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="evidence_group_010">evidence_group_010 · evidence_group_inventory · PENDING_REVIEW · visual</option>
+<option value="impacted_product_area_01_001">impacted_product_area_01_001 · retrieved_evidence_product_area · PENDING_REVIEW · visual</option>
+<option value="impacted_product_area_02_001">impacted_product_area_02_001 · retrieved_evidence_product_area · PENDING_REVIEW · visual</option>
+<option value="unresolved_evidence_gaps_001">unresolved_evidence_gaps_001 · missing_evidence_inventory · PENDING_REVIEW · no-visual</option>
+<option value="draft_status_001">draft_status_001 · draft_status · PENDING_REVIEW · no-visual</option></select>
+      </label>
+      <label id="gap-target-label" class="hidden">Gap target
+        <select id="gap-target"><option value="gap_001">gap_001 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_002">gap_002 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_003">gap_003 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_004">gap_004 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_005">gap_005 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_006">gap_006 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_007">gap_007 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_008">gap_008 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_009">gap_009 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option>
+<option value="gap_010">gap_010 · PENDING_ACKNOWLEDGEMENT · ack=UNSET</option></select>
+      </label>
+      <label id="claim-value-label">Claim decision
+        <select id="claim-value"><option value="ACCEPT">ACCEPT</option>
+<option value="REJECT">REJECT</option>
+<option value="NEEDS_MORE_EVIDENCE">NEEDS_MORE_EVIDENCE</option>
+<option value="UNSET">UNSET</option></select>
+      </label>
+      <label id="gap-value-label" class="hidden">Gap acknowledgement
+        <select id="gap-value"><option value="ACKNOWLEDGED">ACKNOWLEDGED</option>
+<option value="NEEDS_MORE_EVIDENCE">NEEDS_MORE_EVIDENCE</option>
+<option value="UNSET">UNSET</option></select>
+      </label>
+      <label>Reviewer notes
+        <textarea id="notes" placeholder="Bounded reviewer note for the audit trail."></textarea>
+      </label>
+      <label class="checkbox-line">
+        <input id="visual-acknowledged" type="checkbox" />
+        <span>Visual evidence acknowledged where required</span>
+      </label>
+      <label class="checkbox-line">
+        <input id="enable-post" type="checkbox" />
+        <span>I understand this will call the guarded endpoint. No direct JSON mutation is performed by this page.</span>
+      </label>
+      <button id="submit-button" type="submit" disabled>POST guarded review update</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Request preview</h2>
+    <pre id="request-preview"></pre>
+  </section>
+
+  <section class="panel">
+    <h2>Endpoint response</h2>
+    <pre id="response-output">No request sent.</pre>
+  </section>
+</main>
+<script>
+const actionEl = document.getElementById('action');
+const enableEl = document.getElementById('enable-post');
+const submitEl = document.getElementById('submit-button');
+const responseEl = document.getElementById('response-output');
+const previewEl = document.getElementById('request-preview');
+
+function activePayload() {
+  const action = actionEl.value;
+  const payload = {
+    action,
+    target_id: action === 'claim' ? document.getElementById('claim-target').value : document.getElementById('gap-target').value,
+    value: action === 'claim' ? document.getElementById('claim-value').value : document.getElementById('gap-value').value,
+    reviewer: document.getElementById('reviewer').value.trim(),
+    notes: document.getElementById('notes').value,
+    visual_acknowledged: document.getElementById('visual-acknowledged').checked
+  };
+  return payload;
+}
+
+function updateVisibility() {
+  const isClaim = actionEl.value === 'claim';
+  document.getElementById('claim-target-label').classList.toggle('hidden', !isClaim);
+  document.getElementById('claim-value-label').classList.toggle('hidden', !isClaim);
+  document.getElementById('gap-target-label').classList.toggle('hidden', isClaim);
+  document.getElementById('gap-value-label').classList.toggle('hidden', isClaim);
+  submitEl.disabled = !enableEl.checked;
+  previewEl.textContent = JSON.stringify(activePayload(), null, 2);
+}
+
+document.getElementById('review-action-form').addEventListener('input', updateVisibility);
+document.getElementById('review-action-form').addEventListener('change', updateVisibility);
+
+document.getElementById('review-action-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!enableEl.checked) { return; }
+  const endpointUrl = document.getElementById('endpoint-url').value.trim();
+  const requestId = document.getElementById('request-id').value.trim();
+  const payload = activePayload();
+  responseEl.textContent = 'Submitting guarded endpoint request...';
+  try {
+    const response = await fetch(endpointUrl, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Request-Id': requestId,
+        'X-Review-Source': 'gate17-browser-action-scaffold'
+      },
+      body: JSON.stringify(payload)
+    });
+    const text = await response.text();
+    let rendered = text;
+    try { rendered = JSON.stringify(JSON.parse(text), null, 2); } catch (_err) {}
+    responseEl.textContent = `HTTP ${response.status}
+${rendered}`;
+  } catch (err) {
+    responseEl.textContent = `REQUEST FAILED
+${err}`;
+  }
+});
+
+updateVisibility();
+</script>
+</body>
+</html>
