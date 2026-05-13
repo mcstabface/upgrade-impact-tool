@@ -21,6 +21,7 @@ def read_text(path: Path) -> str:
 
 def validate_design_spec(path: Path) -> list[ValidationFailure]:
     text = read_text(path)
+    text_lower = text.lower()
     failures: list[ValidationFailure] = []
 
     required_fragments = [
@@ -30,14 +31,14 @@ def validate_design_spec(path: Path) -> list[ValidationFailure]:
         "does not fetch JWKS",
         "does not accept tokens",
         "does not replace `LocalPolicyAuthAdapter`",
-        "finalization remains disabled",
-        "issuer/audience requirements",
-        "JWKS retrieval and caching policy",
-        "accepted algorithms",
-        "clock-skew policy",
-        "claim-to-reviewer mapping",
-        "security-denial audit integration",
-        "explicit enablement guardrails",
+        "Finalization remains disabled",
+        "Issuer and Audience Requirements",
+        "JWKS Retrieval and Cache Policy",
+        "Accepted Algorithms",
+        "Clock skew",
+        "Claim-to-Reviewer Mapping",
+        "Security-Denial Audit Integration",
+        "Endpoint Integration Guardrails",
         "RS256",
         "OIDC_DENIAL:<CATEGORY>:<AUDIT_SAFE_MESSAGE>",
         "TOKEN_SIGNATURE_INVALID",
@@ -76,14 +77,22 @@ def validate_design_spec(path: Path) -> list[ValidationFailure]:
             failures.append(ValidationFailure("required_section", f"Missing required section: {section!r}."))
 
     forbidden_fragments = [
-        "accepts tokens in Gate 17E",
-        "wire OIDC into the guarded endpoint in Gate 17E",
-        "replace `LocalPolicyAuthAdapter` in Gate 17E",
-        "enable finalization",
+        "accepts tokens in gate 17e",
+        "wire oidc into the guarded endpoint in gate 17e",
+        "replace `localpolicyauthadapter` in gate 17e",
     ]
     for fragment in forbidden_fragments:
-        if fragment in text:
+        if fragment in text_lower:
             failures.append(ValidationFailure("forbidden_fragment", f"Forbidden design claim found: {fragment!r}."))
+
+    required_negative_claims = [
+        "does not accept tokens",
+        "does not replace `localpolicyauthadapter`",
+        "does not enable finalization",
+    ]
+    for fragment in required_negative_claims:
+        if fragment not in text_lower:
+            failures.append(ValidationFailure("required_negative_claim", f"Missing required negative claim: {fragment!r}."))
 
     return failures
 
