@@ -45,6 +45,10 @@ def append_endpoint_denial(
     )
 
 
+class AuditedPermissionError(PermissionError):
+    """PermissionError marker for denials already written to security audit."""
+
+
 class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
     server_version = "KBGuardedReviewUpdateHTTP/1.1"
 
@@ -89,7 +93,6 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
             self._json_response(HTTPStatus.NOT_FOUND, {"status": "ERROR", "error": f"Unknown route: {route}"})
             return
 
-        payload: dict[str, Any] = {}
         request_id = self.headers.get("X-Request-Id", "")
         source = self.headers.get("X-Review-Source", "HTTP")
         user_agent = self.headers.get("User-Agent", "")
@@ -107,7 +110,24 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
             target_id = request.target_id
 
             adapter = LocalPolicyAuthAdapter(self.server.policy_path)  # type: ignore[attr-defined]
-            decision = adapter.authorize_request_context({"reviewer_id": reviewer_id}, action=action)
+            try:
+                decision = adapter.authorize_request_context({"reviewer_id": reviewer_id}, action=action)
+            except PermissionError as exc:
+                append_endpoint_denial(
+                    audit_path=self.server.security_audit_output,  # type: ignore[attr-defined]
+                    request_id=request_id,
+                    route=route,
+                    action=action,
+                    target_id=target_id,
+                    reviewer_id=reviewer_id,
+                    principal_subject=reviewer_id,
+                    principal_issuer=principal_issuer,
+                    denial_reason=str(exc),
+                    source=source,
+                    user_agent=user_agent,
+                )
+                raise AuditedPermissionError(str(exc)) from exc
+
             if decision.reviewer_identity is not None:
                 principal_subject = decision.reviewer_identity.principal_subject
                 principal_issuer = decision.reviewer_identity.principal_issuer
@@ -125,7 +145,7 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
                     source=source,
                     user_agent=user_agent,
                 )
-                raise PermissionError(decision.reason)
+                raise AuditedPermissionError(decision.reason)
 
             try:
                 provenance = provenance_from_headers(
@@ -162,23 +182,6 @@ class GuardedReviewUpdateHTTPHandler(BaseHTTPRequestHandler):
             )
             self._json_response(HTTPStatus.OK, guarded_response_to_dict(response))
         except PermissionError as exc:
-            if reviewer_id and action and target_id:
-                # If authorization raised before a structured decision was available, record it here.
-                # Duplicate audit is avoided for decision-based denials by checking the error string is not already emitted.
-                if "not allowed" not in str(exc) and "No reviewer role allows" not in str(exc):
-                    append_endpoint_denial(
-                        audit_path=self.server.security_audit_output,  # type: ignore[attr-defined]
-                        request_id=request_id,
-                        route=route,
-                        action=action,
-                        target_id=target_id,
-                        reviewer_id=reviewer_id,
-                        principal_subject=principal_subject,
-                        principal_issuer=principal_issuer,
-                        denial_reason=str(exc),
-                        source=source,
-                        user_agent=user_agent,
-                    )
             self._json_response(
                 HTTPStatus.FORBIDDEN,
                 {
