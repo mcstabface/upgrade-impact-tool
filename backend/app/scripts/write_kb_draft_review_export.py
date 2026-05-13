@@ -102,8 +102,13 @@ def render_export(manifest: dict[str, Any], draft: dict[str, Any], context: dict
             for caveat in claim.get("caveats"):
                 lines.append(f"- Caveat: {caveat}")
             lines.append("")
-        lines.append("Reviewer decision: `UNSET`  ")
-        lines.append("Reviewer notes:  ")
+        lines.append(f"Reviewer decision: `{task.get('reviewer_decision', 'UNSET')}`  ")
+        lines.append(f"Review status: `{task.get('review_status', 'PENDING_REVIEW')}`  ")
+        lines.append(f"Visual acknowledgement: `{task.get('visual_acknowledgement_status', 'UNSET')}`  ")
+        lines.append(f"Reviewer: `{task.get('reviewer', '')}`  ")
+        lines.append(f"Reviewer notes: {task.get('reviewer_notes', '')}  ")
+        if task.get("updated_utc"):
+            lines.append(f"Updated UTC: `{task.get('updated_utc')}`  ")
         lines.append("")
 
     lines.append("## Unresolved Gap Acknowledgement Tasks")
@@ -119,6 +124,38 @@ def render_export(manifest: dict[str, Any], draft: dict[str, Any], context: dict
             f"{markdown_escape(task.get('gap_text'))} |"
         )
     lines.append("")
+    lines.append("## Gap Details for Review")
+    lines.append("")
+    for task in manifest.get("unresolved_gap_tasks", []):
+        lines.append(f"### `{task.get('gap_id')}`")
+        lines.append("")
+        lines.append(task.get("gap_text", ""))
+        lines.append("")
+        lines.append(f"Acknowledgement: `{task.get('acknowledgement_status', 'UNSET')}`  ")
+        lines.append(f"Review status: `{task.get('review_status', 'PENDING_ACKNOWLEDGEMENT')}`  ")
+        lines.append(f"Reviewer: `{task.get('reviewer', '')}`  ")
+        lines.append(f"Reviewer notes: {task.get('reviewer_notes', '')}  ")
+        if task.get("updated_utc"):
+            lines.append(f"Updated UTC: `{task.get('updated_utc')}`  ")
+        lines.append("")
+
+    audit_events = manifest.get("review_audit_events") or []
+    if audit_events:
+        lines.append("## Review Audit Events")
+        lines.append("")
+        lines.append("| Event | Timestamp UTC | Action | Target | Reviewer |")
+        lines.append("|---|---|---|---|---|")
+        for event in audit_events:
+            lines.append(
+                "| "
+                f"`{markdown_escape(event.get('event_id'))}` | "
+                f"{markdown_escape(event.get('timestamp_utc'))} | "
+                f"{markdown_escape(event.get('action_type'))} | "
+                f"{markdown_escape(event.get('target_id'))} | "
+                f"{markdown_escape(event.get('reviewer'))} |"
+            )
+        lines.append("")
+
     lines.append("## Source Inputs")
     lines.append("")
     lines.append(f"- Source draft: `{manifest.get('source_draft_path', '')}`")
