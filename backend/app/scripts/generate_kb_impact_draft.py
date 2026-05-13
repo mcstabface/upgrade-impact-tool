@@ -218,7 +218,7 @@ def build_draft_status_section() -> DraftSection:
             DraftClaim(
                 claim_id="draft_status_001",
                 claim_type="draft_status",
-                text="This artifact is a citation-bound draft generated from retrieved evidence. It is not reviewed, not final, and not a business conclusion.",
+                text="This artifact is a citation-bound draft generated from retrieved evidence. It is not reviewed, not final, and not a finalized business finding.",
                 evidence_ids=[],
                 caveats=["Reviewer validation is required before any impact statement can be finalized."],
             )
