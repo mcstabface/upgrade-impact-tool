@@ -4,8 +4,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from app.scripts.apply_kb_review_update import read_json, write_json
-from app.scripts.extract_kb_source_manifest import relpath, repo_root
+from app.scripts.apply_kb_review_update import read_json, regenerate_outputs, validate_state, write_json
 from app.scripts.review_authorization import (
     RequestProvenance,
     append_provenance_to_latest_audit_event,
@@ -34,6 +33,8 @@ def apply_guarded_review_update_request(
     export_path: Path | None = None,
     surface_path: Path | None = None,
 ) -> GuardedReviewUpdateResponse:
+    from app.scripts.extract_kb_source_manifest import repo_root
+
     root = repo_root()
     manifest_path = manifest_path or root / "kbs" / "review" / "kb_draft_review_manifest.v1.json"
     output_path = output_path or manifest_path
@@ -57,22 +58,27 @@ def apply_guarded_review_update_request(
         provenance=provenance,
     )
     write_json(output_path, manifest)
+    validate_state(output_path)
+    regenerate_outputs(output_path, export_path=export_path, surface_path=surface_path)
+    manifest = read_json(output_path)
 
-    # Regenerate artifacts once more so reviewer-facing outputs reflect provenance-enhanced audit metadata if rendered later.
-    service_response = apply_review_update_request(
-        ReviewUpdateRequest(
-            action=request.action,
-            target_id=request.target_id,
-            value=request.value,
-            reviewer=request.reviewer,
-            notes=request.notes,
-            visual_acknowledged=request.visual_acknowledged,
-        ),
-        manifest_path=output_path,
-        output_path=output_path,
-        export_path=export_path,
-        surface_path=surface_path,
-    ) if False else service_response
+    service_response = ReviewUpdateResponse(
+        status=service_response.status,
+        action=service_response.action,
+        target_id=service_response.target_id,
+        reviewer=service_response.reviewer,
+        manifest_path=service_response.manifest_path,
+        export_path=service_response.export_path,
+        surface_path=service_response.surface_path,
+        review_status=str(manifest.get("review_status")),
+        diagnostics=manifest.get("diagnostics") or {},
+        audit_event_count=len(manifest.get("review_audit_events") or []),
+        messages=[
+            *service_response.messages,
+            "Reviewer authorization was checked before mutation.",
+            "Request provenance was appended to the latest audit event.",
+        ],
+    )
 
     return GuardedReviewUpdateResponse(
         status="OK",
@@ -84,9 +90,4 @@ def apply_guarded_review_update_request(
 
 
 def guarded_response_to_dict(response: GuardedReviewUpdateResponse) -> dict[str, Any]:
-    payload = asdict(response)
-    service_response = payload.get("service_response") or {}
-    if service_response.get("manifest_path"):
-        root = repo_root()
-        service_response["manifest_path"] = relpath(root / service_response["manifest_path"], root)
-    return payload
+    return asdict(response)
