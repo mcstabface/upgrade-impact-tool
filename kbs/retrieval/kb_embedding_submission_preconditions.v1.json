@@ -1,0 +1,64 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "Review fixture must contain review items.",
+      "name": "review_items_present",
+      "passed": true
+    },
+    {
+      "detail": "pending_count=0",
+      "name": "no_pending_decisions",
+      "passed": true
+    },
+    {
+      "detail": "mask_before_embedding_count=0",
+      "name": "no_mask_required_decisions",
+      "passed": true
+    },
+    {
+      "detail": "block_embedding_count=0",
+      "name": "no_block_embedding_decisions",
+      "passed": true
+    },
+    {
+      "detail": "unsupported_decision_count=0",
+      "name": "no_unsupported_decisions",
+      "passed": true
+    },
+    {
+      "detail": "effective_blocking_count=0",
+      "name": "no_effective_blockers",
+      "passed": true
+    },
+    {
+      "detail": "Decision summary must remain dry-run only.",
+      "name": "summary_dry_run_only",
+      "passed": true
+    },
+    {
+      "detail": "Decision summary must forbid embedding submission.",
+      "name": "summary_submission_forbidden",
+      "passed": true
+    },
+    {
+      "detail": "Fixture must forbid embedding submission.",
+      "name": "fixture_submission_forbidden",
+      "passed": true
+    },
+    {
+      "detail": "Fixture must not create vectors.",
+      "name": "fixture_vectors_not_created",
+      "passed": true
+    }
+  ],
+  "dry_run_only": true,
+  "failed_count": 0,
+  "fixture_path": "kbs/retrieval/kb_embedding_redaction_review_resolution_fixture.v1.json",
+  "passed_count": 10,
+  "real_submission_allowed": false,
+  "report_version": "1",
+  "source_review_export": "kbs/retrieval/kb_embedding_unresolved_redaction_review.v1.json",
+  "status": "PRECONDITIONS_READY_DRY_RUN_ONLY",
+  "vectors_created": false
+}

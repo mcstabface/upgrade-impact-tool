@@ -1,0 +1,52 @@
+{
+  "draft_generation_enabled": false,
+  "evidence_slot_count": 3,
+  "llm_call_performed": false,
+  "production_retrieval_enabled": false,
+  "report_version": "1",
+  "section_count": 3,
+  "sections": [
+    {
+      "citation_labels": [
+        "vector-rank-1:KB881136:39048140",
+        "vector-rank-2:KB881136:39048140",
+        "vector-rank-3:KB881136:39048140"
+      ],
+      "generated_text": "",
+      "instruction": "Summarize only the citation-bound vector evidence slots. Do not add uncited claims.",
+      "required_evidence_ids": [
+        "vector-evidence-0001",
+        "vector-evidence-0002",
+        "vector-evidence-0003"
+      ],
+      "section_id": "vector-context-summary",
+      "title": "Vector Context Summary"
+    },
+    {
+      "citation_labels": [
+        "vector-rank-1:KB881136:39048140",
+        "vector-rank-2:KB881136:39048140",
+        "vector-rank-3:KB881136:39048140"
+      ],
+      "generated_text": "",
+      "instruction": "Draft impact statements only from required evidence IDs when generation is explicitly enabled in a later gate.",
+      "required_evidence_ids": [
+        "vector-evidence-0001",
+        "vector-evidence-0002",
+        "vector-evidence-0003"
+      ],
+      "section_id": "potential-upgrade-impact",
+      "title": "Potential Upgrade Impact"
+    },
+    {
+      "citation_labels": [],
+      "generated_text": "",
+      "instruction": "Reserve space for human review notes; no automated prose is generated in this gate.",
+      "required_evidence_ids": [],
+      "section_id": "review-notes",
+      "title": "Reviewer Notes"
+    }
+  ],
+  "source_draft_input_report": "kbs/retrieval/kb_fixture_vector_draft_input.v1.json",
+  "status": "VECTOR_DRAFT_SKELETON_READY"
+}

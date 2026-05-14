@@ -1,0 +1,44 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "status=DRY_RUN_VALID",
+      "name": "dry_run_report_valid",
+      "passed": true
+    },
+    {
+      "detail": "dry_run_only=True",
+      "name": "dry_run_only",
+      "passed": true
+    },
+    {
+      "detail": "candidate_vector_count=3",
+      "name": "candidate_vectors_present",
+      "passed": true
+    },
+    {
+      "detail": "validation_error_count=0",
+      "name": "validation_errors_absent",
+      "passed": true
+    },
+    {
+      "detail": "vector_outputs_created=False",
+      "name": "dry_run_vector_outputs_absent",
+      "passed": true
+    },
+    {
+      "detail": "vector_jsonl_path=kbs/retrieval/kb_vectors.v1.jsonl vector_index_path=kbs/retrieval/kb_vector_index.v1.json",
+      "name": "vector_paths_declared",
+      "passed": true
+    }
+  ],
+  "commit_enabled": false,
+  "failed_count": 0,
+  "passed_count": 6,
+  "report_version": "1",
+  "source_dry_run_report": "kbs/retrieval/kb_vector_writer_dry_run_report.v1.json",
+  "status": "COMMIT_GATE_READY_BUT_DISABLED",
+  "vector_index_path": "kbs/retrieval/kb_vector_index.v1.json",
+  "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl",
+  "vector_outputs_created": false
+}

@@ -1,0 +1,28 @@
+{
+  "index_version": "1",
+  "records": [
+    {
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0000",
+      "dimensions": 1536,
+      "embedding_cache_key": "f2ea5471d4c34de3edcb906c9a65e80c63d1d3a3187feb32c8dedbeeacfa82ac",
+      "offset": 0,
+      "vector_record_id": "vec_ea88a63aeb7fb0511fad61c5b941ffbb"
+    },
+    {
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0001",
+      "dimensions": 1536,
+      "embedding_cache_key": "90e20ff20c7886d5aa83632203c424070f7fd4ea142d9e6717a9688e77e56c18",
+      "offset": 1,
+      "vector_record_id": "vec_487d93e236d7623daecfff216f637be4"
+    },
+    {
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0002",
+      "dimensions": 1536,
+      "embedding_cache_key": "a368a6f5420e717e71cc3a3c94f41a896c23222dfd3a99afb4544a20b60e1079",
+      "offset": 2,
+      "vector_record_id": "vec_51caef1bce6843c603ee6456d74fe9e0"
+    }
+  ],
+  "vector_count": 3,
+  "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl"
+}

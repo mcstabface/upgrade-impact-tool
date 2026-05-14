@@ -6,7 +6,7 @@ Generated UTC: `2026-05-13T17:12:00.168353+00:00`
 
 - Artifact type: `kb_draft_review_manifest`
 - Schema version: `kb_draft_review_manifest.v1`
-- Review status: `PENDING_REVIEW`
+- Review status: `IN_REVIEW`
 - Claim review tasks: 15
 - Evidence review tasks: 13
 - Visual review tasks: 13
@@ -32,7 +32,7 @@ Generated UTC: `2026-05-13T17:12:00.168353+00:00`
 | `evidence_group_003` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | 1ca0f8c396010bcd (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage); 4f36e7a253467768 (KB881135 / bug 39127058 / Oracle Utilities Service and Measurement Data Foundation / Usage) |
 | `evidence_group_004` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | ba55538e4b6a1e3b (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage); c8146663783b1ce0 (KB875759 / bug 38794940 / Oracle Utilities Service and Measurement Data Foundation / Usage) |
 | `evidence_group_005` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | 7660d8480f7219d5 (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage); e1e70f018e26be2d (KB881136 / bug 38966530 / Oracle Utilities Service and Measurement Data Foundation / Usage) |
-| `evidence_group_006` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | 603547a634443bcb (KB869018 / bug 38848234 / Oracle Utilities Customer Care and Billing / Billing) |
+| `evidence_group_006` | Evidence Groups | evidence_group_inventory | REVIEWED | ACCEPT | True | True | 603547a634443bcb (KB869018 / bug 38848234 / Oracle Utilities Customer Care and Billing / Billing) |
 | `evidence_group_007` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | 970bbd743c307ff2 (KB881135 / bug 39234264 / Oracle Utilities Customer Care and Billing / Billing) |
 | `evidence_group_008` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | 1cc8cb7c3db849f3 (KB881135 / bug 39064768 / Oracle Utilities Customer Care and Billing / Conversion) |
 | `evidence_group_009` | Evidence Groups | evidence_group_inventory | PENDING_REVIEW | UNSET | True | True | 71db8e4fa7f2b8e5 (KB881135 / bug 38959224 / Oracle Utilities Customer Care and Billing / Case Management) |
@@ -122,11 +122,12 @@ Evidence group KB869018::38848234::Oracle Utilities Customer Care and Billing::B
 
 - Caveat: One or more cited PFDS evidence items are image-bearing; reviewer visual inspection is required before final impact conclusions.
 
-Reviewer decision: `UNSET`  
-Review status: `PENDING_REVIEW`  
-Visual acknowledgement: `UNSET`  
-Reviewer: ``  
-Reviewer notes:   
+Reviewer decision: `ACCEPT`  
+Review status: `REVIEWED`  
+Visual acknowledgement: `ACKNOWLEDGED`  
+Reviewer: `GATE15_AUTH_SMOKE`  
+Reviewer notes: Guarded HTTP smoke-test acceptance with visual acknowledgement.  
+Updated UTC: `2026-05-13T17:12:00.781173+00:00`  
 
 ### `evidence_group_007` — Evidence Groups
 
@@ -330,6 +331,12 @@ Acknowledgement: `UNSET`
 Review status: `PENDING_ACKNOWLEDGEMENT`  
 Reviewer: ``  
 Reviewer notes:   
+
+## Review Audit Events
+
+| Event | Timestamp UTC | Action | Target | Reviewer |
+|---|---|---|---|---|
+| `review_event_0001` | 2026-05-13T17:12:00.781213+00:00 | CLAIM_DECISION_UPDATE | evidence_group_006 | GATE15_AUTH_SMOKE |
 
 ## Source Inputs
 

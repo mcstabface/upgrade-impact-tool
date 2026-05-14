@@ -1,0 +1,37 @@
+{
+  "decision": {
+    "finding_count": 42,
+    "real_submission_allowed": false,
+    "reason": "REDACTION_FINDINGS_PRESENT",
+    "request_count": 895,
+    "status": "REFUSED",
+    "would_submit": false
+  },
+  "dry_run_only": true,
+  "finding_count": 42,
+  "real_submission_allowed": false,
+  "report_version": "1",
+  "request_count": 895,
+  "simulated_response_schema": {
+    "response_jsonl_path": "kbs/retrieval/kb_embedding_batch_responses.v1.jsonl",
+    "row_contract": {
+      "chunk_id": "string",
+      "dimensions": "integer",
+      "embedding_cache_key": "string",
+      "embedding_vector": "array<float>",
+      "error": "string|null",
+      "model": "string",
+      "request_id": "string",
+      "status": "OK|ERROR"
+    },
+    "vector_store_outputs": {
+      "vector_index_path": "kbs/retrieval/kb_vector_index.v1.json",
+      "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl"
+    }
+  },
+  "source_payload_report": "kbs/retrieval/kb_embedding_full_text_payload_report.v1.json",
+  "source_request_jsonl": "kbs/retrieval/kb_embedding_full_text_requests.v1.jsonl",
+  "status": "REFUSED",
+  "vectors_created": false,
+  "would_submit": false
+}

@@ -1,0 +1,87 @@
+{
+  "atomic_commit_report_path": "kbs/retrieval/kb_vector_writer_atomic_commit_report.v1.json",
+  "blockers": [],
+  "checks": [
+    {
+      "detail": "/home/stabby/Documents/upgrade-impact-tool/kbs/retrieval/kb_vectors.v1.jsonl",
+      "name": "vector_jsonl_exists",
+      "passed": true
+    },
+    {
+      "detail": "/home/stabby/Documents/upgrade-impact-tool/kbs/retrieval/kb_vector_index.v1.json",
+      "name": "vector_index_exists",
+      "passed": true
+    },
+    {
+      "detail": "/home/stabby/Documents/upgrade-impact-tool/kbs/retrieval/kb_vector_writer_atomic_commit_report.v1.json",
+      "name": "atomic_commit_report_exists",
+      "passed": true
+    },
+    {
+      "detail": "vector_rows=3",
+      "name": "vector_rows_present",
+      "passed": true
+    },
+    {
+      "detail": "index_records=3",
+      "name": "index_records_present",
+      "passed": true
+    },
+    {
+      "detail": "vectors=3 index_count=3",
+      "name": "vector_count_matches_index",
+      "passed": true
+    },
+    {
+      "detail": "vectors=3 commit_count=3",
+      "name": "vector_count_matches_commit_report",
+      "passed": true
+    },
+    {
+      "detail": "vector sha256 comparison",
+      "name": "vector_checksum_matches_commit_report",
+      "passed": true
+    },
+    {
+      "detail": "index sha256 comparison",
+      "name": "index_checksum_matches_commit_report",
+      "passed": true
+    },
+    {
+      "detail": "unique=3 total=3",
+      "name": "vector_ids_unique",
+      "passed": true
+    },
+    {
+      "detail": "vector IDs must match index order",
+      "name": "vector_index_order_matches",
+      "passed": true
+    },
+    {
+      "detail": "dimensions=1536",
+      "name": "dimensions_consistent",
+      "passed": true
+    },
+    {
+      "detail": "dimensions=1536",
+      "name": "vector_lengths_match_dimensions",
+      "passed": true
+    },
+    {
+      "detail": "all vector rows must have OK status",
+      "name": "vector_status_ok",
+      "passed": true
+    }
+  ],
+  "dimensions": 1536,
+  "failed_count": 0,
+  "passed_count": 14,
+  "report_version": "1",
+  "retrieval_ready": true,
+  "status": "RETRIEVAL_READY",
+  "vector_count": 3,
+  "vector_file_sha256": "5df537f85dc8e9815a68d66f4e7a6d6456b28ed3a99f18a3cbe65c67a62f5aad",
+  "vector_index_path": "kbs/retrieval/kb_vector_index.v1.json",
+  "vector_index_sha256": "e2a089800bd910322161b19ac4f0971cdb122991413c8d48c6242bbb30762c53",
+  "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl"
+}

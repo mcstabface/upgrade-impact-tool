@@ -1,0 +1,12 @@
+{
+  "adapter_name": "disabled",
+  "errors": [],
+  "real_submission_allowed": false,
+  "reason": "DISABLED_ADAPTER_REFUSES_REAL_SUBMISSION",
+  "request_count": 895,
+  "response_jsonl_path": "kbs/retrieval/kb_embedding_batch_responses.v1.jsonl",
+  "status": "REFUSED",
+  "vector_index_path": "kbs/retrieval/kb_vector_index.v1.json",
+  "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl",
+  "would_submit": false
+}

@@ -1,0 +1,6 @@
+{
+  "allow_oidc_adapter": true,
+  "local_policy_path": "kbs/policies/review_authorization_policy.v1.json",
+  "oidc_config_path": "kbs/policies/review_oidc_adapter.config.json",
+  "review_update_auth_adapter": "oidc"
+}
