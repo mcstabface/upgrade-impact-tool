@@ -4,6 +4,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from app.scripts.actual_corpus_ingestion_dry_run import build_actual_corpus_ingestion_dry_run_report
+from app.scripts.extract_kb_source_manifest import repo_root
 
 
 def _assert(condition: bool, message: str) -> None:
@@ -11,8 +12,12 @@ def _assert(condition: bool, message: str) -> None:
         raise AssertionError(message)
 
 
+def _repo_tempdir() -> TemporaryDirectory[str]:
+    return TemporaryDirectory(dir=repo_root())
+
+
 def test_missing_source_root_not_ready() -> None:
-    with TemporaryDirectory() as tmp:
+    with _repo_tempdir() as tmp:
         missing = Path(tmp) / "missing"
         report = build_actual_corpus_ingestion_dry_run_report(source_root=missing)
         _assert(report.status == "ACTUAL_CORPUS_INGESTION_DRY_RUN_NOT_READY", report.status)
@@ -22,7 +27,7 @@ def test_missing_source_root_not_ready() -> None:
 
 
 def test_empty_source_root_not_ready() -> None:
-    with TemporaryDirectory() as tmp:
+    with _repo_tempdir() as tmp:
         root = Path(tmp) / "raw"
         root.mkdir()
         report = build_actual_corpus_ingestion_dry_run_report(source_root=root)
@@ -35,7 +40,7 @@ def test_empty_source_root_not_ready() -> None:
 
 
 def test_populated_source_root_ready_with_no_missing_portfolios() -> None:
-    with TemporaryDirectory() as tmp:
+    with _repo_tempdir() as tmp:
         root = Path(tmp) / "raw"
         root.mkdir()
         portfolio = root / "CCS_1.0_MP1_PFDs_Portfolio.pdf"
