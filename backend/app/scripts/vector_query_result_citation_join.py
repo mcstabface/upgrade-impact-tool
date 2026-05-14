@@ -23,7 +23,10 @@ class VectorCitationJoinResult:
     score: float
     request_id: str
     citation_payload: dict[str, Any]
-    text_hash: str
+    source_artifact_path: str
+    kb_document_id: str
+    bug_patch_number: str
+    child_sha256: str
 
 
 @dataclass(frozen=True)
@@ -70,6 +73,13 @@ def request_rows_by_chunk_id(request_rows: list[dict[str, Any]]) -> dict[str, di
     return by_chunk_id
 
 
+def has_required_citation_trace(citation_payload: dict[str, Any]) -> bool:
+    return all(
+        str(citation_payload.get(field_name) or "")
+        for field_name in ("source_artifact_path", "kb_document_id", "bug_patch_number", "child_sha256")
+    )
+
+
 def build_vector_citation_join_report(*, query_report_path: Path, request_jsonl_path: Path) -> VectorCitationJoinReport:
     if not query_report_path.exists():
         raise FileNotFoundError(f"Query report not found: {query_report_path}")
@@ -95,7 +105,9 @@ def build_vector_citation_join_report(*, query_report_path: Path, request_jsonl_
         if request_row is None:
             raise ValueError(f"No request row found for query result chunk_id: {chunk_id}")
         citation_payload = request_row.get("citation_payload") or {}
-        if not isinstance(citation_payload, dict) or not citation_payload:
+        if not isinstance(citation_payload, dict):
+            citation_payload = {}
+        if not has_required_citation_trace(citation_payload):
             missing_citation_count += 1
         joined.append(
             VectorCitationJoinResult(
@@ -106,7 +118,10 @@ def build_vector_citation_join_report(*, query_report_path: Path, request_jsonl_
                 score=float(result.get("score") or 0.0),
                 request_id=str(request_row.get("request_id") or ""),
                 citation_payload=citation_payload,
-                text_hash=str(request_row.get("text_hash") or ""),
+                source_artifact_path=str(citation_payload.get("source_artifact_path") or ""),
+                kb_document_id=str(citation_payload.get("kb_document_id") or ""),
+                bug_patch_number=str(citation_payload.get("bug_patch_number") or ""),
+                child_sha256=str(citation_payload.get("child_sha256") or ""),
             )
         )
     root = repo_root()
