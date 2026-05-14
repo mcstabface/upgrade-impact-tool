@@ -13,6 +13,7 @@ from app.scripts.citation_bound_vector_draft_generation_contract import (
     write_generation_contract,
 )
 from app.scripts.extract_kb_source_manifest import repo_root
+from app.scripts.gate18y_local_skeleton_fixture import ensure_local_skeleton_fixture
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -23,8 +24,7 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 def assert_ready_skeleton_builds_disabled_contract() -> None:
     root = repo_root()
     skeleton = root / DEFAULT_DRAFT_SKELETON_REPORT
-    if not skeleton.exists():
-        raise AssertionError(f"Expected Gate 18X draft skeleton: {skeleton}")
+    ensure_local_skeleton_fixture(skeleton)
     report = build_generation_contract(draft_skeleton_path=skeleton)
     if report.status != "GENERATION_DISABLED_CONTRACT_READY":
         raise AssertionError(f"Unexpected contract status: {report.status}")
@@ -48,7 +48,9 @@ def assert_ready_skeleton_builds_disabled_contract() -> None:
 
 def assert_generation_enabled_skeleton_blocks_contract() -> None:
     root = repo_root()
-    source = read_json(root / DEFAULT_DRAFT_SKELETON_REPORT)
+    skeleton = root / DEFAULT_DRAFT_SKELETON_REPORT
+    ensure_local_skeleton_fixture(skeleton)
+    source = read_json(skeleton)
     bad = copy.deepcopy(source)
     bad["draft_generation_enabled"] = True
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -65,7 +67,9 @@ def assert_generation_enabled_skeleton_blocks_contract() -> None:
 
 def assert_generated_text_blocks_contract() -> None:
     root = repo_root()
-    source = read_json(root / DEFAULT_DRAFT_SKELETON_REPORT)
+    skeleton = root / DEFAULT_DRAFT_SKELETON_REPORT
+    ensure_local_skeleton_fixture(skeleton)
+    source = read_json(skeleton)
     bad = copy.deepcopy(source)
     sections = bad.get("sections")
     if not isinstance(sections, list) or not sections or not isinstance(sections[0], dict):
