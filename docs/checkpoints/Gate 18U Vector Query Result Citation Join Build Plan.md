@@ -44,10 +44,26 @@ production_retrieval_enabled remains false
 query results join by chunk_id
 joined results preserve rank order
 joined results include request_id
-joined results include text_hash
 joined results include citation_payload
+joined results include source_artifact_path
+joined results include kb_document_id
+joined results include bug_patch_number
+joined results include child_sha256
 missing citation payloads are reported
 bad query status fails closed
+```
+
+## Citation Trace Contract
+
+Gate 18U uses the citation payload fields already present in the Gate 18F request JSONL. It does not require a separate `text_hash` field.
+
+Required citation trace fields are:
+
+```text
+source_artifact_path
+kb_document_id
+bug_patch_number
+child_sha256
 ```
 
 ## Validation Command
