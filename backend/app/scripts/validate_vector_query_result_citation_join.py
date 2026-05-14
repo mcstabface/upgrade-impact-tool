@@ -50,10 +50,16 @@ def assert_current_query_results_join_to_citations() -> None:
     for result in report.results:
         if not result.request_id:
             raise AssertionError(f"Joined result missing request_id: {result}")
-        if not result.text_hash:
-            raise AssertionError(f"Joined result missing text_hash: {result}")
         if not result.citation_payload:
             raise AssertionError(f"Joined result missing citation payload: {result}")
+        if not result.source_artifact_path:
+            raise AssertionError(f"Joined result missing source_artifact_path: {result}")
+        if not result.kb_document_id:
+            raise AssertionError(f"Joined result missing kb_document_id: {result}")
+        if not result.bug_patch_number:
+            raise AssertionError(f"Joined result missing bug_patch_number: {result}")
+        if not result.child_sha256:
+            raise AssertionError(f"Joined result missing child_sha256: {result}")
     with tempfile.TemporaryDirectory() as temp_dir:
         output = Path(temp_dir) / "citation_join.json"
         write_vector_citation_join_report(output, report)
