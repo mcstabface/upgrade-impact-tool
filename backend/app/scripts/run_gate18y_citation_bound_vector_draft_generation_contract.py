@@ -6,11 +6,13 @@ import sys
 from pathlib import Path
 
 from app.scripts.extract_kb_source_manifest import repo_root
+from app.scripts.gate18y_local_skeleton_fixture import ensure_local_skeleton_fixture
 
 
 EXPECTED_SOURCE_FILES = [
     "backend/app/scripts/citation_bound_vector_draft_generation_contract.py",
     "backend/app/scripts/validate_citation_bound_vector_draft_generation_contract.py",
+    "backend/app/scripts/gate18y_local_skeleton_fixture.py",
 ]
 
 
@@ -53,6 +55,8 @@ def main() -> None:
         for path in missing:
             print(f"[gate18y]   missing: {path}")
         raise SystemExit(1)
+    if not args.dry_run:
+        ensure_local_skeleton_fixture(args.draft_skeleton)
     print("[gate18y] Build citation-bound vector draft generation contract")
     run_module(
         "app.scripts.citation_bound_vector_draft_generation_contract",
