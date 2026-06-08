@@ -46,8 +46,11 @@ def count(conn, sql, params=()):
 Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)
 conn = sqlite3.connect(DB_PATH)
 conn.row_factory = sqlite3.Row
-conn.execute("PRAGMA foreign_keys=ON")
 
+# Reset must be idempotent against an existing generated database. Disable
+# foreign key enforcement only during table teardown, then re-enable it before
+# creating and seeding the schema so all validation still runs with FK checks on.
+conn.execute("PRAGMA foreign_keys=OFF")
 for table in [
     "audit_events",
     "bug_extracted_fields",
@@ -66,6 +69,8 @@ for table in [
     "schema_metadata",
 ]:
     conn.execute(f"DROP TABLE IF EXISTS {table}")
+conn.commit()
+conn.execute("PRAGMA foreign_keys=ON")
 
 conn.executescript(
     """
