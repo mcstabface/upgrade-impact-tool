@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEFAULT_DB_PATH="${ROOT_DIR}/artifacts/genti_review_workflow/genti_review_workflow_demo.db"
 DEFAULT_REPORT_DIR="${ROOT_DIR}/artifacts/genti_review_workflow/reports"
+DEFAULT_ARTIFACT_DIR="${ROOT_DIR}/artifacts/genti_review_workflow"
 
 usage() {
   cat <<'EOF'
@@ -13,13 +14,19 @@ Usage:
   bash scripts/genti_demo.sh reports [db_path] [report_dir]
   bash scripts/genti_demo.sh summary [db_path] [report_dir]
   bash scripts/genti_demo.sh all [db_path] [report_dir]
+  bash scripts/genti_demo.sh quiet [db_path] [report_dir]
+  bash scripts/genti_demo.sh show-files [db_path] [report_dir]
+  bash scripts/genti_demo.sh clean
 
 Commands:
-  prepare   Create/reset the seeded Genti workflow demo database.
-  query     Validate deterministic query/view output over the seeded database.
-  reports   Generate and validate deterministic report exports.
-  summary   Print a compact demo artifact summary.
-  all       Run prepare, query, reports, then summary.
+  prepare    Create/reset the seeded Genti workflow demo database.
+  query      Validate deterministic query/view output over the seeded database.
+  reports    Generate and validate deterministic report exports.
+  summary    Print a compact demo artifact summary.
+  all        Run prepare, query, reports, then summary.
+  quiet      Run the full demo path with only the compact summary output.
+  show-files Print expected generated artifact paths.
+  clean      Remove generated local demo artifacts.
 
 Defaults:
   db_path    artifacts/genti_review_workflow/genti_review_workflow_demo.db
@@ -51,8 +58,6 @@ reports() {
 
 summary() {
   python3 - "${DB_PATH}" "${REPORT_DIR}" <<'PY'
-import csv
-import json
 import sqlite3
 import sys
 from pathlib import Path
@@ -109,6 +114,27 @@ for key in sorted(summary_rows):
 PY
 }
 
+show_files() {
+  cat <<EOF
+Genti demo generated artifacts
+
+database:
+${DB_PATH}
+
+reports:
+${REPORT_DIR}/genti_mismatch_review.csv
+${REPORT_DIR}/genti_test_required.csv
+${REPORT_DIR}/genti_bug_136_detail.json
+${REPORT_DIR}/genti_audit_history.csv
+${REPORT_DIR}/genti_mismatch_review.md
+EOF
+}
+
+clean() {
+  rm -rf "${DEFAULT_ARTIFACT_DIR}"
+  echo "removed: ${DEFAULT_ARTIFACT_DIR}"
+}
+
 case "${command}" in
   prepare)
     prepare
@@ -127,6 +153,18 @@ case "${command}" in
     query
     reports
     summary
+    ;;
+  quiet)
+    prepare >/dev/null
+    query >/dev/null
+    reports >/dev/null
+    summary
+    ;;
+  show-files)
+    show_files
+    ;;
+  clean)
+    clean
     ;;
   *)
     echo "Unknown command: ${command}" >&2
