@@ -1,0 +1,14 @@
+{
+  "atomic_write": true,
+  "commit_gate_status": "COMMIT_GATE_READY_BUT_DISABLED",
+  "errors": [],
+  "report_version": "1",
+  "source_commit_gate_report": "kbs/retrieval/kb_vector_writer_commit_gate.v1.json",
+  "source_response_fixture": "kbs/retrieval/kb_embedding_response_fixture.v1.jsonl",
+  "status": "VECTOR_OUTPUTS_COMMITTED_FROM_FIXTURE",
+  "vector_count": 3,
+  "vector_file_sha256": "5df537f85dc8e9815a68d66f4e7a6d6456b28ed3a99f18a3cbe65c67a62f5aad",
+  "vector_index_path": "kbs/retrieval/kb_vector_index.v1.json",
+  "vector_index_sha256": "e2a089800bd910322161b19ac4f0971cdb122991413c8d48c6242bbb30762c53",
+  "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl"
+}

@@ -1,0 +1,28 @@
+{
+  "allowed_review_ids": [],
+  "block_embedding_review_ids": [],
+  "blocking_review_ids": [
+    "redaction-review-0004",
+    "redaction-review-0010",
+    "redaction-review-0016",
+    "redaction-review-0019",
+    "redaction-review-0022",
+    "redaction-review-0028"
+  ],
+  "counts": {
+    "allow_technical_identifier_count": 0,
+    "block_embedding_count": 0,
+    "effective_blocking_count": 6,
+    "item_count": 6,
+    "mask_before_embedding_count": 0,
+    "pending_count": 6,
+    "unsupported_decision_count": 0
+  },
+  "dry_run_only": true,
+  "embedding_submission_allowed": false,
+  "mask_required_review_ids": [],
+  "report_version": "1",
+  "source_review_export": "kbs/retrieval/kb_embedding_unresolved_redaction_review.v1.json",
+  "status": "SUMMARY_BLOCKED",
+  "vectors_created": false
+}

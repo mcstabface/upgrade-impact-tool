@@ -1,0 +1,224 @@
+{
+  "embedding_submission_allowed": false,
+  "finding_count": 42,
+  "findings": [
+    {
+      "chunk_id": "KB881136::38996294::d54f136243f5a9b6fd62d8a15af2c5ef6718a0765bf3c14a370aaf9f4006d35d::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::38996294::d54f136243f5a9b6fd62d8a15af2c5ef6718a0765bf3c14a370aaf9f4006d35d::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39045691::6c00d48a0658af67dfa0311a6b0776cae37085b9c6930f6484ee5540f3c4f035::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39045691::6c00d48a0658af67dfa0311a6b0776cae37085b9c6930f6484ee5540f3c4f035::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39047227::fdeecb8ffa3610f28d69bd240d052f7a3dc44bf04e57ed49a9807e70dc2e25b9::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39047227::fdeecb8ffa3610f28d69bd240d052f7a3dc44bf04e57ed49a9807e70dc2e25b9::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39047227::fdeecb8ffa3610f28d69bd240d052f7a3dc44bf04e57ed49a9807e70dc2e25b9::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39047227::fdeecb8ffa3610f28d69bd240d052f7a3dc44bf04e57ed49a9807e70dc2e25b9::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39088202::8948ab3163f417435aa1d606e0bb9d7fa721be6df30b22002145d723b6f604b6::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39088202::8948ab3163f417435aa1d606e0bb9d7fa721be6df30b22002145d723b6f604b6::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39026126::8c7789fbfc0f407048eccf46c28abeb07633e2065960794bb3a29231cf1a9bbd::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39026126::8c7789fbfc0f407048eccf46c28abeb07633e2065960794bb3a29231cf1a9bbd::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39045293::e1cf9154ab6702b8bd629efad02b29ff8c258cec9798cb2526facdd2f9cafdac::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39045293::e1cf9154ab6702b8bd629efad02b29ff8c258cec9798cb2526facdd2f9cafdac::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881136::39045293::e1cf9154ab6702b8bd629efad02b29ff8c258cec9798cb2526facdd2f9cafdac::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881135::38915946::a3669d23fa745fc0143c9ba10b5c5b61e01e9fff307a439bb06ef646962132f5::0003",
+      "code": "EMAIL_PATTERN",
+      "detail": "Email-like text detected."
+    },
+    {
+      "chunk_id": "KB881135::39109281::c47e693c88ab2fb1d7b10170c77bc18b894e99d7eaa1b568bc3cb9a5d3418cb5::0006",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881135::38578093::dff9247c0de823e2c2029069b4788353d8a8cd9de805f9d807e72d53379f54d7::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB881135::38578093::dff9247c0de823e2c2029069b4788353d8a8cd9de805f9d807e72d53379f54d7::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38948777::27484b55511420ed28ec3026815e6ac466fc1b13a48c2f1d945c1ae43ee8a5f6::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38879050::d862d444400ae34e910328529fe0b87a1da22c36d183f51241fe7c816bac5781::0004",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38879050::d862d444400ae34e910328529fe0b87a1da22c36d183f51241fe7c816bac5781::0005",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38604480::5753cae5bb27958d1883d911685207c42358aa4509491efd61b20a3a129289a3::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38604480::5753cae5bb27958d1883d911685207c42358aa4509491efd61b20a3a129289a3::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38604480::5753cae5bb27958d1883d911685207c42358aa4509491efd61b20a3a129289a3::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB869018::38604480::5753cae5bb27958d1883d911685207c42358aa4509491efd61b20a3a129289a3::0005",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38578093::37e4456bdc8e5a9bcc9a1f26cf1d3e1c78295f32a75a9025b72f228d622acf59::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38578093::37e4456bdc8e5a9bcc9a1f26cf1d3e1c78295f32a75a9025b72f228d622acf59::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38981944::9240442996b3b2bd536024364d1a2dfcf64bb981c7ea119fcad11c6428369310::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38981944::9240442996b3b2bd536024364d1a2dfcf64bb981c7ea119fcad11c6428369310::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38758919::32a1b9bbefca91f245d643a998fdcb43b5cf1e5ed61ba86a3d77497c666a2b8a::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38758919::32a1b9bbefca91f245d643a998fdcb43b5cf1e5ed61ba86a3d77497c666a2b8a::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38758919::32a1b9bbefca91f245d643a998fdcb43b5cf1e5ed61ba86a3d77497c666a2b8a::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38819602::5e7207bcbb098660ee87c71af3eb34e3b4263ee6dc57056a55a056a40cb33197::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38819602::5e7207bcbb098660ee87c71af3eb34e3b4263ee6dc57056a55a056a40cb33197::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38819602::5e7207bcbb098660ee87c71af3eb34e3b4263ee6dc57056a55a056a40cb33197::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38836879::9183bb2ace28e6e962ef83191b51998218f26d01f3febfb04c9a7f9aaa10eadc::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38836879::9183bb2ace28e6e962ef83191b51998218f26d01f3febfb04c9a7f9aaa10eadc::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38776380::0b72dd97b8b35f40e21d4fbba451566f206c72f4a25ae34d24a78d326dac26e8::0000",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38776380::0b72dd97b8b35f40e21d4fbba451566f206c72f4a25ae34d24a78d326dac26e8::0001",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38776380::0b72dd97b8b35f40e21d4fbba451566f206c72f4a25ae34d24a78d326dac26e8::0002",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    },
+    {
+      "chunk_id": "KB875759::38776380::0b72dd97b8b35f40e21d4fbba451566f206c72f4a25ae34d24a78d326dac26e8::0003",
+      "code": "LONG_DIGIT_PATTERN",
+      "detail": "Long digit sequence detected."
+    }
+  ],
+  "redaction_check_status": "FAILED",
+  "report_version": "1",
+  "request_count": 895,
+  "request_jsonl_path": "kbs/retrieval/kb_embedding_full_text_requests.v1.jsonl",
+  "source_chunk_manifest": "kbs/manifests/kb_search_context_chunks_manifest.json",
+  "source_embedding_manifest": "kbs/retrieval/kb_embedding_manifest.v1.json",
+  "status": "PAYLOAD_BLOCKED_BY_REDACTION_FINDINGS",
+  "vectors_created": false
+}

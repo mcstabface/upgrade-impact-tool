@@ -1,0 +1,46 @@
+{
+  "context_item_count": 3,
+  "context_items": [
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0001",
+      "citation_label": "vector-rank-1:KB881136:39048140",
+      "kb_document_id": "KB881136",
+      "rank": 1,
+      "request_id": "embreq_90e20ff20c7886d5aa836322",
+      "score": 1.0,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json",
+      "vector_record_id": "vec_487d93e236d7623daecfff216f637be4"
+    },
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0002",
+      "citation_label": "vector-rank-2:KB881136:39048140",
+      "kb_document_id": "KB881136",
+      "rank": 2,
+      "request_id": "embreq_a368a6f5420e717e71cc3a3c",
+      "score": 0.032061312709,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json",
+      "vector_record_id": "vec_51caef1bce6843c603ee6456d74fe9e0"
+    },
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0000",
+      "citation_label": "vector-rank-3:KB881136:39048140",
+      "kb_document_id": "KB881136",
+      "rank": 3,
+      "request_id": "embreq_f2ea5471d4c34de3edcb906c",
+      "score": -0.003366679231,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json",
+      "vector_record_id": "vec_ea88a63aeb7fb0511fad61c5b941ffbb"
+    }
+  ],
+  "impact_generation_enabled": false,
+  "production_retrieval_enabled": false,
+  "report_version": "1",
+  "source_citation_join_report": "kbs/retrieval/kb_fixture_vector_citation_join.v1.json",
+  "status": "CITATION_BOUND_VECTOR_CONTEXT_READY"
+}

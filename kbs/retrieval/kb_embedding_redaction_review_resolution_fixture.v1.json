@@ -1,0 +1,154 @@
+{
+  "decision_summary": {
+    "allow_technical_identifier_count": 6,
+    "block_embedding_count": 0,
+    "mask_before_embedding_count": 0,
+    "pending_count": 0,
+    "terminal_decision_count": 6
+  },
+  "embedding_submission_allowed": false,
+  "export_version": "1",
+  "items": [
+    {
+      "chunk_id": "KB881136::39045691::6c00d48a0658af67dfa0311a6b0776cae37085b9c6930f6484ee5540f3c4f035::0001",
+      "citation_payload": {
+        "bug_patch_number": "39045691",
+        "category": "Measurement",
+        "child_pdf_path": "kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39045691_Product_Fix_Design_6.pdf",
+        "child_sha256": "6c00d48a0658af67dfa0311a6b0776cae37085b9c6930f6484ee5540f3c4f035",
+        "kb_document_id": "KB881136",
+        "portfolio_file": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Service and Measurement Data Foundation",
+        "source_artifact_path": "kbs/search_context/KB881136/KB881136__39045691__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__6c00d48a0658.json"
+      },
+      "classification": "UNRESOLVED_REQUIRES_REVIEW",
+      "code": "LONG_DIGIT_PATTERN",
+      "context_window": "5540f3c4f035 chunk_id: KB881136::39045691::6c00d48a0658af67dfa0311a6b0776cae37085b9c6930f6484ee5540f3c4f035::0001 text: 904569139045691 Product Fix Design Table of Contents Table of Contents.................................................................",
+      "matched_values": [
+        "904569139045691"
+      ],
+      "review_id": "redaction-review-0004",
+      "reviewer": "gate18m-fixture",
+      "reviewer_decision": "ALLOW_TECHNICAL_IDENTIFIER",
+      "reviewer_notes": "Gate 18M deterministic fixture: reviewed as technical identifier."
+    },
+    {
+      "chunk_id": "KB881136::39088202::8948ab3163f417435aa1d606e0bb9d7fa721be6df30b22002145d723b6f604b6::0001",
+      "citation_payload": {
+        "bug_patch_number": "39088202",
+        "category": "For MDM specific Functionality",
+        "child_pdf_path": "kbs/extracted/CCS_26.4_MP1.1.0_PFDs_Portfolio/0_Bug_39088202_Product_Fix_Design_6.pdf",
+        "child_sha256": "8948ab3163f417435aa1d606e0bb9d7fa721be6df30b22002145d723b6f604b6",
+        "kb_document_id": "KB881136",
+        "portfolio_file": "CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Service and Measurement Data Foundation",
+        "source_artifact_path": "kbs/search_context/KB881136/KB881136__39088202__CCS_26.4_MP1.1.0_PFDs_Portfolio.pdf__8948ab3163f4.json"
+      },
+      "classification": "UNRESOLVED_REQUIRES_REVIEW",
+      "code": "LONG_DIGIT_PATTERN",
+      "context_window": "d723b6f604b6 chunk_id: KB881136::39088202::8948ab3163f417435aa1d606e0bb9d7fa721be6df30b22002145d723b6f604b6::0001 text: 908820239088202 Product Fix Design Table of Contents Table of Contents.................................................................",
+      "matched_values": [
+        "908820239088202"
+      ],
+      "review_id": "redaction-review-0010",
+      "reviewer": "gate18m-fixture",
+      "reviewer_decision": "ALLOW_TECHNICAL_IDENTIFIER",
+      "reviewer_notes": "Gate 18M deterministic fixture: reviewed as technical identifier."
+    },
+    {
+      "chunk_id": "KB881135::38915946::a3669d23fa745fc0143c9ba10b5c5b61e01e9fff307a439bb06ef646962132f5::0003",
+      "citation_payload": {
+        "bug_patch_number": "38915946",
+        "category": "Payment",
+        "child_pdf_path": "kbs/extracted/CCS_25.10_MP7.2.0_PFDs_Portfolio/0_Bug_38915946_Product_Fix_Design_6.pdf",
+        "child_sha256": "a3669d23fa745fc0143c9ba10b5c5b61e01e9fff307a439bb06ef646962132f5",
+        "kb_document_id": "KB881135",
+        "portfolio_file": "CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Customer Care and Billing",
+        "source_artifact_path": "kbs/search_context/KB881135/KB881135__38915946__CCS_25.10_MP7.2.0_PFDs_Portfolio.pdf__a3669d23fa74.json"
+      },
+      "classification": "FORBIDDEN_REQUIRES_REVIEW",
+      "code": "EMAIL_PATTERN",
+      "context_window": "source_id: KB881135::38915946::a3669d23fa745fc0143c9ba10b5c5b61e01e9fff307a439bb06ef646962132f5 chunk_id: KB881135::38915946::a3669d23fa745fc0143c9ba10b5c5b61e01e9fff307a439bb06ef646962132f5::0003 text: ce. 4 Copyright \u00a92026, Oracle. All ri",
+      "matched_values": [],
+      "review_id": "redaction-review-0016",
+      "reviewer": "gate18m-fixture",
+      "reviewer_decision": "ALLOW_TECHNICAL_IDENTIFIER",
+      "reviewer_notes": "Gate 18M deterministic fixture: reviewed as technical identifier."
+    },
+    {
+      "chunk_id": "KB881135::38578093::dff9247c0de823e2c2029069b4788353d8a8cd9de805f9d807e72d53379f54d7::0003",
+      "citation_payload": {
+        "bug_patch_number": "38578093",
+        "category": "Database",
+        "child_pdf_path": "kbs/extracted/CCS_25.10_MP7.1.0_PFDs_Portfolio/0_Bug_38578093_Product_Fix_Design_6.pdf",
+        "child_sha256": "dff9247c0de823e2c2029069b4788353d8a8cd9de805f9d807e72d53379f54d7",
+        "kb_document_id": "KB881135",
+        "portfolio_file": "CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Customer to Meter",
+        "source_artifact_path": "kbs/search_context/KB881135/KB881135__38578093__CCS_25.10_MP7.1.0_PFDs_Portfolio.pdf__dff9247c0de8.json"
+      },
+      "classification": "UNRESOLVED_REQUIRES_REVIEW",
+      "code": "LONG_DIGIT_PATTERN",
+      "context_window": "STATUS_CD BO_STATUS_REASON_CD -------------- ------------------------------ ------------ ------------------------------ 21420503596962 FIELDACTIVITY COMINPROG But the Device was actually connected to multiple SPs. select D1.D1_DEVICE_ID, COUNT(DISTINCT I",
+      "matched_values": [
+        "21420503596962"
+      ],
+      "review_id": "redaction-review-0019",
+      "reviewer": "gate18m-fixture",
+      "reviewer_decision": "ALLOW_TECHNICAL_IDENTIFIER",
+      "reviewer_notes": "Gate 18M deterministic fixture: reviewed as technical identifier."
+    },
+    {
+      "chunk_id": "KB869018::38879050::d862d444400ae34e910328529fe0b87a1da22c36d183f51241fe7c816bac5781::0005",
+      "citation_payload": {
+        "bug_patch_number": "38879050",
+        "category": "Usage",
+        "child_pdf_path": "kbs/extracted/CCS_25.10_MP5.3.1_PFDs_Portfolio/0_Bug_38879050_Product_Fix_Design_6.pdf",
+        "child_sha256": "d862d444400ae34e910328529fe0b87a1da22c36d183f51241fe7c816bac5781",
+        "kb_document_id": "KB869018",
+        "portfolio_file": "CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Service and Measurement Data Foundation",
+        "source_artifact_path": "kbs/search_context/KB869018/KB869018__38879050__CCS_25.10_MP5.3.1_PFDs_Portfolio.pdf__d862d444400a.json"
+      },
+      "classification": "UNRESOLVED_REQUIRES_REVIEW",
+      "code": "LONG_DIGIT_PATTERN",
+      "context_window": "a Foundation Bug 38879050 Product Fix Design    Copyright \u00a92026, Oracle. All rights reserved. 11     Usage Transaction: 18940593595780",
+      "matched_values": [
+        "18940593595780"
+      ],
+      "review_id": "redaction-review-0022",
+      "reviewer": "gate18m-fixture",
+      "reviewer_decision": "ALLOW_TECHNICAL_IDENTIFIER",
+      "reviewer_notes": "Gate 18M deterministic fixture: reviewed as technical identifier."
+    },
+    {
+      "chunk_id": "KB875759::38578093::37e4456bdc8e5a9bcc9a1f26cf1d3e1c78295f32a75a9025b72f228d622acf59::0003",
+      "citation_payload": {
+        "bug_patch_number": "38578093",
+        "category": "Database",
+        "child_pdf_path": "kbs/extracted/CCS_25.10_MP6.4.0_PFDs_Portfolio/0_Bug_38578093_Product_Fix_Design_6.pdf",
+        "child_sha256": "37e4456bdc8e5a9bcc9a1f26cf1d3e1c78295f32a75a9025b72f228d622acf59",
+        "kb_document_id": "KB875759",
+        "portfolio_file": "CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Customer to Meter",
+        "source_artifact_path": "kbs/search_context/KB875759/KB875759__38578093__CCS_25.10_MP6.4.0_PFDs_Portfolio.pdf__37e4456bdc8e.json"
+      },
+      "classification": "UNRESOLVED_REQUIRES_REVIEW",
+      "code": "LONG_DIGIT_PATTERN",
+      "context_window": "STATUS_CD BO_STATUS_REASON_CD -------------- ------------------------------ ------------ ------------------------------ 21420503596962 FIELDACTIVITY COMINPROG But the Device was actually connected to multiple SPs. select D1.D1_DEVICE_ID, COUNT(DISTINCT I",
+      "matched_values": [
+        "21420503596962"
+      ],
+      "review_id": "redaction-review-0028",
+      "reviewer": "gate18m-fixture",
+      "reviewer_decision": "ALLOW_TECHNICAL_IDENTIFIER",
+      "reviewer_notes": "Gate 18M deterministic fixture: reviewed as technical identifier."
+    }
+  ],
+  "source_request_jsonl": "kbs/retrieval/kb_embedding_full_text_requests.v1.jsonl",
+  "source_triage_report": "kbs/retrieval/kb_embedding_redaction_triage_report.v1.json",
+  "status": "REVIEW_COMPLETE_FIXTURE",
+  "unresolved_count": 6,
+  "vectors_created": false
+}

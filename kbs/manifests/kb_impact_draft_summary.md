@@ -1,6 +1,6 @@
 # KB Impact Draft Summary
 
-Generated UTC: `2026-05-13T15:56:36.697476+00:00`
+Generated UTC: `2026-05-13T17:11:59.956826+00:00`
 
 ## Overview
 

@@ -1,0 +1,35 @@
+{
+  "dry_run_only": true,
+  "fixture_response_count": 3,
+  "notes": [
+    "Gate 18O writes a small deterministic response fixture only.",
+    "Gate 18O does not write vector JSONL or vector index artifacts."
+  ],
+  "real_submission_allowed": false,
+  "report_version": "1",
+  "response_fixture_jsonl": "kbs/retrieval/kb_embedding_response_fixture.v1.jsonl",
+  "row_contract": {
+    "chunk_id": "string",
+    "dimensions": "integer",
+    "embedding_cache_key": "string",
+    "model": "string",
+    "source_response_request_id": "string",
+    "status": "OK",
+    "vector": "array<float>",
+    "vector_record_id": "string"
+  },
+  "source_request_jsonl": "kbs/retrieval/kb_embedding_full_text_requests.v1.jsonl",
+  "status": "DESIGN_ONLY_VECTOR_WRITER_NOT_ENABLED",
+  "validation_rules": [
+    "response status must be OK",
+    "embedding vector length must match dimensions",
+    "embedding_cache_key must match request manifest cache key",
+    "chunk_id must match source request row",
+    "vector_record_id must be deterministic from embedding_cache_key",
+    "duplicate vector_record_id values are forbidden",
+    "vector writer must fail before partial vector output on validation error"
+  ],
+  "vector_index_path": "kbs/retrieval/kb_vector_index.v1.json",
+  "vector_jsonl_path": "kbs/retrieval/kb_vectors.v1.jsonl",
+  "vector_outputs_created": false
+}

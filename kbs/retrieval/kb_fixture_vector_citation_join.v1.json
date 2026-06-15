@@ -1,0 +1,78 @@
+{
+  "joined_count": 3,
+  "missing_citation_count": 0,
+  "production_retrieval_enabled": false,
+  "report_version": "1",
+  "result_count": 3,
+  "results": [
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0001",
+      "citation_payload": {
+        "bug_patch_number": "39048140",
+        "category": "Cloud Service Foundation",
+        "child_pdf_path": "kbs/extracted/CCS_26.4_MP1.4.0_PFDs_Portfolio/0_Bug_39048140_Product_Fix_Design_6.pdf",
+        "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+        "kb_document_id": "KB881136",
+        "portfolio_file": "CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Cloud Service Foundation",
+        "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json"
+      },
+      "embedding_cache_key": "90e20ff20c7886d5aa83632203c424070f7fd4ea142d9e6717a9688e77e56c18",
+      "kb_document_id": "KB881136",
+      "rank": 1,
+      "request_id": "embreq_90e20ff20c7886d5aa836322",
+      "score": 1.0,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json",
+      "vector_record_id": "vec_487d93e236d7623daecfff216f637be4"
+    },
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0002",
+      "citation_payload": {
+        "bug_patch_number": "39048140",
+        "category": "Cloud Service Foundation",
+        "child_pdf_path": "kbs/extracted/CCS_26.4_MP1.4.0_PFDs_Portfolio/0_Bug_39048140_Product_Fix_Design_6.pdf",
+        "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+        "kb_document_id": "KB881136",
+        "portfolio_file": "CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Cloud Service Foundation",
+        "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json"
+      },
+      "embedding_cache_key": "a368a6f5420e717e71cc3a3c94f41a896c23222dfd3a99afb4544a20b60e1079",
+      "kb_document_id": "KB881136",
+      "rank": 2,
+      "request_id": "embreq_a368a6f5420e717e71cc3a3c",
+      "score": 0.032061312709,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json",
+      "vector_record_id": "vec_51caef1bce6843c603ee6456d74fe9e0"
+    },
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0000",
+      "citation_payload": {
+        "bug_patch_number": "39048140",
+        "category": "Cloud Service Foundation",
+        "child_pdf_path": "kbs/extracted/CCS_26.4_MP1.4.0_PFDs_Portfolio/0_Bug_39048140_Product_Fix_Design_6.pdf",
+        "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+        "kb_document_id": "KB881136",
+        "portfolio_file": "CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf",
+        "product": "Oracle Utilities Cloud Service Foundation",
+        "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json"
+      },
+      "embedding_cache_key": "f2ea5471d4c34de3edcb906c9a65e80c63d1d3a3187feb32c8dedbeeacfa82ac",
+      "kb_document_id": "KB881136",
+      "rank": 3,
+      "request_id": "embreq_f2ea5471d4c34de3edcb906c",
+      "score": -0.003366679231,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json",
+      "vector_record_id": "vec_ea88a63aeb7fb0511fad61c5b941ffbb"
+    }
+  ],
+  "source_query_report": "kbs/retrieval/kb_fixture_vector_similarity_query.v1.json",
+  "source_request_jsonl": "kbs/retrieval/kb_embedding_full_text_requests.v1.jsonl",
+  "status": "CITATION_JOIN_OK"
+}

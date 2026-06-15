@@ -1,0 +1,44 @@
+{
+  "adapter_mode": "fixture_vector_context_to_draft_input",
+  "draft_generation_enabled": false,
+  "evidence_slot_count": 3,
+  "evidence_slots": [
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0001",
+      "citation_label": "vector-rank-1:KB881136:39048140",
+      "evidence_id": "vector-evidence-0001",
+      "kb_document_id": "KB881136",
+      "rank": 1,
+      "score": 1.0,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json"
+    },
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0002",
+      "citation_label": "vector-rank-2:KB881136:39048140",
+      "evidence_id": "vector-evidence-0002",
+      "kb_document_id": "KB881136",
+      "rank": 2,
+      "score": 0.032061312709,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json"
+    },
+    {
+      "bug_patch_number": "39048140",
+      "child_sha256": "5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e",
+      "chunk_id": "KB881136::39048140::5337e1dffa8ebfde5bb747ad891a357a44102bd244b14f57ad33b45d390eb31e::0000",
+      "citation_label": "vector-rank-3:KB881136:39048140",
+      "evidence_id": "vector-evidence-0003",
+      "kb_document_id": "KB881136",
+      "rank": 3,
+      "score": -0.003366679231,
+      "source_artifact_path": "kbs/search_context/KB881136/KB881136__39048140__CCS_26.4_MP1.4.0_PFDs_Portfolio.pdf__5337e1dffa8e.json"
+    }
+  ],
+  "production_retrieval_enabled": false,
+  "report_version": "1",
+  "source_vector_context_report": "kbs/retrieval/kb_fixture_vector_context.v1.json",
+  "status": "VECTOR_DRAFT_INPUT_READY"
+}
